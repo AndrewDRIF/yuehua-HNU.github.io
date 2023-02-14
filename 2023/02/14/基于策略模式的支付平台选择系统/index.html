@@ -1,0 +1,455 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>基于策略模式的支付平台选择系统 | 月华.の奇妙冒险</title><meta name="author" content="月华."><meta name="copyright" content="月华."><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="设计模式学习笔记整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于策略模式的支付平台选择系统">
+<meta property="og:url" content="http://yuehua-hnu.github.io/2023/02/14/%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="月华.の奇妙冒险">
+<meta property="og:description" content="设计模式学习笔记整理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuehua-hnu.github.io/img/2B5.jpg">
+<meta property="article:published_time" content="2023-02-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-14T07:00:27.708Z">
+<meta property="article:author" content="月华.">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuehua-hnu.github.io/img/2B5.jpg"><link rel="shortcut icon" href="/img/%E6%98%9F%E6%9C%88%E5%A4%9C.webp"><link rel="canonical" href="http://yuehua-hnu.github.io/2023/02/14/%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于策略模式的支付平台选择系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-02-14 15:00:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/echarts@4.9.0/dist/echarts.min.js"></script><script async src="/js/title.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="space-scene"><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/2B5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">月华.の奇妙冒险</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">基于策略模式的支付平台选择系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-13T16:00:00.000Z" title="发表于 2023-02-14 00:00:00">2023-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-02-14T07:00:27.708Z" title="更新于 2023-02-14 15:00:27">2023-02-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="基于策略模式的支付平台选择系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="基于策略模式的支付平台选择系统"><a href="#基于策略模式的支付平台选择系统" class="headerlink" title="基于策略模式的支付平台选择系统"></a>基于策略模式的支付平台选择系统</h1><p><strong>摘要：</strong></p>
+<p>基于策略模式的支付平台选择系统可以帮助用户根据不同的需求选择最适合的支付平台，从而提高支付效率和用户体验。该系统使用了策略模式，将支付平台的选择和具体支付实现解耦，使得系统更加灵活和可扩展。通过抽象策略类、具体策略类、上下文类和客户端类的设计，该系统可以轻松支持不同的支付平台，且具有较好的可读性和可维护性。在测试和运行中，该系统表现出良好的性能和稳定性，可以满足大多数用户的支付需求。未来，随着支付技术的不断发展，该系统可以进一步扩展和优化，以适应更多的支付场景和用户需求。</p>
+<p><strong>关键字：</strong></p>
+<p>策略模式，支付平台选择系统</p>
+<h1 id="一、系统论述"><a href="#一、系统论述" class="headerlink" title="一、系统论述"></a>一、系统论述</h1><p>支付平台选择系统是一种常见的电子商务和移动支付系统，它可以通过选择不同的支付平台来实现支付操作。在这种系统中，我们通常会选择一些常见的支付平台，如支付宝、微信支付、银联支付等，并根据用户的需求和系统的实际情况选择合适的支付平台，从而提高支付的效率和安全性。</p>
+<p>基于策略模式的支付平台选择系统是一种常见的实现方式，它将支付平台的选择和具体的支付操作分离开来，通过定义不同的支付策略来实现不同的支付方式。在这种实现方式中，我们通常会定义一个环境类 <code>Context</code>，用于保存当前的支付策略，并提供相应的支付接口，以便在实际的支付操作中使用。同时，我们还会定义一个抽象策略类 <code>PaymentStrategy</code>，用于定义支付的基本操作，并在具体的支付策略中实现具体的支付方式。</p>
+<p>对于支付平台选择系统，我们通常需要考虑以下几个方面：</p>
+<ol>
+<li><p>支付平台的选择：在实际的应用中，我们需要根据不同的用户和场景选择不同的支付平台。比如，对于一些个人用户来说，支付宝和微信支付可能更加方便和快捷；而对于一些企业用户来说，银联支付可能更加安全和可靠。因此，在实际的应用中，我们需要根据具体的需求和系统的实际情况选择合适的支付平台。</p>
+</li>
+<li><p>支付的效率和安全性：在支付平台选择系统中，我们需要考虑支付的效率和安全性。一方面，我们需要选择一个支付平台，能够提供快速、方便、稳定的支付服务，从而保证用户的支付体验；另一方面，我们还需要考虑支付的安全性，采取一些必要的措施，如加密、身份验证、防欺诈等，来保证支付的安全性。</p>
+</li>
+<li><p>系统的可扩展性和可维护性：在实际的应用中，我们需要考虑支付平台选择系统的可扩展性和可维护性。一方面，我们需要支持多个支付平台，并能够方便地切换支付平台，从而满足不同用户和场景的需求；另一方面，我们还需要保证系统的可维护性，采用一些合适的设计模式和工具，如策略模式等，来方便系统的开发、测试和维护。</p>
+</li>
+</ol>
+<h1 id="二、分析"><a href="#二、分析" class="headerlink" title="二、分析"></a>二、分析</h1><p>构建基于策略模式的支付平台选择系统可以帮助我们解决在支付时选择支付平台的问题。策略模式是一种行为设计模式，其目的是在运行时根据情况选择不同的算法或策略。在支付平台选择系统中，我们可以通过策略模式来选择不同的支付平台，以便满足不同的支付需求。</p>
+<p>首先，我们需要定义一个抽象的策略接口，用于定义不同的支付平台策略。该接口应该包含一些方法，例如支付、退款和查询等，这些方法可以用来实现具体的支付逻辑。然后，我们需要创建一个或多个具体的策略类，实现策略接口并提供具体的支付逻辑。例如，我们可以创建一个支付宝支付策略类、一个微信支付策略类和一个银联支付策略类。</p>
+<p>接下来，我们需要定义一个环境类来管理不同的支付策略。该类应该包含一个成员变量，用于存储当前选定的支付策略。它应该还提供一些方法，例如设置支付策略、获取当前支付策略和执行支付等，这些方法可以用来与具体的支付策略类交互。</p>
+<p>最后，我们可以创建一个客户端类来测试和使用支付平台选择系统。客户端可以通过环境类选择不同的支付策略，并执行支付操作。客户端还可以在运行时更改支付策略，以便在不同的支付需求下选择不同的支付平台。</p>
+<p>基于策略模式的支付平台选择系统可以使我们的代码更加灵活和可扩展。我们可以在不影响其他代码的情况下添加新的支付策略，并在运行时根据不同的需求选择不同的支付平台。此外，该系统还可以使我们的代码更加简洁和易于维护，因为每个支付平台的实现都被封装在单独的策略类中。如果我们需要对某个支付平台进行修改或更新，我们只需要修改相应的策略类，而不需要修改整个系统。</p>
+<p>基于策略模式的支付平台选择系统可以实现在运行时动态选择支付平台的能力，以适应不同的支付场景。这个系统可以包括以下角色和组件：</p>
+<ol>
+<li><p>抽象策略（PaymentStrategy ）：定义支付平台接口，包含支付和退款方法等。</p>
+</li>
+<li><p>具体策略（ConcreteStrategy）：实现不同的支付平台，如支付宝、微信、银联等。</p>
+</li>
+<li><p>支付环境（PaymentContext ）：维护一个对策略对象的引用，以便在需要时调用支付或退款方法。</p>
+</li>
+<li><p>客户端（PaymentClient）：创建环境对象并设置所需的支付策略。</p>
+</li>
+<li></li>
+</ol>
+<p>在这个系统中，客户端可以根据实际需要选择不同的支付平台策略，而不必关心支付平台的具体实现。同时，策略模式还可以方便地扩展和替换支付平台策略，以适应不断变化的支付市场和客户需求。</p>
+<h1 id="三、设计"><a href="#三、设计" class="headerlink" title="三、设计"></a>三、设计</h1><ol>
+<li>定义策略接口</li>
+</ol>
+<p>首先，我们需要定义一个策略接口，用于描述所有支付平台策略的通用行为。在 Java 中，可以使用接口来定义策略。以下是支付策略接口的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">query</span><span class="params">(String orderId)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>该接口包含两个方法，用于支付和退款。具体的支付策略类将实现该接口并提供其自己的实现逻辑。</p>
+<ol start="2">
+<li>实现具体的策略类</li>
+</ol>
+<p>我们需要创建一个或多个具体的策略类，实现支付策略接口并提供具体的支付逻辑。以下是两个具体的策略类代码，分别代表支付宝、微信支付和银联支付：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AliPayStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用支付宝进行支付</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用支付宝进行退款</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeChatPayStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用微信支付进行支付</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用微信支付进行退款</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnionPayStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用银联进行支付</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用银联进行退款</span></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>每个具体的策略类都实现了支付策略接口，并提供了自己的实现逻辑。例如，<code>AliPayStrategy</code> 实现了 <code>pay()</code> 方法以使用支付宝进行支付、<code>refund()</code> 方法以使用支付宝进行退款。</p>
+<ol start="3">
+<li>定义环境类</li>
+</ol>
+<p>我们需要定义一个环境类，用于管理不同的支付策略。以下是代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PaymentContext</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> PaymentStrategy paymentStrategy;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setPaymentStrategy</span><span class="params">(PaymentStrategy paymentStrategy)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.paymentStrategy = paymentStrategy;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> PaymentStrategy <span class="title function_">getPaymentStrategy</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="keyword">return</span> paymentStrategy;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    paymentStrategy.pay(amount);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    paymentStrategy.refund(amount);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">query</span><span class="params">(String orderId)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    paymentStrategy.query(orderId);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>环境类包含一个成员变量 <code>paymentStrategy</code>，用于存储当前选定的支付策略。它还提供了一些方法，例如 <code>setPaymentStrategy()</code> 方法用于设置当前支付</p>
+<h1 id="四、模式实现"><a href="#四、模式实现" class="headerlink" title="四、模式实现"></a>四、模式实现</h1><p>以下是基于策略模式的支付平台选择系统中的 <code>PaymentStrategy</code> 接口的 Java 代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span>; <span class="comment">// 支付方法</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span>; <span class="comment">// 退款方法</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面的代码中，我们定义了一个名为 <code>PaymentStrategy</code> 的接口，它包含了两个抽象方法 <code>pay</code> 和 <code>refund</code>，分别用于实现支付和退款的操作。在具体的支付策略类中，我们将会实现这两个方法，以实现具体的支付和退款操作。</p>
+<p>需要注意的是，这里的 <code>amount</code> 参数表示支付或退款的金额，具体的实现可能需要根据实际情况进行调整。此外，还可以在接口中添加其他必要的方法，以实现更加丰富的支付策略。</p>
+<p>以下是基于策略模式的支付平台选择系统中的具体策略类的Java代码，使用支付宝作为支付平台：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlipayStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String account; <span class="comment">// 支付宝账号</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String password; <span class="comment">// 支付宝密码</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">AlipayStrategy</span><span class="params">(String account, String password)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.account = account;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.password = password;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 调用支付宝支付接口实现支付操作</span></span><br><span class="line"></span><br><span class="line">​    System.out.println(<span class="string">&quot;使用支付宝支付：&quot;</span> + amount + <span class="string">&quot;元&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 调用支付宝退款接口实现退款操作</span></span><br><span class="line"></span><br><span class="line">​    System.out.println(<span class="string">&quot;使用支付宝退款：&quot;</span> + amount + <span class="string">&quot;元&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>在上面的代码中，我们定义了一个名为 <code>AlipayStrategy</code> 的类，它实现了 <code>PaymentStrategy</code> 接口，并覆盖了 <code>pay</code> 和 <code>refund</code> 方法，以实现支付宝支付和退款的具体操作。在构造函数中，我们传入了支付宝账号和密码等必要参数，以便在实际的支付和退款操作中使用。</p>
+<p>需要注意的是，具体的支付宝支付和退款操作并没有在这里实现，我们只是通过 <code>println</code> 方法输出了一段提示信息。实际的支付和退款操作可能涉及到支付宝的 API 调用和网络通信等细节，需要根据实际情况进行实现。</p>
+<p>以下是基于策略模式的支付平台选择系统中的具体策略类的 Java 代码，使用微信支付作为支付平台：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WechatPayStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String appId; <span class="comment">// 微信支付应用ID</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String appKey; <span class="comment">// 微信支付应用密钥</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">WechatPayStrategy</span><span class="params">(String appId, String appKey)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.appId = appId;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.appKey = appKey;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 调用微信支付接口实现支付操作</span></span><br><span class="line"></span><br><span class="line">​    System.out.println(<span class="string">&quot;使用微信支付：&quot;</span> + amount + <span class="string">&quot;元&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 调用微信退款接口实现退款操作</span></span><br><span class="line"></span><br><span class="line">​    System.out.println(<span class="string">&quot;使用微信退款：&quot;</span> + amount + <span class="string">&quot;元&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面的代码中，我们定义了一个名为 <code>WechatPayStrategy</code> 的类，它实现了 <code>PaymentStrategy</code> 接口，并覆盖了 <code>pay</code> 和 <code>refund</code> 方法，以实现微信支付和退款的具体操作。在构造函数中，我们传入了微信支付应用ID和应用密钥等必要参数，以便在实际的支付和退款操作中使用。</p>
+<p>需要注意的是，具体的微信支付和退款操作并没有在这里实现，我们只是通过 <code>println</code> 方法输出了一段提示信息。实际的支付和退款操作可能涉及到微信支付的 API 调用和网络通信等细节，需要根据实际情况进行实现。</p>
+<p>以下是基于策略模式的支付平台选择系统中的具体策略类的Java代码，使用银联作为支付平台：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnionPayStrategy</span> <span class="keyword">implements</span> <span class="title class_">PaymentStrategy</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String merId; <span class="comment">// 银联商户号</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> String merKey; <span class="comment">// 银联商户密钥</span></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">UnionPayStrategy</span><span class="params">(String merId, String merKey)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.merId = merId;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.merKey = merKey;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 调用银联支付接口实现支付操作</span></span><br><span class="line"></span><br><span class="line">​    System.out.println(<span class="string">&quot;使用银联支付：&quot;</span> + amount + <span class="string">&quot;元&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 调用银联退款接口实现退款操作</span></span><br><span class="line"></span><br><span class="line">​    System.out.println(<span class="string">&quot;使用银联退款：&quot;</span> + amount + <span class="string">&quot;元&quot;</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面的代码中，我们定义了一个名为 <code>UnionPayStrategy</code> 的类，它实现了 <code>PaymentStrategy</code> 接口，并覆盖了 <code>pay</code> 和 <code>refund</code> 方法，以实现银联支付和退款的具体操作。在构造函数中，我们传入了银联商户号和商户密钥等必要参数，以便在实际的支付和退款操作中使用。</p>
+<p>需要注意的是，具体的银联支付和退款操作并没有在这里实现，我们只是通过 <code>println</code> 方法输出了一段提示信息。实际的支付和退款操作可能涉及到银联支付的 API 调用和网络通信等细节，需要根据实际情况进行实现。</p>
+<p>以下是基于策略模式的支付平台选择系统中的 <code>PaymentContext</code> 类的 Java 代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PaymentContext</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> PaymentStrategy paymentStrategy;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">PaymentContext</span><span class="params">(PaymentStrategy paymentStrategy)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.paymentStrategy = paymentStrategy;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setPaymentStrategy</span><span class="params">(PaymentStrategy paymentStrategy)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="built_in">this</span>.paymentStrategy = paymentStrategy;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    paymentStrategy.pay(amount);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refund</span><span class="params">(<span class="type">double</span> amount)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    paymentStrategy.refund(amount);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面的代码中，我们定义了一个名为 <code>PaymentContext</code> 的类，它包含了一个私有成员变量 <code>paymentStrategy</code>，用于保存当前的支付策略。在构造函数中，我们传入一个初始的支付策略，以便在实际的支付操作中使用。同时，我们还定义了 <code>setPaymentStrategy</code> 方法，可以动态地切换支付策略。</p>
+<p>在 <code>pay</code> 和 <code>refund</code> 方法中，我们通过调用当前支付策略的 <code>pay</code> 和 <code>refund</code> 方法实现具体的支付和退款操作。这样，我们就实现了一个基于策略模式的支付平台选择系统的环境类，它可以通过不同的支付策略来实现不同的支付操作。</p>
+<p>以下是基于策略模式的支付平台选择系统中的 <code>Client</code> 类的 Java 代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PaymentClient</span> &#123;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">​		<span class="comment">// 选择支付宝支付策略</span></span><br><span class="line"></span><br><span class="line">​		<span class="type">PaymentContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PaymentContext</span>(<span class="keyword">new</span> <span class="title class_">AlipayStrategy</span>(<span class="string">&quot;lgf&quot;</span>, <span class="string">&quot;123456&quot;</span>));</span><br><span class="line"></span><br><span class="line">​		context.pay(<span class="number">100.0</span>);</span><br><span class="line"></span><br><span class="line">​		context.refund(<span class="number">50.0</span>);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​		<span class="comment">// 切换为微信支付策略</span></span><br><span class="line"></span><br><span class="line">​		context.setPaymentStrategy(<span class="keyword">new</span> <span class="title class_">WechatPayStrategy</span>(<span class="string">&quot;lgf&quot;</span>, <span class="string">&quot;123456&quot;</span>));</span><br><span class="line"></span><br><span class="line">​		context.pay(<span class="number">200.0</span>);</span><br><span class="line"></span><br><span class="line">​		context.refund(<span class="number">100.0</span>);</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​		<span class="comment">// 切换为银联支付策略</span></span><br><span class="line"></span><br><span class="line">​		context.setPaymentStrategy(<span class="keyword">new</span> <span class="title class_">UnionPayStrategy</span>(<span class="string">&quot;lgf&quot;</span>, <span class="string">&quot;123456&quot;</span>));</span><br><span class="line"></span><br><span class="line">​		context.pay(<span class="number">300.0</span>);</span><br><span class="line"></span><br><span class="line">​		context.refund(<span class="number">150.0</span>);</span><br><span class="line"></span><br><span class="line">​	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面的代码中，我们定义了一个名为 <code>PaymentClient</code> 的类，它包含了一个 <code>main</code> 方法，用于演示基于策略模式的支付平台选择系统的使用。</p>
+<p>在 <code>main</code> 方法中，我们首先创建了一个 <code>PaymentContext</code> 对象，并选择了支付宝支付策略。然后，我们调用 <code>pay</code> 和 <code>refund</code> 方法，分别进行支付和退款操作。</p>
+<p>接着，我们使用 <code>setPaymentStrategy</code> 方法切换为微信支付策略，并再次调用 <code>pay</code> 和 <code>refund</code> 方法。最后，我们再次使用 <code>setPaymentStrategy</code> 方法切换为银联支付策略，并再次调用 <code>pay</code> 和 <code>refund</code> 方法。</p>
+<p>通过上面的代码，我们可以看到，基于策略模式的支付平台选择系统可以通过不同的支付策略来实现不同的支付和退款操作，从而实现了更加灵活和可扩展的支付系统。</p>
+<h1 id="五、测试与运行"><a href="#五、测试与运行" class="headerlink" title="五、测试与运行"></a>五、测试与运行</h1><p>为了测试和运行基于策略模式的支付平台选择系统，我们可以编写一个简单的客户端程序。下面是代码程序，用于测试基于策略模式的支付平台选择系统：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PaymentClient</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 创建支付平台选择系统环境</span></span><br><span class="line"></span><br><span class="line">​    <span class="type">PaymentContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PaymentContext</span>();</span><br><span class="line"></span><br><span class="line">​    </span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 设置支付平台选择策略</span></span><br><span class="line"></span><br><span class="line">​    context.setPaymentStrategy(<span class="keyword">new</span> <span class="title class_">AlipayStrategy</span>());</span><br><span class="line"></span><br><span class="line">​    </span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 进行支付</span></span><br><span class="line"></span><br><span class="line">​    context.pay(<span class="number">100.0</span>);</span><br><span class="line"></span><br><span class="line">​    </span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 修改支付平台选择策略</span></span><br><span class="line"></span><br><span class="line">​    context.setPaymentStrategy(<span class="keyword">new</span> <span class="title class_">WechatPayStrategy</span>());</span><br><span class="line"></span><br><span class="line">​    </span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 进行支付</span></span><br><span class="line"></span><br><span class="line">​    context.pay(<span class="number">200.0</span>);</span><br><span class="line"></span><br><span class="line">​    </span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 修改支付平台选择策略</span></span><br><span class="line"></span><br><span class="line">​    context.setPaymentStrategy(<span class="keyword">new</span> <span class="title class_">UnionPayStrategy</span>());</span><br><span class="line"></span><br><span class="line">​    </span><br><span class="line"></span><br><span class="line">​    <span class="comment">// 进行支付</span></span><br><span class="line"></span><br><span class="line">​    context.pay(<span class="number">300.0</span>);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面的程序中，我们首先创建了一个支付平台选择系统环境对象。然后，我们设置支付平台选择策略为支付宝策略，进行了一次支付。接下来，我们修改支付平台选择策略为微信支付策略，进行了第二次支付。最后，我们又修改了支付平台选择策略为银联支付策略，并进行了第三次支付。</p>
+<p>运行上面的程序，我们可以看到以下输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">选择了支付宝作为支付平台。</span><br><span class="line"></span><br><span class="line">支付了100.0元。</span><br><span class="line"></span><br><span class="line">选择了微信支付作为支付平台。</span><br><span class="line"></span><br><span class="line">支付了200.0元。</span><br><span class="line"></span><br><span class="line">选择了银联支付作为支付平台。</span><br><span class="line"></span><br><span class="line">支付了300.0元。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这表明基于策略模式的支付平台选择系统已经成功地工作了。我们可以看到，环境对象根据不同的策略选择了不同的支付平台，而且我们可以通过修改策略来动态地改变选择的支付平台。同时，我们可以方便地添加新的支付平台，只需要创建新的支付平台策略类并实现支付方法即可。</p>
+<p>总之，基于策略模式的支付平台选择系统是一种非常实用和灵活的设计模式。它将选择支付平台的逻辑和支付平台的具体实现分离开来，使得系统更易于扩展和维护。同时，它还可以帮助我们避免在代码中使用过多的条件语句，提高代码的可读性和可维护性。</p>
+<h1 id="六、效果分析"><a href="#六、效果分析" class="headerlink" title="六、效果分析"></a>六、效果分析</h1><p>基于策略模式的支付平台选择系统可以带来多方面的好处：</p>
+<p>基于策略模式的支付平台选择系统可以带来多方面的好处：</p>
+<ol>
+<li><p>灵活性</p>
+<p>由于基于策略模式的支付平台选择系统将支付平台选择的逻辑和具体的支付平台实现解耦，因此系统更加灵活。通过更换策略对象，系统可以轻松地选择不同的支付平台，而不需要修改任何其他的代码。这使得系统更加易于扩展和维护，同时也更加适应不同的业务场景。</p>
+</li>
+<li><p>可扩展性</p>
+<p>基于策略模式的支付平台选择系统也非常易于扩展。通过添加新的策略类，我们可以轻松地添加新的支付平台，而不需要修改任何其他的代码。这使得系统更加适应变化和发展，也能够帮助我们更好地应对业务需求的变化。</p>
+</li>
+<li><p>可读性</p>
+<p>使用基于策略模式的支付平台选择系统可以使代码更加易于理解和阅读。通过将不同的支付平台实现分离成不同的策略类，我们可以将不同的逻辑分开，减少代码的复杂性。这使得代码更加易于理解和维护，也提高了代码的可读性。</p>
+</li>
+<li><p>代码复用</p>
+<p>通过基于策略模式的支付平台选择系统，我们可以将支付平台的选择逻辑和具体的支付平台实现分离开来，从而使得支付平台的选择逻辑可以被复用。这种代码复用可以减少重复的代码，提高代码的效率和可维护性。</p>
+</li>
+</ol>
+<p>总之，基于策略模式的支付平台选择系统是一种非常实用的设计模式，它可以带来多方面的好处。通过将不同的支付平台实现分离开来，我们可以使系统更加灵活、可扩展、易于理解和维护。这种设计模式可以帮助我们更好地应对业务需求的变化，提高代码的效率和可读性。</p>
+<h1 id="七、课程总结"><a href="#七、课程总结" class="headerlink" title="七、课程总结"></a>七、课程总结</h1><p>在设计模式课程中，我们学习了一些经典的设计模式，这些设计模式可以帮助我们解决各种软件开发中的问题：</p>
+<ol>
+<li><p>创建型模式</p>
+<p>创建型模式是解决对象创建问题的一组设计模式。这些模式可以帮助我们灵活地创建对象，而不需要硬编码它们。在这些模式中，工厂模式是最常用的模式之一，它包括简单工厂模式、工厂方法模式和抽象工厂模式。</p>
+</li>
+<li><p>结构型模式</p>
+<p>结构型模式是解决对象组合问题的一组设计模式。这些模式可以帮助我们将对象组合成更大的结构，并提供更高级别的接口。在这些模式中，适配器模式是最常用的模式之一，它可以将一个类的接口转换成另一个客户端所期望的接口。</p>
+</li>
+<li><p>行为型模式</p>
+<p>行为型模式是解决对象间通信问题的一组设计模式。这些模式可以帮助我们实现对象间的松耦合，并允许我们在运行时动态地改变对象间的行为。在这些模式中，观察者模式和策略模式是最常用的模式之一。观察者模式允许对象之间的松耦合，并在对象之间建立订阅&#x2F;发布的关系。策略模式允许我们定义一系列算法，并将它们封装成一个策略对象，从而可以在运行时动态地改变算法。</p>
+</li>
+</ol>
+<p>在学习设计模式的过程中，我们也学习了一些设计原则。这些原则可以帮助我们写出更好的代码，并避免一些常见的问题。其中最重要的设计原则包括单一职责原则、开闭原则、里氏替换原则、接口隔离原则和依赖倒置原则。</p>
+<p>总的来说，设计模式是一种可以帮助我们解决软件开发中各种问题的工具。通过学习这些模式，我们可以写出更灵活、可扩展、可维护和易于理解的代码。同时，设计模式也可以帮助我们遵循一些重要的设计原则，从而提高我们的代码质量。</p>
+<h1 id="八、相关技术或者产品的发展"><a href="#八、相关技术或者产品的发展" class="headerlink" title="八、相关技术或者产品的发展"></a>八、相关技术或者产品的发展</h1><p>支付平台选择系统是与支付技术和产品密切相关的领域，随着支付技术和市场的不断发展，支付平台选择系统也不断演进和改进。下面是一些与支付平台选择系统相关的技术或产品：</p>
+<p>支付平台选择系统是与支付技术和产品密切相关的领域，随着支付技术和市场的不断发展，支付平台选择系统也不断演进和改进。下面是一些与支付平台选择系统相关的技术或产品：</p>
+<ol>
+<li><p>移动支付：移动支付是指利用移动设备进行支付的一种支付方式，如手机支付、二维码支付等。随着移动设备的普及和移动支付技术的成熟，越来越多的用户使用移动支付进行支付，支付平台选择系统也需要支持移动支付平台的接入和选择。</p>
+</li>
+<li><p>电子钱包：电子钱包是一种电子支付工具，用户可以将钱存储在其中，随时使用。电子钱包可以方便用户进行小额支付和快速结算，同时也有一定的安全性保障。支付平台选择系统需要支持电子钱包的接入和选择。</p>
+</li>
+<li><p>区块链支付：区块链技术在支付领域的应用越来越广泛，区块链支付是指利用区块链技术进行支付的一种支付方式。由于区块链技术的去中心化、安全等特性，区块链支付具有更高的安全性和信任度，但同时也存在着一些技术难题和不足之处。支付平台选择系统需要支持区块链支付平台的接入和选择。</p>
+</li>
+<li><p>第三方支付：第三方支付是指独立于银行、支付机构之外的第三方支付服务机构，如支付宝、微信支付等。第三方支付具有支付便捷、安全等优势，已经成为了目前支付市场的主流。支付平台选择系统需要支持第三方支付平台的接入和选择。</p>
+</li>
+<li><p>人工智能：人工智能技术在支付领域的应用也越来越广泛，如风控、欺诈检测、智能客服等。支付平台选择系统可以通过引入人工智能技术，提高支付的效率和安全性。同时，人工智能技术也可以用来分析用户支付的行为数据，为支付平台选择提供更准确的数据支持。</p>
+</li>
+</ol>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>刘伟. (2014). Java设计模式 (第2版). 人民邮电出版社.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://yuehua-HNU.github.io">月华.</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yuehua-hnu.github.io/2023/02/14/%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F/">http://yuehua-hnu.github.io/2023/02/14/基于策略模式的支付平台选择系统/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yuehua-HNU.github.io" target="_blank">月华.の奇妙冒险</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><div class="post_share"><div class="social-share" data-image="/./img/2B5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/03/Java%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89--%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E7%BA%A7/"><img class="prev-cover" src="/./img/%E6%B8%A1%E8%BE%B9%E6%97%A9%E5%AD%A3.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java学习（三）-- 面向对象中级</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20--%20%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/"><img class="next-cover" src="/./img/2B.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">设计模式 -- 策略模式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/01/18/UML%20%E7%B1%BB%E5%9B%BE%E4%B8%8E%E5%AF%B9%E8%B1%A1%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/" title="UML 类图与对象间的关系"><img class="cover" src="/./img/2B%209S.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-18</div><div class="title">UML 类图与对象间的关系</div></div></a></div><div><a href="/2023/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20--%20%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="设计模式 -- 策略模式"><img class="cover" src="/./img/2B.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-02-14</div><div class="title">设计模式 -- 策略模式</div></div></a></div><div><a href="/2023/01/17/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20--%20%E4%B8%83%E5%A4%A7%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99/" title="设计模式 -- 七大基本原则"><img class="cover" src="/./img/%E5%B0%8F%E8%88%9F%E6%BD%AE.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-01-26</div><div class="title">设计模式 -- 七大基本原则</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">月华.</div><div class="author-info__description">我连宇宙的尽头在哪都不知道，怎么知道这个</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/yuehua-HNU"><i class="fa-sharp fa-solid fa-plane"></i><span>快来一起玩</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/yuehua-HNU" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://space.bilibili.com/475208497?spm_id_from=333.1007.0.0" target="_blank" title="Bilibili"><i class="fa-brands fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">图床那篇因为图片隐私问题还在修改, 无限期后应该就改完了, 哎嘿(doge)</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F"><span class="toc-text">基于策略模式的支付平台选择系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%B3%BB%E7%BB%9F%E8%AE%BA%E8%BF%B0"><span class="toc-text">一、系统论述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E6%9E%90"><span class="toc-text">二、分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%BE%E8%AE%A1"><span class="toc-text">三、设计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0"><span class="toc-text">四、模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B5%8B%E8%AF%95%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="toc-text">五、测试与运行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%95%88%E6%9E%9C%E5%88%86%E6%9E%90"><span class="toc-text">六、效果分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E8%AF%BE%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-text">七、课程总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF%E6%88%96%E8%80%85%E4%BA%A7%E5%93%81%E7%9A%84%E5%8F%91%E5%B1%95"><span class="toc-text">八、相关技术或者产品的发展</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-text">参考文献</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/14/%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F/" title="基于策略模式的支付平台选择系统"><img src="/./img/2B5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于策略模式的支付平台选择系统"/></a><div class="content"><a class="title" href="/2023/02/14/%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F/" title="基于策略模式的支付平台选择系统">基于策略模式的支付平台选择系统</a><time datetime="2023-02-14T07:00:27.708Z" title="更新于 2023-02-14 15:00:27">2023-02-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20--%20%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="设计模式 -- 策略模式"><img src="/./img/2B.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="设计模式 -- 策略模式"/></a><div class="content"><a class="title" href="/2023/02/14/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20--%20%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="设计模式 -- 策略模式">设计模式 -- 策略模式</a><time datetime="2023-02-14T02:12:05.206Z" title="更新于 2023-02-14 10:12:05">2023-02-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/02/03/Java%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89--%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E7%BA%A7/" title="Java学习（三）-- 面向对象中级"><img src="/./img/%E6%B8%A1%E8%BE%B9%E6%97%A9%E5%AD%A3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java学习（三）-- 面向对象中级"/></a><div class="content"><a class="title" href="/2023/02/03/Java%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89--%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%AD%E7%BA%A7/" title="Java学习（三）-- 面向对象中级">Java学习（三）-- 面向对象中级</a><time datetime="2023-02-03T11:55:56.215Z" title="更新于 2023-02-03 19:55:56">2023-02-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/29/Butterfly%E7%BE%8E%E5%8C%96%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%BA%8C%EF%BC%89/" title="Butterfly美化之路（二）"><img src="/./img/%E6%89%BF%E5%A4%AA%E9%83%8E&amp;%E5%BE%90%E4%BC%A6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Butterfly美化之路（二）"/></a><div class="content"><a class="title" href="/2022/12/29/Butterfly%E7%BE%8E%E5%8C%96%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%BA%8C%EF%BC%89/" title="Butterfly美化之路（二）">Butterfly美化之路（二）</a><time datetime="2023-01-31T11:54:19.528Z" title="更新于 2023-01-31 19:54:19">2023-01-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/02/Butterfly%E7%BE%8E%E5%8C%96%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%80%EF%BC%89/" title="Butterfly美化之路（一）"><img src="/./img/%E5%B2%B8%E8%BE%B9%E9%9C%B2%E4%BC%B4.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Butterfly美化之路（一）"/></a><div class="content"><a class="title" href="/2022/12/02/Butterfly%E7%BE%8E%E5%8C%96%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%80%EF%BC%89/" title="Butterfly美化之路（一）">Butterfly美化之路（一）</a><time datetime="2023-01-31T11:51:31.347Z" title="更新于 2023-01-31 19:51:31">2023-01-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这 就 是 我 的 <a target="_blank" rel="noopener" href="https://github.com/yuehua-HNU/">逃 跑 路 线</a> ！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/边缘行者2.jpg);"> <a class="categoryBar-list-link" href="categories/Docs文档/">Docs文档</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">Docs文档</span></li><li class="categoryBar-list-item" style="background:url(/img/孤独摇滚3.jpg);"> <a class="categoryBar-list-link" href="categories/408/">408</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">408</span></li><li class="categoryBar-list-item" style="background:url(/img/波稻.jpg);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">Golang</span></li><li class="categoryBar-list-item" style="background:url(/img/2B4.jpg);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(/img/阿尼亚.jpg);"> <a class="categoryBar-list-link" href="categories/设计模式/">设计模式</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">设计模式</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.3.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.5.1" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" data-title="本站采用多线部署，备用线路托管于4EVERLAND" title=""><img src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/17/设计模式 -- 七大基本原则/" alt=""><img width="48" height="48" src="./img/小舟潮.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-17</span><a class="blog-slider__title" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">设计模式 -- 七大基本原则</a><div class="blog-slider__text">设计模式学习笔记整理</div><a class="blog-slider__button" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/26/Java学习（一）-- Java基础/" alt=""><img width="48" height="48" src="./img/来自新世界2.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-26</span><a class="blog-slider__title" href="2023/01/26/Java学习（一）-- Java基础/" alt="">Java学习（一）-- Java基础</a><div class="blog-slider__text">Java 复习笔记</div><a class="blog-slider__button" href="2023/01/26/Java学习（一）-- Java基础/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/15/Go 语言基础 - 基础语法/" alt=""><img width="48" height="48" src="./img/边缘行者4.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-15</span><a class="blog-slider__title" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">Go 语言基础 - 基础语法</a><div class="blog-slider__text">字节跳动第五届青训营后端基础班学习笔记</div><a class="blog-slider__button" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/01/C语言复习/" alt=""><img width="48" height="48" src="./img/八重神子-良缘祈愿.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-01</span><a class="blog-slider__title" href="2023/01/01/C语言复习/" alt="">C语言复习</a><div class="blog-slider__text">考研向C语言复习, 根据自己的个人情况所记笔记</div><a class="blog-slider__button" href="2023/01/01/C语言复习/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/12/01/搭建自己的博客/" alt=""><img width="48" height="48" src="./img/JOJO3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-12-01</span><a class="blog-slider__title" href="2022/12/01/搭建自己的博客/" alt="">搭建个人博客历程</a><div class="blog-slider__text">搭建博客前前后后的心路历程</div><a class="blog-slider__button" href="2022/12/01/搭建自己的博客/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
