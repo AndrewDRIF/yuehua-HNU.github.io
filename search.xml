@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Sqoop 检查 MySQL 指令报错</title>
+      <link href="/2023/02/22/Sqoop%20%E6%A3%80%E6%9F%A5%20MySQL%20%E6%8C%87%E4%BB%A4%E6%8A%A5%E9%94%99/"/>
+      <url>/2023/02/22/Sqoop%20%E6%A3%80%E6%9F%A5%20MySQL%20%E6%8C%87%E4%BB%A4%E6%8A%A5%E9%94%99/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Sqoop-检查-MySQL-指令报错-Caused-by-java-sql-SQLException-Access-denied-for-user-‘root‘-’bd’-using-password-YES"><a href="#Sqoop-检查-MySQL-指令报错-Caused-by-java-sql-SQLException-Access-denied-for-user-‘root‘-’bd’-using-password-YES" class="headerlink" title="Sqoop 检查 MySQL 指令报错 Caused by: java.sql.SQLException: Access denied for user ‘root‘@’bd’ (using password: YES)"></a>Sqoop 检查 MySQL 指令报错 Caused by: java.sql.SQLException: Access denied for user ‘root‘@’bd’ (using password: YES)</h1><p>输入 Sqoop 检查 MySQL 指令报错</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqoop list-databases --connect jdbc:mysql://<span class="number">192</span>.<span class="number">168</span>.<span class="number">242</span>.<span class="number">1</span>:<span class="number">3306</span> --username root --password <span class="number">123456</span></span><br></pre></td></tr></table></figure><p>报错信息</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.sql.SQLException: Access denied <span class="keyword">for</span> user &#x27;root&#x27;@&#x27;bd&#x27; (using password: YES)</span><br></pre></td></tr></table></figure><p>下图为报错信息</p><p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230222094433763.png" alt="报错信息"></p><p>我们需要在 MySQL 中创建一个 <code>&#39;root&#39;@&#39;bd&#39;</code> 这一个用户</p><p>MySQL 创建用户指令</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create user &#x27;root&#x27;@&#x27;bd&#x27; identified by &#x27;MySQL密码&#x27;;</span><br></pre></td></tr></table></figure><p>接下来输入以下指令</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grant all on *.* to &#x27;root&#x27;@&#x27;bd&#x27;;</span><br></pre></td></tr></table></figure><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></table></figure><p>最后在重新使用 Sqoop 检查指令</p><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqoop list-databases --connect jdbc:mysql://<span class="number">192</span>.<span class="number">168</span>.<span class="number">242</span>.<span class="number">1</span>:<span class="number">3306</span> --username root --password <span class="number">123456</span></span><br></pre></td></tr></table></figure><p>成功解决</p><p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230222094630716.png" alt="解决之后的输出"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据科学与大数据 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Sqoop </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Java 项目 -- 学以致用</title>
       <link href="/2023/02/14/Java%20%E9%A1%B9%E7%9B%AE%20--%20%E5%AD%A6%E4%BB%A5%E8%87%B4%E7%94%A8/"/>
       <url>/2023/02/14/Java%20%E9%A1%B9%E7%9B%AE%20--%20%E5%AD%A6%E4%BB%A5%E8%87%B4%E7%94%A8/</url>
