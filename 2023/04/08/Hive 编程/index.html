@@ -1,0 +1,778 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Hive 编程 | 月华.の奇妙冒险</title><meta name="author" content="月华."><meta name="copyright" content="月华."><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="NIIT Hive 学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive 编程">
+<meta property="og:url" content="http://yuehua-hnu.github.io/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="月华.の奇妙冒险">
+<meta property="og:description" content="NIIT Hive 学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuehua-hnu.github.io/img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg">
+<meta property="article:published_time" content="2023-04-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-08T01:56:47.347Z">
+<meta property="article:author" content="月华.">
+<meta property="article:tag" content="Hive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuehua-hnu.github.io/img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg"><link rel="shortcut icon" href="/img/%E6%98%9F%E6%9C%88%E5%A4%9C.webp"><link rel="canonical" href="http://yuehua-hnu.github.io/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hive 编程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-08 09:56:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/echarts@4.9.0/dist/echarts.min.js"></script><script async src="/js/title.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="space-scene"><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">月华.の奇妙冒险</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hive 编程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-07T16:00:00.000Z" title="发表于 2023-04-08 00:00:00">2023-04-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-08T01:56:47.347Z" title="更新于 2023-04-08 09:56:47">2023-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE/">数据科学与大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hive 编程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Hive-编程"><a href="#Hive-编程" class="headerlink" title="Hive 编程"></a>Hive 编程</h1><p><em><strong>*启动Hive:*</strong></em></p>
+<p>1.先启动HiveServer2服务:</p>
+<p>hive –service hiveserver2</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps80.jpg" alt="img"> </p>
+<p>然后挂着这个终端</p>
+<p>2.再打开第二个终端</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps81.jpg" alt="img"> </p>
+<p>这个终端负责写指令</p>
+<p>3.然后在新的终端输入beeline 用来显示表格框框</p>
+<p>4.输入指令 ! connect jdbc:hive2:&#x2F;&#x2F;zp:10000&#x2F;default (zp是主机名,可以改成自己的)</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps82.jpg" alt="img"> </p>
+<p>5.输入用户名密码(虚拟机登录时的用户名密码)</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps83.jpg" alt="img"> </p>
+<p>6.然后开始在终端中写Hive指令</p>
+<p><em><strong>*基础:*</strong></em></p>
+<p>展示所有数据库:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps84.jpg" alt="img"> </p>
+<p>展示这个数据库的内容:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps85.jpg" alt="img"> </p>
+<p>展示默认数据库:</p>
+<p>describe database default;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps86.jpg" alt="img"> </p>
+<p>创建数据库:</p>
+<p>Create database db_name;</p>
+<p>create database if not exists db_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps87.jpg" alt="img"> </p>
+<p>创建数据库时添加注释:</p>
+<p>create database if not exists niit_db1 comment “Its NIIT Database”;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps88.jpg" alt="img"> </p>
+<p>创建数据库时添加属性:</p>
+<p>create database if not exists db2 with dbproperties(‘creator’&#x3D;’DPS’,’date’&#x3D;’2021-03-02’);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps89.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps90.jpg" alt="img"> </p>
+<p>展示数据库的属性:</p>
+<p>describe database extended db1;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps91.jpg" alt="img"> </p>
+<p>数据库中无表时删除数据库:</p>
+<p>drop database db_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps92.jpg" alt="img"> </p>
+<p>数据库有表时删除数据库:</p>
+<p>drop database if exists db_name CASCADE;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps93.jpg" alt="img"> </p>
+<p>创建表:</p>
+<p>create table Manager(name string, id int,address string,age int) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile;	</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps94.jpg" alt="img"> </p>
+<p>建表:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps95.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps96.jpg" alt="img"> </p>
+<p>展示表:</p>
+<p>describe tb_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps97.jpg" alt="img"> </p>
+<p>获取默认位置:</p>
+<p>set hive.metastore.warehouse.dir</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps98.jpg" alt="img"> </p>
+<p>将表存储到另一个位置:</p>
+<p>create table manager1(name string, id int,address string,age int) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile location ‘&#x2F;user&#x2F;dps&#x2F;manager1’;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps99.jpg" alt="img"> </p>
+<p>删除表:</p>
+<p>drop table if exists tb_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps100.jpg" alt="img"> </p>
+<p>重命名表:</p>
+<p>alter table tb_name rename to new_tb_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps101.jpg" alt="img"> </p>
+<p>更改列名和数据类型:</p>
+<p>ALTER TABLE tb_name CHANGE old_column new_column data_type;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps102.jpg" alt="img"> </p>
+<p>在现有表中添加新列:</p>
+<p>ALTER TABLE tb_name ADD COLUMNS (dept STRING COMMENT ‘Department name’);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps103.jpg" alt="img"> </p>
+<p>从本地加载数据:(不会覆盖,如果输入两次相同的指令会在表中叠加)</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;data.txt’ into table manager;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps104.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps105.jpg" alt="img"> </p>
+<p>检索数据:</p>
+<p>Select * from manager;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps106.jpg" alt="img"> </p>
+<p>覆盖表中的现有数据:</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;data2.txt’ overwrite into table manager;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps107.jpg" alt="img"> </p>
+<p>将文件从本地复制到HDFS:</p>
+<p>a) 先在HDFS中创建文件夹</p>
+<p>hdfs dfs -mkdir &#x2F;user&#x2F;files</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps108.jpg" alt="img"> </p>
+<p>b) 从本地复制到HDFS</p>
+<p>hdfs dfs -copyFromLocal &#x2F;tools&#x2F;datafiles&#x2F;data.txt &#x2F;user&#x2F;files</p>
+<p>或者</p>
+<p>hdfs dfs -put &#x2F;tools&#x2F;datafiles&#x2F;data2.txt &#x2F;user&#x2F;files</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps109.jpg" alt="img"> </p>
+<p>从HDFS加载数据到表中:</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;data.txt’ into table manager;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps110.jpg" alt="img"> </p>
+<p><em><strong>*Hive管理:*</strong></em></p>
+<p>内部表:</p>
+<p>内部表是由Hive控制的。</p>
+<p>metastore存储的元数据和HDFS的实际数据都被Hive控制。</p>
+<p>访问内部表数据的唯一方法是使用Hive。不管数据的位置是HDFS还是Hive自己的仓库目录。</p>
+<p>Hive不允许任何其他应用程序访问这些数据。如果我们必须访问内部表的数据，我们只能对这些数据使用Hive查询。</p>
+<p>当我们删除内部表时，元数据和实际数据都会丢失，因为它们都被Hive控制。</p>
+<p>默认情况下，如果我们创建的表没有使用“external”关键字，那么它将是内部表。</p>
+<p>因为默认情况下，如果表没有被提到为外部表，那么它的内部表。</p>
+<p>create table manager2(name string, id int,address string,age int) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps111.jpg" alt="img"> </p>
+<p>外部表:</p>
+<p>在外部表的情况下，只有存储在metastore的元数据被Hive控制。．</p>
+<p>HDFS的实际数据不受Hive控制。当我们删除外部表时，只有元数据会丢失。我们可以通过其他应用，比如HBase，来访问外部表。</p>
+<p>如果我们创建一个表使用’external’关键字，那么它将是外部表。</p>
+<p>Create external table manager3(name string, id int,address string,age int) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps112.jpg" alt="img"> </p>
+<p>显示列</p>
+<p>Set hive.cli.print.header&#x3D;true</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps113.jpg" alt="img"> </p>
+<p>Insert指令将数据从一个表加载到另一个表</p>
+<p>(两个表的列数,列名以及每个列的数据类型都要相同)</p>
+<p>Insert into table tar_table select col1,col2,col3 from source_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps114.jpg" alt="img"> </p>
+<p>(重复多次不会覆盖只会叠加)</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps115.jpg" alt="img"> </p>
+<p>将一个表中的数据重写覆盖进另一个表</p>
+<p>Insert overwrite table tar_table select col1,col2,col3 from source_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps116.jpg" alt="img"> </p>
+<p>在特定行覆盖表中信息</p>
+<p>Insert overwrite table tar_table select col1,col2,col3 from source_tab where col3&#x3D;’Shanghai’;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps117.jpg" alt="img"> </p>
+<p>将一个表的数据插入到多个表中</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps118.jpg" alt="img"> </p>
+<p>重写列名</p>
+<p>alter table manager replace columns(callnumber intstring, phone int);</p>
+<p>只剩这些行,剩多少行剩多少数据,但是数据类型要一样</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps119.jpg" alt="img"> </p>
+<p>显示表的元数据</p>
+<p>desc formatted emp;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps120.jpg" alt="img"> </p>
+<p>设置表的属性</p>
+<p>alter table emp set tblproperties(‘auto.purge’&#x3D;’true’);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps121.jpg" alt="img"> </p>
+<p>改变表的数据类型</p>
+<p>alter table emp set fileformat avro;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps122.jpg" alt="img"> </p>
+<p>静态分区:</p>
+<p>n 将输入数据文件单独插入分区表是静态分区。 </p>
+<p>n 通常在将文件（大文件）加载到 Hive 表时，首选静态分区。 </p>
+<p>n 与动态分区相比，静态分区可以节省加载数据的时间。 </p>
+<p>n 您可以“静态地”在表中添加一个分区，并将文件移动到表的分区中。 </p>
+<p>n 我们可以改变静态分区中的分区。 </p>
+<p>分区表 </p>
+<p>Hive 分区的类型</p>
+<p>n 您可以从文件名、日期等获取分区列值，而无需读取整个大文件。 </p>
+<p>n 如果要在 Hive 中使用静态分区，应在 hive-site.xml 中默认设置属性 set hive.mapred.mode&#x3D;strict 此属性集 </p>
+<p>n 静态分区处于严格模式。 </p>
+<p>n 应该使用 where 子句在静态分区中使用 limit。 </p>
+<p>n 您可以在 Hive 管理表或外部表上执行静态分区。</p>
+<p>创建分区</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps123.jpg" alt="img"> </p>
+<p>静态分区表</p>
+<p>create table if not exists part_dept (deptno int,empname string,sal int) partitioned by (deptname string) row format delimited fields terminated by’,’ lines terminated by’\n’stored as textfile;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps124.jpg" alt="img"> </p>
+<p>静态分区负荷</p>
+<p>insert into table part_dept partition (deptname &#x3D; ‘HR’) select col1,col3,col4 from dept where col2 &#x3D; ‘HR’;</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;act’into table part_dept partition( deptname &#x3D;’Accounts’);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps125.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps126.jpg" alt="img"> </p>
+<p>动态分区</p>
+<p>n 对分区表的单个插入称为动态分区。 </p>
+<p>n 通常，动态分区从非分区表加载数据。 </p>
+<p>n 与静态分区相比，动态分区在加载数据方面花费更多的时间。 </p>
+<p>n 当您在表中存储了大量数据时，动态分区是合适的。 </p>
+<p>n 如果您想划分多个列，但不知道有多少列，那么动态分区也是合适的。 </p>
+<p>n 动态分区使用 limit 不需要 where 子句。 </p>
+<p>n 我们无法在动态分区上执行 alter。 </p>
+<p>n 您可以对 Hive 外部表和托管表执行动态分区。 </p>
+<p>n 如果要在 Hive 中使用动态分区，则该模式为非严格模式。 </p>
+<p>n 以下是您应该允许的 Hive 动态分区属性 </p>
+<p>默认情况下，Hive 中禁用动态分区。因此，首先我们需要通过设置以下两个属性在 Hive 中启用动态分区。 </p>
+<p>set hive.exec.dynamic.partition&#x3D;true; </p>
+<p>set hive.exec.dynamic.partition.mode&#x3D;nonstrict; </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps127.jpg" alt="img"> </p>
+<p>创建动态分区表</p>
+<p>create table if not exists dyna_part_dept (deptno int,empname string,sal int) partitioned by (deptname string) row format delimited fields terminated by’,’ lines terminated by’\n’stored as textfile;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps128.jpg" alt="img"> </p>
+<p>动态分区负荷</p>
+<p>insert into table dyna_part_dept partition (deptname) select col1,col3,col4,col2 from dept; </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps129.jpg" alt="img"> </p>
+<p>删除分区</p>
+<p>alter table dyna_part_dept drop partition (deptname &#x3D; ‘HR’);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps130.jpg" alt="img"> </p>
+<p>添加分区</p>
+<p>alter table dyna_part_dept add partition (deptname &#x3D; ‘Dev’);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps131.jpg" alt="img"> </p>
+<p>导入信息到分区</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps132.jpg" alt="img"> </p>
+<p>msck repair table  dyna_part_dept;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps133.jpg" alt="img"> </p>
+<p>创建分桶</p>
+<p>create table if not exists dept_buck(deptno int,empname string,sal int, location string)</p>
+<p>partitioned by (deptname string) clustered by (location ) into 4 buckets</p>
+<p>row format delimited fields terminated by’,’ lines terminated by’\n’ stored as textfile;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps134.jpg" alt="img"> </p>
+<p>导入信息到分桶</p>
+<p>insert into table dept_buck partition (deptname) select deptno,empname,sal,location,deptname from dept_loc; </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps135.jpg" alt="img"> </p>
+<p>使用分桶</p>
+<p>set hive.enforce.bucketing&#x3D;true;</p>
+<p>set hive.exec.dynamic.partition.mode&#x3D;nonstrict;</p>
+<p>分桶采样</p>
+<p>select deptno, empname,sal,location from dept_buck tablesample(bucket 1 out of 2 on location);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps136.jpg" alt="img"> </p>
+<p>select deptno, empname,sal,location from dept_buck tablesample(2 percent);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps137.jpg" alt="img"> </p>
+<p>select deptno, empname,sal,location from dept_buck tablesample(1M);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps138.jpg" alt="img"> </p>
+<p>select deptno, empname,sal,location from dept_buck tablesample(20 rows);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps139.jpg" alt="img"> </p>
+<p>保护模式</p>
+<p>No_drop子句</p>
+<p>防止数据被删除,控制不能使用drop table命令</p>
+<p>alter table tb_name enable no_drop;</p>
+<p>取消no_drop控制</p>
+<p>table tb_name disable no_drop;</p>
+<p>在分区中应用no_drop</p>
+<p>alter table tb_name partition (deptname&#x3D;’HR’) enable no_drop;</p>
+<p>控制no_drop后尝试删除分区</p>
+<p>alter table tb_name drop partition (deptname&#x3D;’HR’);</p>
+<p>取消分区中的no_drop控制</p>
+<p>alter table tb_name partition (deptname&#x3D;’HR’) disable no_drop;</p>
+<p>Offline子句</p>
+<p>防止数据被查询	</p>
+<p>alter table tb_name enable offline;</p>
+<p>撤销防查指令</p>
+<p>alter table tb_name disable offline;</p>
+<p>防止分区数据被查询</p>
+<p>table tb_name drop partition (deptname&#x3D;’HR’) enable offline;</p>
+<p>撤销分区防查指令</p>
+<p>alter table tb_name drop partition (deptname&#x3D;’HR’) disable offline;</p>
+<p>创建临时表</p>
+<p>create temporary table table_name (col1 datatype1,…);</p>
+<p>或者</p>
+<p>create temporary table emp100(id int, name string, gender string, age_in_years double, weight_in_kg double,age_in_company double, salary double, city string, state string, region string) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps140.jpg" alt="img"> </p>
+<p>一些重要的Hive指令</p>
+<p>插入指令(会另外开辟一行插入)</p>
+<p>INSERT INTO table_name(col1,col2,col3) values(val1,val2,val3);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps141.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps142.jpg" alt="img"> </p>
+<p>INSERT INTO table_name values(val1,val2,…);</p>
+<p>以这种方式添加行必须要全部填满,有多少列就要有多少值,而且每个值要用单引号’’引上</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps143.jpg" alt="img"> </p>
+<p>为现有表生成create table指令</p>
+<p>Show create table table_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps144.jpg" alt="img"> </p>
+<p>描述表的指令</p>
+<p>Describe table_name</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps145.jpg" alt="img"> </p>
+<p>describe formatted table_name;</p>
+<p>表及分区格式化信息</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps146.jpg" alt="img"> </p>
+<p>describe extended table_name;</p>
+<p>带描述列信息查看</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps147.jpg" alt="img"> </p>
+<p>Create table table_name like model_table_name</p>
+<p>复制现有表的模式而不复制其数据，可以使用CREATE table LIKE命令</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps148.jpg" alt="img"> </p>
+<p>Create Table table_name as Select </p>
+<p> Create Table manager2345 as Select * from manager2 where id &#x3D;&#x3D; 2;</p>
+<p>以表的模式以及导入输出的值来创建一个新表</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps149.jpg" alt="img"> </p>
+<p>将hive数据导出</p>
+<p>set hive.cli.print.header&#x3D;true;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps150.jpg" alt="img"> </p>
+<p>INSERT OVERWRITE LOCAL DIRECTORY ‘&#x2F;tools&#x2F;datafiles&#x2F;output(导出文件位置)’ ROW FORMAT DELIMITEDFIELDS TERMINATED BY ‘,’ SELECT * FROM table_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps151.jpg" alt="img"> </p>
+<p><em><strong>*第三章 HQL语法*</strong></em></p>
+<p>创建表</p>
+<p>create table employee(id int, name string, gender string, age_in_years double, weight_in_kg double,age_in_company double, salary double, city string, state string, region string) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile;</p>
+<p>从本地导入数据</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;emp.csv’ into table employee;</p>
+<p>Select子句</p>
+<p>SELECT [ALL | DISTINCT] select_expr, select_expr, …</p>
+<p> FROM table_reference</p>
+<p> [WHERE where_condition]</p>
+<p> [GROUP BY col_list]</p>
+<p> [ORDER BY col_list]</p>
+<p> [CLUSTER BY col_list</p>
+<p>  | [DISTRIBUTE BY col_list] [SORT BY col_list]</p>
+<p>  ]</p>
+<p> [LIMIT [offset,] rows]</p>
+<p>挑选出所有列</p>
+<p>SELECT  * from table_name;</p>
+<p>挑选出特定列</p>
+<p>SELECT  col1 from table_name;</p>
+<p>挑选出n个列</p>
+<p>SELECT  col1, col2,….coln from table_name;</p>
+<p>All和distinct子句</p>
+<p>ALL 和 DISTINCT 选项指定是否返回重复的行。如果未指定，则默认值为 ALL（返回所有行）。 </p>
+<p>DISTINCT 指定从结果集中删除重复行。</p>
+<p>没声明distinct时默认为all,在这种情况下，重复的行不会从查询结果中删除</p>
+<p>SELECT  *  from table_name;</p>
+<p>如果指定了DISTINCT选项，则查询结果中将排除所有重复的数据值行</p>
+<p>SELECT  distinct col1 from table_name;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps152.jpg" alt="img"> </p>
+<p>Where子句</p>
+<p>SELECT * FROM sales WHERE amount &gt; 10 AND region &#x3D; “US”</p>
+<p>Order by子句</p>
+<p>用来使检索列按照某种格式升序或降序排列</p>
+<p>升序排列:</p>
+<p>SELECT Id, Name, Dept FROM employee ORDER BY DEPT;</p>
+<p>降序排列:</p>
+<p>SELECT Id, Name, Dept FROM employee ORDER BY DEPT desc;</p>
+<p>Sort by子句</p>
+<p>Hive支持SORT BY，可以对每个reducer的数据进行排序。“order by”和“sort by”之间的区别是，前者保证输出中的全部顺序，而后者只保证减速机中行的顺序。如果有多个reducer，“sort by”可能给出部分排序的最终结果。</p>
+<p>SELECT Id, Name FROM employee sort by id;</p>
+<p>在HQL中，Cluster By被用作distribute By和sort By子句的替代。</p>
+<p>SELECT  Id, Name from employees CLUSTER BY Id;</p>
+<p>Hive中用于表的Cluster BY子句。Hive使用Cluster by中的列将行分布到reducer中。Cluster BY列将转到多个reducer</p>
+<p>SELECT  Id, Name from employees distributed BY sort by Id;</p>
+<p>Group by子句</p>
+<p>用于使用特定的集合列对结果集中的所有记录进行分组。用于查询一组记录。</p>
+<p>select region, avg(salary) from employee group by region;</p>
+<p>Having子句</p>
+<p>HAVING子句被添加到Hive是因为WHERE关键字不能用于聚合函数</p>
+<p>聚合函数:avg, max, min, sum, count</p>
+<p>select region, avg(salary) from employee group by region having avg(salary)&gt;10;</p>
+<p>Like和RLike</p>
+<p>Like: <img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps153.jpg" alt="img"></p>
+<p>select id,name,salary from employee where name like ‘_u%’;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps154.jpg" alt="img"> </p>
+<p>RLike: 可以使用Java正则表达式,只要任何一个与之匹配则计算结果就为TRUE</p>
+<p>select id,name,salary from employee where name rlike ‘(Hugh|Deane)’;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps155.jpg" alt="img"> </p>
+<p>Hive 集运算符</p>
+<p>Union: 从结果集中删除重复的行</p>
+<p>Union all: 不会从结果集中删除重复的行</p>
+<p><em><strong>*Hive链接*</strong></em></p>
+<p>准备:</p>
+<p>create table if not exists emp_tab (col1 int,col2 string,col3 string,col4 int,col5 int,col6 int,col7 string) row format delimited fields terminated by’,’ lines terminated by’\n’stored as textfile;</p>
+<p>create table if not exists dept_tab (col1 int,col2 string,col3 string,col4 string) row format delimited fields terminated by’,’ lines terminated by’\n’stored as textfile;</p>
+<p>create table if not exists third_tab (col1 int,col2 string,col3 string) row format delimited fields terminated by’,’ lines terminated by’\n’stored as textfile;</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;emp_tab.txt’ into table emp_tab;</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;dept_tab.txt’ into table dept_tab;</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;third_tab.txt’ into table third_tab;</p>
+<p>内部链接&#x2F;等效链接</p>
+<p>Select emp_tab.col1,emp_tab.col2,emp_tab.col3,dept_tab.col1,dept_tab.col2,dept_tab.col3 from emp_tab join dept_tab on (emp_tab.col6 &#x3D; dept_tab.col1);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps156.jpg" alt="img"> </p>
+<p>外部链接:</p>
+<p>左外链接 :JOIN 操作符左边表中符合 WHERE 子句的所有记录将会被返回。以左边表为主,右边如果没有值就补null</p>
+<p>select emp_tab.col1,emp_tab.col2,emp_tab.col3,dept_tab.col1,dept_tab.col2,dept_tab.col3 from emp_tab left outer join dept_tab on (emp_tab.col6 &#x3D; dept_tab.col1);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps157.jpg" alt="img"> </p>
+<p>右外链接: JOIN 操作符右边表中符合 WHERE 子句的所有记录将会被返回。以右边表为主,左边如果没有值就补null</p>
+<p>select emp_tab.col1,emp_tab.col2,emp_tab.col3,dept_tab.col1,dept_tab.col2,dept_tab.col3 from emp_tab right outer join dept_tab on (emp_tab.col6 &#x3D; dept_tab.col1);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps158.jpg" alt="img"> </p>
+<p>完全外部链接:谁没有就补null</p>
+<p>select emp_tab.col1,emp_tab.col2,emp_tab.col3,dept_tab.col1,dept_tab.col2,dept_tab.col3 from emp_tab full outer join dept_tab on (emp_tab.col6 &#x3D; dept_tab.col1);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps159.jpg" alt="img"> </p>
+<p>连接三个表:最后join最大的表,这样可以加快处理速度</p>
+<p>Select emp_tab.col1,emp_tab.col2,dept_tab.col2,dept_tab.col3,third_tab.col2 from emp_tab join dept_tab on ( emp_tab.col7 &#x3D; dept_tab.col4 ) join third_tab on ( dept_tab.col1 &#x3D; third_tab.col1);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps160.jpg" alt="img"> </p>
+<p><em><strong>*筛选词*</strong></em></p>
+<p>And并且, or或者, between之前, in在给定值内, not in不在给定值内, limit限定几行</p>
+<p>select id,name from employee where region&#x3D;’OH’ or salary&gt;10;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps161.jpg" alt="img"> </p>
+<p>select id,name from employee where region&#x3D;’OH’ and salary&gt;10;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps162.jpg" alt="img"> </p>
+<p>select id,salary from employee where salary between 10 and 12;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps163.jpg" alt="img"> </p>
+<p>select id,salary from employee where salary in (11.35,12);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps164.jpg" alt="img"> </p>
+<p>select id,salary from employee where salary not in (11.35,12);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps165.jpg" alt="img"> </p>
+<p>select id,salary from employee where salary not in (11.35,12) limit 49;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps166.jpg" alt="img"> </p>
+<p><em><strong>*打印表头*</strong></em></p>
+<p>打开配置:Set hive.cli.print.header&#x3D;true</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps167.jpg" alt="img"> </p>
+<p><em><strong>*用正则表达式查询特定的列*</strong></em></p>
+<p>set hive.support.quoted.identifiers&#x3D;none;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps168.jpg" alt="img"> </p>
+<p><em><strong>*设置列别名*</strong></em></p>
+<p>select name as ne from employee;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps169.jpg" alt="img"> </p>
+<p><em><strong>*嵌套选择*</strong></em></p>
+<p>(一个表中的嵌套)</p>
+<p>select id from (select id,name from employee) a ;(这个a可以是任何词,只是作为一个EOF)</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps170.jpg" alt="img"> </p>
+<p>select name from (select * from employee order by salary desc limit 1) a;(工资最高的人的名字)</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps171.jpg" alt="img"> </p>
+<p>(不同表中的嵌套)</p>
+<p>select * from student where id in (select id from employee);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps172.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps173.jpg" alt="img"> </p>
+<p>一些示例</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps174.jpg" alt="img"> </p>
+<p><em><strong>*Hive 视图*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps175.jpg" alt="img"> </p>
+<p>创建视图语法:</p>
+<p>Create view view_name {column_name,column_name…} as select…</p>
+<p>create view emp_view1 as select * from emp_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps176.jpg" alt="img"> </p>
+<p>create view emp_view2 as select col1,col2 from emp_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps177.jpg" alt="img"> </p>
+<p>create view if not exists emp_view3 as select col1 as id,col2 as name from emp_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps178.jpg" alt="img"> </p>
+<p>create view emp_view4 as select emp_tab.col1,emp_tab.col2,dept_tab.col3 from emp_tab join dept_tab on (emp_tab.col6 &#x3D; dept_tab.col1);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps179.jpg" alt="img"> </p>
+<p>修改视图语法:</p>
+<p>alter view emp_view1 as select col1 from emp_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps180.jpg" alt="img"> </p>
+<p>重命名视图语法:</p>
+<p>alter view emp_view1 rename to emp_view_new;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps181.jpg" alt="img"> </p>
+<p>删除视图语法:</p>
+<p>drop view emp_view_new;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps182.jpg" alt="img"> </p>
+<p>视图的优点:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps183.jpg" alt="img"> </p>
+<p><em><strong>*高级表属性*</strong></em></p>
+<p>去掉页眉页脚(直接略过上下两行):</p>
+<p>create table if not exists log_tab (col1 string ,col2 int) </p>
+<p>row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ </p>
+<p>stored as textfile tblproperties (“skip.header.line.count”&#x3D;”1”, “skip.footer.line.count”&#x3D;”2”);</p>
+<p>load data local inpath’&#x2F;tools&#x2F;datafiles&#x2F;log2.txt’ into table log_tab;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps184.jpg" alt="img"> </p>
+<p><em><strong>*Hive不可变属性*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps185.jpg" alt="img"> </p>
+<p>创建一个不可变表:</p>
+<p>create table if not exists dept_imu (col1 int,col2 string,col3 string,col4 int) row format delimited fields terminated by’,’ lines terminated by’\n’stored as textfile tblproperties (“immutable”&#x3D;”true”);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps186.jpg" alt="img"> </p>
+<p>试图修改数据:报错</p>
+<p>insert into table dept_imu select * from dept; </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps187.jpg" alt="img"> </p>
+<p>试图重修数据:成功</p>
+<p>insert overwrite table dept_imu select * from dept;</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps188.jpg" alt="img"> </p>
+<p>Insert overwrite指令不受不可变属性影响</p>
+<p><em><strong>*Hive null属性*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps189.jpg" alt="img"> </p>
+<p>如果源数据有一个部分为空,正常情况下就是一个空值,加入此属性后表中的内容为null</p>
+<p>create table if not exists table6 (col1 string, col2 string, col3 int) row format delimited fields terminated by ‘,’ lines terminated by ‘\n’ stored as textfile tblproperties (“serialization.null.format”&#x3D;””);</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps190.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps191.jpg" alt="img"> </p>
+<p><em><strong>*第四章 Hive运算符和函数*</strong></em></p>
+<p><em><strong>*Hive运算符*</strong></em></p>
+<p>算术运算符:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps192.jpg" alt="img"> </p>
+<p>关系运算符:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps193.jpg" alt="img"> </p>
+<p>逻辑运算符:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps194.jpg" alt="img"> </p>
+<p>字符串运算符:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps195.jpg" alt="img"> </p>
+<p>复杂类型运算符:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps196.jpg" alt="img"> </p>
+<p><em><strong>*Hive函数*</strong></em></p>
+<p>数学函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps197.jpg" alt="img"> </p>
+<p>日期函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps198.jpg" alt="img"> </p>
+<p>条件函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps199.jpg" alt="img"> </p>
+<p>字符串函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps200.jpg" alt="img"> </p>
+<p>内置聚合函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps201.jpg" alt="img"> </p>
+<p>内置表生成函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps202.jpg" alt="img"> </p>
+<p>Hive自定义函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps203.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps204.jpg" alt="img"> </p>
+<p>用JavaAPI自定义函数:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps205.jpg" alt="img"> </p>
+<p>导入jar包并运行:</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps206.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps207.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps208.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps209.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps210.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps211.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps212.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps213.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps214.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps215.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps216.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps217.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps218.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps219.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps220.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps221.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps222.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps223.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps224.jpg" alt="img"> </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://yuehua-HNU.github.io">月华.</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yuehua-hnu.github.io/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/">http://yuehua-hnu.github.io/2023/04/08/Hive 编程/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yuehua-HNU.github.io" target="_blank">月华.の奇妙冒险</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hive/">Hive</a></div><div class="post_share"><div class="social-share" data-image="/./img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/08/Hadoop%20%E7%BC%96%E7%A8%8B/"><img class="prev-cover" src="/./img/%E8%83%A1%E6%A1%83-%E9%9B%AA%E8%BF%B9%E6%A2%85%E9%A6%99.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Hadoop 编程</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/08/HBase%20%E4%BC%81%E4%B8%9A%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"><img class="next-cover" src="/./img/%E5%88%BB%E6%99%B4-%E6%99%A8%E5%85%89%E6%98%9F%E6%96%97.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">HBase 企业应用开发</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">月华.</div><div class="author-info__description">我连宇宙的尽头在哪都不知道，怎么知道这个</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/yuehua-HNU"><i class="fa-sharp fa-solid fa-plane"></i><span>快来一起玩</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/yuehua-HNU" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://space.bilibili.com/475208497?spm_id_from=333.1007.0.0" target="_blank" title="Bilibili"><i class="fa-brands fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">图床那篇因为图片隐私问题还在修改, 无限期后应该就改完了, 哎嘿(doge)</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hive-%E7%BC%96%E7%A8%8B"><span class="toc-text">Hive 编程</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据"><img src="/./img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 MySQL 查询数据"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据">使用 MySQL 查询数据</a><time datetime="2023-04-08T01:59:49.875Z" title="更新于 2023-04-08 09:59:49">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础"><img src="/./img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux 操作系统基础"/></a><div class="content"><a class="title" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础">Linux 操作系统基础</a><time datetime="2023-04-08T01:59:14.316Z" title="更新于 2023-04-08 09:59:14">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统"><img src="/./img/%E5%AE%B5%E5%AE%AB-%E6%B8%A9%E6%B0%B4%E6%9A%96%E4%B9%A1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Kafka 实现分布式消息传递系统"/></a><div class="content"><a class="title" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统">使用 Kafka 实现分布式消息传递系统</a><time datetime="2023-04-08T01:57:38.269Z" title="更新于 2023-04-08 09:57:38">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/" title="Hive 编程"><img src="/./img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hive 编程"/></a><div class="content"><a class="title" href="/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/" title="Hive 编程">Hive 编程</a><time datetime="2023-04-08T01:56:47.347Z" title="更新于 2023-04-08 09:56:47">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/" title="使用 ZooKeeper 建立集群应用"><img src="/./img/%E7%94%98%E9%9B%A8-%E4%BA%91%E6%B5%B7%E7%A2%A7%E7%A9%BA.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 ZooKeeper 建立集群应用"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/" title="使用 ZooKeeper 建立集群应用">使用 ZooKeeper 建立集群应用</a><time datetime="2023-04-08T01:56:24.556Z" title="更新于 2023-04-08 09:56:24">2023-04-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这 就 是 我 的 <a target="_blank" rel="noopener" href="https://github.com/yuehua-HNU/">逃 跑 路 线</a> ！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/边缘行者2.jpg);"> <a class="categoryBar-list-link" href="categories/Docs文档/">Docs文档</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">Docs文档</span></li><li class="categoryBar-list-item" style="background:url(/img/孤独摇滚.jpg);"> <a class="categoryBar-list-link" href="categories/408/">408</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">408</span></li><li class="categoryBar-list-item" style="background:url(/img/波稻.jpg);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">Golang</span></li><li class="categoryBar-list-item" style="background:url(/img/2B4.jpg);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(/img/阿尼亚.jpg);"> <a class="categoryBar-list-link" href="categories/数据科学与大数据/">数据科学与大数据</a><span class="categoryBar-list-count">10</span><span class="categoryBar-list-descr">设计模式</span></li><li class="categoryBar-list-item" style="background:url(/img/进击的巨人3.jpg);"> <a class="categoryBar-list-link" href="categories/设计模式/">设计模式</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">数据科学与大数据</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.3.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.5.1" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" data-title="本站采用多线部署，备用线路托管于4EVERLAND" title=""><img src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/27/数据库系统概论学习笔记/" alt=""><img width="48" height="48" src="./img/艾莉丝格雷拉特3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-27</span><a class="blog-slider__title" href="2023/02/27/数据库系统概论学习笔记/" alt="">数据库系统概论学习笔记</a><div class="blog-slider__text">数据库系统概论期末复习</div><a class="blog-slider__button" href="2023/02/27/数据库系统概论学习笔记/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/17/设计模式 -- 七大基本原则/" alt=""><img width="48" height="48" src="./img/小舟潮.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-17</span><a class="blog-slider__title" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">设计模式 -- 七大基本原则</a><div class="blog-slider__text">设计模式学习笔记整理</div><a class="blog-slider__button" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/26/Java学习（一）-- Java基础/" alt=""><img width="48" height="48" src="./img/来自新世界2.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-26</span><a class="blog-slider__title" href="2023/01/26/Java学习（一）-- Java基础/" alt="">Java学习（一）-- Java基础</a><div class="blog-slider__text">Java 复习笔记</div><a class="blog-slider__button" href="2023/01/26/Java学习（一）-- Java基础/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/15/Go 语言基础 - 基础语法/" alt=""><img width="48" height="48" src="./img/边缘行者4.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-15</span><a class="blog-slider__title" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">Go 语言基础 - 基础语法</a><div class="blog-slider__text">字节跳动第五届青训营后端基础班学习笔记</div><a class="blog-slider__button" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/01/C语言复习/" alt=""><img width="48" height="48" src="./img/奥尔斯蒂德.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-01</span><a class="blog-slider__title" href="2023/01/01/C语言复习/" alt="">C语言复习</a><div class="blog-slider__text">考研向C语言复习, 根据自己的个人情况所记笔记</div><a class="blog-slider__button" href="2023/01/01/C语言复习/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/12/01/搭建自己的博客/" alt=""><img width="48" height="48" src="./img/JOJO3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-12-01</span><a class="blog-slider__title" href="2022/12/01/搭建自己的博客/" alt="">搭建个人博客历程</a><div class="blog-slider__text">搭建博客前前后后的心路历程</div><a class="blog-slider__button" href="2022/12/01/搭建自己的博客/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

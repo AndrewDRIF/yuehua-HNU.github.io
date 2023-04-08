@@ -1,0 +1,1598 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>使用 MySQL 查询数据 | 月华.の奇妙冒险</title><meta name="author" content="月华."><meta name="copyright" content="月华."><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="NIIT MySQL 学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 MySQL 查询数据">
+<meta property="og:url" content="http://yuehua-hnu.github.io/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="月华.の奇妙冒险">
+<meta property="og:description" content="NIIT MySQL 学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuehua-hnu.github.io/img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg">
+<meta property="article:published_time" content="2023-04-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-08T01:59:49.875Z">
+<meta property="article:author" content="月华.">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuehua-hnu.github.io/img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg"><link rel="shortcut icon" href="/img/%E6%98%9F%E6%9C%88%E5%A4%9C.webp"><link rel="canonical" href="http://yuehua-hnu.github.io/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用 MySQL 查询数据',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-08 09:59:49'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/echarts@4.9.0/dist/echarts.min.js"></script><script async src="/js/title.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="space-scene"><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">月华.の奇妙冒险</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用 MySQL 查询数据</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-07T16:00:00.000Z" title="发表于 2023-04-08 00:00:00">2023-04-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-08T01:59:49.875Z" title="更新于 2023-04-08 09:59:49">2023-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE/">数据科学与大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">9.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>39分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用 MySQL 查询数据"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="使用-MySQL-查询数据"><a href="#使用-MySQL-查询数据" class="headerlink" title="使用 MySQL 查询数据"></a>使用 MySQL 查询数据</h1><p><em><strong>*第二章*</strong></em></p>
+<p><em><strong>*一、*</strong></em><em><strong>*创建和管理数据库 :*</strong></em></p>
+<p><em><strong>*创建用户定义的数据库 :*</strong></em></p>
+<p><em><strong>*Create database [if not exists] 数据库名*</strong></em></p>
+<p><em><strong>*<a href="%E6%9C%80%E9%BB%98%E8%AE%A4%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86%E6%98%AFlatin1"> [default] 默认字符集 &lt;字符集名称(big5 , dec8 , latin1 , latin2)&gt;</a>*</strong></em></p>
+<p><em><strong>*[ [default] 排序创建值 &lt;排序名称&gt;];*</strong></em></p>
+<p><em><strong>*Eg : create database if not exists production_management_system*</strong></em></p>
+<p><em><strong>*Default character set latin1*</strong></em></p>
+<p><em><strong>*Default collate latin1_bin;*</strong></em></p>
+<p><em><strong>*访问数据库 :*</strong></em></p>
+<p><em><strong>*语法 : Use 数据库名;*</strong></em></p>
+<p><em><strong>*Show语句 :*</strong></em></p>
+<p><em><strong>*Show database;(查看所有数据库的列表)*</strong></em></p>
+<p><em><strong>*Show character set;(列出所有MySQL支持的字符集)*</strong></em></p>
+<p><em><strong>*Show collation;(列出所有MySQL支持的字符序)*</strong></em></p>
+<p><em><strong>*Show tables;(列出该数据库所有表名)*</strong></em></p>
+<p><em><strong>*修改数据库 :*</strong></em> </p>
+<p><em><strong>*Alter database 语句 :*</strong></em></p>
+<p><em><strong>*Alter database 数据库名*</strong></em></p>
+<p><em><strong>*[ [default] character set 指定字符集名称]*</strong></em></p>
+<p><em><strong>*[ [default] collate 指定字符序名称]*</strong></em></p>
+<p><em><strong>*Eg : alter database production_management_system*</strong></em></p>
+<p><em><strong>*Character set big5*</strong></em></p>
+<p><em><strong>*Collate big5_Chinese_ci;*</strong></em></p>
+<p><em><strong>*删除数据库 :*</strong></em></p>
+<p><em><strong>*Drop语句 :*</strong></em></p>
+<p><em><strong>*Drop database 数据库名;*</strong></em></p>
+<p><em><strong>*Eg : drop database production_management_system;*</strong></em></p>
+<p><strong>二、</strong><em><strong>*创建和管理表*</strong></em></p>
+<p><em><strong>*整数数据类型 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps2.jpg" alt="img"> </p>
+<p><em><strong>*小数数据类型(p指精度 , s指小数位(小数点后的位数) , na指不适用) :*</strong></em></p>
+<p><em><strong>*精度介于0至23为单精度 , 介于24至53为双精度*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps3.jpg" alt="img"> </p>
+<p><em><strong>*Bit数据类型(接受一个或多个位的列) :*</strong></em></p>
+<p><em><strong>*与bit类型关联的列仅可接受一个位值0或1*</strong></em></p>
+<p><em><strong>*接受多个位 : bit(M)*</strong></em></p>
+<p><em><strong>*字符串*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps4.jpg" alt="img"><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps5.jpg" alt="img"> </p>
+<p><em><strong>*日期*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps6.jpg" alt="img"><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps7.jpg" alt="img"> </p>
+<p><em><strong>*创建表 :*</strong></em></p>
+<p><em><strong>*Create [temporary(临时表)] table [if not exists] 表名*</strong></em></p>
+<p><em><strong>*(列名 列的数据类型 [not null | null ] [default ] ,*</strong></em></p>
+<p> <em><strong>*列名 ….*</strong></em></p>
+<p><em><strong>*)*</strong></em></p>
+<p><em><strong>*<a href="%E6%B2%A1%E6%9C%89%E5%B0%B1%E8%AE%BE%E7%BD%AE%E9%BB%98%E8%AE%A4%E5%BC%95%E6%93%8E">指定表的存储引擎</a>*</strong></em></p>
+<p><em><strong>*Eg : create table if not exists customers*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*Customer_ID int not null ,*</strong></em></p>
+<p><em><strong>*Firstname varchar(45) not null ,*</strong></em></p>
+<p><em><strong>*Lastname varchar(45) not null ,*</strong></em></p>
+<p><em><strong>*Address varchar(50) ,*</strong></em></p>
+<p><em><strong>*City varchar(20) ,*</strong></em></p>
+<p><em><strong>*Postal_code int*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*Describe(查看所有列的详细信息)*</strong></em></p>
+<p><em><strong>*Describe 表名 [列名 | 包含模式的字符串]*</strong></em></p>
+<p><em><strong>*Eg : desc products*</strong></em> <em><strong>*‘*</strong></em><em><strong>*P%*</strong></em><em><strong>*’*</strong></em><em><strong>*;(以p开头的列名)*</strong></em></p>
+<p><em><strong>*应用约束 :*</strong></em></p>
+<p><em><strong>*主键约束 :*</strong></em></p>
+<p><em><strong>*创建表时应用主键约束的语法 :*</strong></em> </p>
+<p><em><strong>*Create table table name*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*Column definition 1,*</strong></em></p>
+<p><em><strong>*Column definition2,*</strong></em></p>
+<p><em><strong>*…*</strong></em></p>
+<p><em><strong>*Constraint 约束名(可有可无) primary key (列名)*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*CREATE TABLE Author*</strong></em> </p>
+<p><em><strong>*(*</strong></em></p>
+<p> <em><strong>*Author_ID char(4) NOT NULL,*</strong></em></p>
+<p> <em><strong>*User_ID char(4) NOT NULL,*</strong></em></p>
+<p> <em><strong>*Author_Name varchar(20),*</strong></em></p>
+<p> <em><strong>*Email_ID varchar(30),*</strong></em></p>
+<p> <em><strong>*Author_Desc varchar(100),*</strong></em></p>
+<p> <em><strong>*Created_On datetime,*</strong></em></p>
+<p><em><strong>*Primary key (Email_ID)*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*唯一约束 :*</strong></em> </p>
+<p><em><strong>*创建表时应用唯一约束的语法 :*</strong></em> </p>
+<p><em><strong>*Create table table name*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*Column definition 1,*</strong></em></p>
+<p><em><strong>*Column definition2,*</strong></em></p>
+<p><em><strong>*…*</strong></em></p>
+<p><em><strong>*Constraint 约束名(约束名可有可无) unique (列名)*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*CREATE TABLE Author*</strong></em> </p>
+<p><em><strong>*(*</strong></em></p>
+<p> <em><strong>*Author_ID char(4) NOT NULL,*</strong></em></p>
+<p> <em><strong>*User_ID char(4) NOT NULL,*</strong></em></p>
+<p> <em><strong>*Author_Name varchar(20),*</strong></em></p>
+<p> <em><strong>*Email_ID varchar(30),*</strong></em></p>
+<p> <em><strong>*Author_Desc varchar(100),*</strong></em></p>
+<p> <em><strong>*Created_On datetime,*</strong></em></p>
+<p><em><strong>*Primary key (Email_ID),*</strong></em></p>
+<p><em><strong>*Constraint unique_pname unique (author_name)*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*外键约束 :*</strong></em> </p>
+<p><em><strong>*创建表时应用*</strong></em><em><strong>*外键*</strong></em><em><strong>*约束的语法 :*</strong></em> </p>
+<p><em><strong>*Create table table name*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*Column definition 1,*</strong></em></p>
+<p><em><strong>*Column definition2,*</strong></em></p>
+<p><em><strong>*…*</strong></em></p>
+<p><em><strong>*Constraint 约束名(约束名可有可无) foreign (列名)*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*CREATE TABLE Author*</strong></em> </p>
+<p><em><strong>*(*</strong></em></p>
+<p> <em><strong>*Author_ID char(4) NOT NULL,*</strong></em></p>
+<p> <em><strong>*User_ID char(4) NOT NULL,*</strong></em></p>
+<p> <em><strong>*Author_Name varchar(20),*</strong></em></p>
+<p> <em><strong>*Email_ID varchar(30),*</strong></em></p>
+<p> <em><strong>*Author_Desc varchar(100),*</strong></em></p>
+<p> <em><strong>*Created_On datetime,*</strong></em></p>
+<p><em><strong>*Constraint  fk1 foreign key (author_name)*</strong></em></p>
+<p><em><strong>*References product (author_name),*</strong></em></p>
+<p><em><strong>*Constraint  fk2 foreign key (email_ID)*</strong></em></p>
+<p><em><strong>*References foreign (email_ID)*</strong></em></p>
+<p> <em><strong>*);*</strong></em></p>
+<p><em><strong>*更改表 :*</strong></em> </p>
+<p><em><strong>*Alter table语句语法 :*</strong></em></p>
+<p><em><strong>*Alter table 表名*</strong></em></p>
+<p>添加列</p>
+<p><em><strong>*{add [column]列名 列*</strong></em><em><strong>*定义*</strong></em><em><strong>*符 first(将此列添加为表的第一列)|after 列名2(将此列添加到列名2的后一列)}*</strong></em></p>
+<p>添加约束</p>
+<p><em><strong>*{add [constraint] 约束名 指定要应用哪种约束}*</strong></em></p>
+<p>更改列的默认值</p>
+<p><em><strong>*{alert [column]列名 set default 指定要更改的表中的列的默认值}*</strong></em></p>
+<p>更改列的位置、大小和数据类型</p>
+<p><em><strong>*{modify [column] 列占位符 first | after 列名3}*</strong></em></p>
+<p>删除列</p>
+<p> <em><strong>*{drop [column] 列名}*</strong></em></p>
+<p>删除约束</p>
+<p><em><strong>*｛drop primary key | foreign key 约束名 | unique 约束名｝*</strong></em></p>
+<p>改表名</p>
+<p><em><strong>*{rename [to] 新表名}*</strong></em></p>
+<p><em><strong>*添加约束 ：*</strong></em> </p>
+<p><em><strong>*Alter table 表名*</strong></em></p>
+<p><em><strong>*Add constraint 约束名 primay key (列名);*</strong></em></p>
+<p><em><strong>*添加列 :*</strong></em> </p>
+<p><em><strong>*Alter table 表名*</strong></em></p>
+<p><em><strong>*Add column 列名 列占位符;*</strong></em></p>
+<p><em><strong>*修改列 :*</strong></em> </p>
+<p><em><strong>*Alter table 表名*</strong></em></p>
+<p><em><strong>*Alter column 列名 set default ‘默认值’;*</strong></em></p>
+<p><em><strong>*删除列 :*</strong></em> </p>
+<p><em><strong>*Alter table 表名*</strong></em></p>
+<p><em><strong>*Drop column 列名;*</strong></em></p>
+<p><em><strong>*重命名表 :*</strong></em> </p>
+<p><em><strong>*Alter table 表名 rename to 新表名;*</strong></em></p>
+<p><em><strong>*操作表数据*</strong></em></p>
+<p><em><strong>*插入数据 :*</strong></em></p>
+<p><em><strong>*Insert语句用于向表中添加记录(如果表中有数据则报错)*</strong></em></p>
+<p><em><strong>*Insert语句语法 :*</strong></em></p>
+<p><em><strong>*Insert [low_priority | delayed] [ignore] [into] 表名*</strong></em></p>
+<p><em><strong>*{ values子句 | set子句}*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em><em><strong>*(没有eg , 参见以下set子句与values子句)*</strong></em></p>
+<p><em><strong>*Set子句(一个个赋值) :*</strong></em></p>
+<p><em><strong>*Insert into products set product_ID &#x3D; 2,product_name &#x3D; ‘silk carpets’,quantity_in_hand &#x3D; 240;*</strong></em></p>
+<p><em><strong>*Values子句(直接按顺序赋值 | 直接地毯式赋值(按照列的顺序)) :*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> <em><strong>*Insert into products(product_ID,product_name,*</strong></em></p>
+<p><em><strong>*Quantity_in_hand)*</strong></em></p>
+<p><em><strong>*Values(3,’red rugs’,400);*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> <em><strong>*Insert into products values(4, ’blue rugs’, 500, 100, 50, 400),(5,’pink rugs ’,400,200,100,500);*</strong></em></p>
+<p><em><strong>*Replace语句用于将新记录插入表中(表中有则替换,没有则插入)*</strong></em></p>
+<p><em><strong>*Replace语句语法 :*</strong></em></p>
+<p><em><strong>*Replace [low_priority | delayed] [ignore] [into]*</strong></em></p>
+<p><em><strong>*{values子句 | set子句}*</strong></em></p>
+<p><em><strong>*Eg*</strong></em> <em><strong>*:*</strong></em> </p>
+<p><em><strong>*Replace into*</strong></em> <em><strong>*product (product_ID, product_name, quantity_in_hand)*</strong></em></p>
+<p><em><strong>*Values (1,’hard rugs’,5000);*</strong></em></p>
+<p><em><strong>*更新表 :*</strong></em></p>
+<p><em><strong>*Update语句语法 :*</strong></em></p>
+<p><em><strong>*Update [low_priority] [ignore] 表名*</strong></em></p>
+<p><em><strong>*Set 列名 &#x3D; 数据 | 多个列名 &#x3D; 数据*</strong></em></p>
+<p><em><strong>*Where 识别在哪记录(在哪个值那里)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Update products*</strong></em></p>
+<p><em><strong>*Set quantity_in_hand &#x3D; 300*</strong></em></p>
+<p><em><strong>*Where product_ID &#x3D; 2;*</strong></em></p>
+<p><em><strong>*复制数据 :*</strong></em></p>
+<p><em><strong>*将数据复制到现有表*</strong></em><em><strong>*(insert语句 replace语句)*</strong></em> <em><strong>*:*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Create table new_product*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*Pid TNT not null,*</strong></em></p>
+<p><em><strong>*Pname varchar(20),*</strong></em></p>
+<p><em><strong>*Primary key(pid)*</strong></em></p>
+<p><em><strong>*);*</strong></em><em><strong>*(创建一个有pid和pname两列的表)*</strong></em></p>
+<p><em><strong>*Select语句语法 :*</strong></em></p>
+<p><em><strong>*Select * |列名 [列名 …..] from表名;*</strong></em></p>
+<p><em><strong>*Eg : Insert into new_product*</strong></em></p>
+<p><em><strong>*Select product_ID , product_name*</strong></em></p>
+<p><em><strong>*From products;(product_ID , product_name两列都被复制到了new_product表中)*</strong></em></p>
+<p><em><strong>*Eg : Replace into new_product*</strong></em></p>
+<p><em><strong>*Select product_ID , product_name*</strong></em></p>
+<p><em><strong>*From products;(没有则插入,有则替换)*</strong></em></p>
+<p><em><strong>*将数据复制到新表 :*</strong></em></p>
+<p><em><strong>*(后跟select的create table语句)*</strong></em></p>
+<p><em><strong>*Eg : create table new_customers*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*Customer_ID int ,*</strong></em></p>
+<p><em><strong>*Firstname varchar(20) ,*</strong></em></p>
+<p><em><strong>*Lastname varchar(20) ,*</strong></em></p>
+<p><em><strong>*)*</strong></em></p>
+<p><em><strong>*Select customer_ID , firstname , lastname from customer ;*</strong></em></p>
+<p><em><strong>*删除数据 :*</strong></em> </p>
+<p><em><strong>*(delete语句和truncate语句)*</strong></em></p>
+<p><em><strong>*Delete语句语法 :*</strong></em></p>
+<p><em><strong>*Delete [low_priority] [ignore]*</strong></em></p>
+<p><em><strong>*From 表名*</strong></em></p>
+<p><em><strong>*[where 被where指定的取区域];*</strong></em></p>
+<p><em><strong>*Eg : delete from produces*</strong></em></p>
+<p><em><strong>*Where product_name &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*hard rug*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*(删除products表列中值为hard rug的记录)*</strong></em></p>
+<p><em><strong>*Eg : delete from products;(删除该表所有记录)*</strong></em></p>
+<p><em><strong>*Truncate语句语法(用于删除表中所有记录) :*</strong></em></p>
+<p><em><strong>*Truncate table 表名;*</strong></em></p>
+<p><em><strong>*Eg : truncate table products;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps8.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps9.jpg" alt="img"> </p>
+<p><em><strong>*删除表 :*</strong></em></p>
+<p><em><strong>*Drop table语句语法 :*</strong></em></p>
+<p><em><strong>*Drop [temporary(指定要删除的临时表)] table [if exits] [数据库名].表名 ,表名…;*</strong></em></p>
+<p><em><strong>*Eg : drop table new_product;*</strong></em></p>
+<p><em><strong>*PS : 如果要删除的表被其他表引用了,必须先删除引用表或者相应外键约束,然后再删除引用表*</strong></em></p>
+<p>​	</p>
+<p><em><strong>*第三章*</strong></em></p>
+<p><em><strong>*一.检索数据*</strong></em></p>
+<p><em><strong>*检索特定属性 :*</strong></em></p>
+<p><em><strong>*Select语句可以从数据库中检索所需数据*</strong></em></p>
+<p><em><strong>*Select*</strong></em></p>
+<p><em><strong>*[all(显示所展示列的所有行) | distinct(只有唯一的行显示在结果中)]*</strong></em></p>
+<p><em><strong>*列名 [, 列名 , 列名 …]*</strong></em></p>
+<p><em><strong>*[from 表名]*</strong></em></p>
+<p><em><strong>*[where 满足要求的那一行(如果没有则选择所有行)]*</strong></em></p>
+<p><em><strong>*Eg : select *from customer;*</strong></em></p>
+<p><em><strong>*Select customer_ID , store_ID , first_name , last_name from customer;*</strong></em></p>
+<p><em><strong>*Select title as ‘film name’ from film;(在用户定义的列(伪列)中显示)*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps10.jpg" alt="img"> </p>
+<p><em><strong>*检索选定行 :*</strong></em></p>
+<p><em><strong>*在select语句中使用where子句,来查询满足条件的行*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> <em><strong>*Select title ,length ,rental_rate from film where rental_rate &#x3D;4.99;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps11.jpg" alt="img"> </p>
+<p><em><strong>*当仅需检索满足查询条件的特定数量的记录而不是全部记录时,可以通过limit子句来实现*</strong></em></p>
+<p><em><strong>*Limit(将查询结果限制在指定范围内)*</strong></em></p>
+<p><em><strong>*Limit [从结果集的开头跳过的行数 , ] 结果集要返回的最大行数*</strong></em></p>
+<p><em><strong>*Eg : select film_ID , title from film limit 5;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps12.jpg" alt="img"> </p>
+<p><em><strong>*Eg : select film_ID , title from film limit 5 , 10;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps13.jpg" alt="img"> </p>
+<p><em><strong>*使用逻辑运算符(在where子句条件下) :*</strong></em></p>
+<p><em><strong>*Or(||) : 满足一个条件就行*</strong></em></p>
+<p><em><strong>*Eg : Select * from customer where last_name &#x3D; ‘Smith’ or*</strong></em> 			<em><strong>*last_name  &#x3D; ‘Jones’;*</strong></em></p>
+<p><em><strong>*And(&amp;&amp;) : 需要同时满足*</strong></em></p>
+<p><em><strong>*Eg : select * from customer where first_name &#x3D; ‘Elizabeth’ and last_name &#x3D; ‘brown’;*</strong></em></p>
+<p><em><strong>*Not(!) : 除去这些全都要*</strong></em></p>
+<p><em><strong>*Eg : select * from customer where not first_name &#x3D; ‘Mary’;*</strong></em></p>
+<p><em><strong>*使用比较运算符(在where子句条件下) :*</strong></em></p>
+<p><em><strong>*&#x3D; , &gt; , &lt; , &gt;&#x3D; , &lt;&#x3D; , &lt;&gt; , !&#x3D; (后两个都是不等于)*</strong></em></p>
+<p><em><strong>*Eg :  Select film_ID , title ,rental_rate from film where rental_rate*</strong></em> 		<em><strong>*&lt; 1;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps14.jpg" alt="img"> </p>
+<p><em><strong>*Between运算符(在两个值之间的记录)*</strong></em></p>
+<p><em><strong>*Eg : select title , rental_rate from film where rental_rate between*</strong></em> 	<em><strong>*0.99 and 2.99;*</strong></em></p>
+<p><em><strong>*Like运算符(不区分大小写)*</strong></em></p>
+<p><em><strong>*% 用于与任意数目的字符匹配*</strong></em></p>
+<p><em><strong>*_*</strong></em> <em><strong>*用于与单个字符匹配*</strong></em></p>
+<p><em><strong>*Eg : select title from film where title like’_F%’;(检索第二个字母为*</strong></em>	<em><strong>*f的片名)*</strong></em></p>
+<p><em><strong>*In运算符(用于检索指定特定字段的多个值)*</strong></em></p>
+<p><em><strong>*Eg : select film_ID , title , description , rental_rate from film where*</strong></em> 	<em><strong>*title in (‘African egg’ , ‘agent truman’ , ‘alone trip’);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps15.jpg" alt="img"> </p>
+<p><em><strong>*使用算数运算符 :*</strong></em> </p>
+<p><em><strong>*Div : 两个整数的除法运算,显示商*</strong></em></p>
+<p><em><strong>*Eg : select 7 div 2; 显示 3*</strong></em></p>
+<p><em><strong>*&#x2F; : 两个整数的除法运算,显示精确的商*</strong></em></p>
+<p><em><strong>*Eg : select 7 &#x2F; 2; 显示3.5000*</strong></em></p>
+<p><em><strong>*- : 两个整数的减法运算*</strong></em></p>
+<p><em><strong>*Eg : select 7 - 2; 显示 5*</strong></em></p>
+<p><em><strong>*%或MOD : 两个整数除法,取余*</strong></em></p>
+<p><em><strong>*Eg : select 7 % 2; 显示 1*</strong></em></p>
+<p><em><strong>*+ : 两个整数的加法*</strong></em></p>
+<p><em><strong>*Eg : select 7 + 2; 显示9*</strong></em></p>
+<p><strong><em>*</em> : 两个整数的乘法*</strong>*</p>
+<p><em><strong>*Eg : select 7 * 2; 显示14*</strong></em></p>
+<p><em><strong>*Eg : select 2*(rental_rate) from film where title &#x3D; ‘academy*</strong></em> 	<em><strong>*dinosaur’*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps16.jpg" alt="img"> </p>
+<p><em><strong>*二.使用函数来自定义结果集 :*</strong></em> </p>
+<p><em><strong>*字符串函数 :*</strong></em></p>
+<p><em><strong>*ASCII*</strong></em></p>
+<p><em><strong>*Select ascii(‘string’);  返回字符串首字母的ACSII码*</strong></em></p>
+<p><em><strong>*Eg : Select ascii(‘ABC’); 返回65,即A的ASCII码.*</strong></em></p>
+<p><em><strong>*Left*</strong></em></p>
+<p><em><strong>*Select left(‘string’,length); 返回字符串从左往右数length个长度*</strong></em></p>
+<p><em><strong>*Eg : Select left(‘DAVID’,4); 返回DAVI*</strong></em></p>
+<p><em><strong>*Reverse*</strong></em></p>
+<p><em><strong>*Select reverse(‘string’); 倒序输出字符串*</strong></em></p>
+<p><em><strong>*Eg : Select reverse(‘RAM’); 输出MAR*</strong></em></p>
+<p><em><strong>*Right*</strong></em></p>
+<p><em><strong>*Select right(‘string’,length); 返回字符串从右往左length个长度*</strong></em></p>
+<p><em><strong>*Eg : Select right(‘LAWSON’,4); 返回WSON*</strong></em></p>
+<p><em><strong>*Substring*</strong></em></p>
+<p><em><strong>*Select substring(‘string1 string2’,length1,length2); 从length1处抽取length2个长度输出*</strong></em></p>
+<p><em><strong>*Eg : Select substring(‘Whet her’,2,2); 返回he*</strong></em></p>
+<p><em><strong>*Upper(有大写字母怎么办?)*</strong></em></p>
+<p><em><strong>*Select upper(‘string’); 将小写字符转换为大写字符*</strong></em></p>
+<p><em><strong>*Eg : Select upper(‘lawson’); 返回LAWSON*</strong></em></p>
+<p><em><strong>*Lower(有小写字母怎么办?)*</strong></em></p>
+<p><em><strong>*Select lower(‘STRING’); 将大写字符转换为小写字符*</strong></em></p>
+<p><em><strong>*Eg : Select lower(‘RI CHARD’); 返回ri chard*</strong></em></p>
+<p><em><strong>*Eg : select first_name , last_name , lower (email) from customer;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps17.jpg" alt="img"> </p>
+<p><em><strong>*Concat*</strong></em></p>
+<p><em><strong>*Select concat(‘string1’,’ ’,’string2’); 连接所有字符串*</strong></em></p>
+<p><em><strong>*Eg : Select concat(‘Mary’,’ ’,’Smith’); 返回Mary Smith*</strong></em></p>
+<p><em><strong>*Regexp(是否区分大小写?)*</strong></em></p>
+<p><em><strong>*Select ‘string1’ regexp ‘string2’; 如果string2包含在string1中,*</strong></em></p>
+<p><em><strong>*返回1;否则返回0*</strong></em></p>
+<p><em><strong>*Eg : Select ‘John Peter’ regexp ‘Peter’; 返回1*</strong></em></p>
+<p><em><strong>*与Regexp运算符一起使用的特殊字符和构造*</strong></em></p>
+<p><em><strong>*. : 与单个字符匹配*</strong></em></p>
+<p><em><strong>*P* : 与0个或任意数目的p字符匹配*</strong></em></p>
+<p><em><strong>*P+ : 与1个或任意数目的p字符匹配*</strong></em></p>
+<p><em><strong>*P? : 与0个或1个p字符匹配*</strong></em></p>
+<p><em><strong>*^p : 与以p字符开头的字符串匹配*</strong></em></p>
+<p><em><strong>*$p : 与以p字符结尾的字符串匹配*</strong></em></p>
+<p><em><strong>*Pqr | abc : 与具有pqr或abc序列的字符串匹配*</strong></em></p>
+<p><em><strong>*[pqrs] : 与[]中包含的字符中的单个字符匹配*</strong></em></p>
+<p><em><strong>*[^pqrs] : 与不包含在[]中的字符匹配*</strong></em></p>
+<p><em><strong>*[p-s] : 与从p到s的任意字符匹配*</strong></em></p>
+<p><em><strong>*[^p-s] : 与除p到s中的字符之外的任意字符匹配*</strong></em></p>
+<p><em><strong>*Eg : select * from sakila.actor*</strong></em></p>
+<p><em><strong>*Where first_name regexp ‘^a’;(显示以a开头的所有演员的)*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps18.jpg" alt="img"> </p>
+<p><em><strong>*Eg : Select * from sakila.actor*</strong></em></p>
+<p><em><strong>*Where first_name regexp ‘^[ab][a-z]*a$’;(以a*</strong></em><em><strong>*或b*</strong></em><em><strong>*开头以*</strong></em><em><strong>*a*</strong></em><em><strong>*结尾*</strong></em><em><strong>*的演员*</strong></em><em><strong>*)*</strong></em></p>
+<p><em><strong>*日期函数 :*</strong></em> </p>
+<p><em><strong>*检索当前系统日期 : select curdate();*</strong></em></p>
+<p><em><strong>*Adddate (推迟日期函数)*</strong></em></p>
+<p><em><strong>*参数 : (date , interval expr unit)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> </p>
+<p><em><strong>*select adddate(‘2008-8-24 15:25:52’,interval ‘8:20’ hour_minute);*</strong></em></p>
+<p><em><strong>*返回比键入时间晚8小时20分钟的时间2008-8-24 15:25:52*</strong></em></p>
+<p><em><strong>*Date(日期函数)*</strong></em></p>
+<p><em><strong>*参数 : (date)*</strong></em></p>
+<p><em><strong>*Eg : select date (‘2008-08-16 22:55:56’);*</strong></em></p>
+<p><em><strong>*返回完整日期(不返回时间)2008-08-16*</strong></em></p>
+<p><em><strong>*Month (月函数)*</strong></em></p>
+<p><em><strong>*参数 : (date)*</strong></em></p>
+<p><em><strong>*Eg : select month(‘2007-08-16 16:40:45’);*</strong></em></p>
+<p><em><strong>*返回月份8*</strong></em></p>
+<p><em><strong>*Monthname(月名)*</strong></em></p>
+<p><em><strong>*参数 : (date)*</strong></em></p>
+<p><em><strong>*Eg : select monthname(‘2008-07-24 20:40:45’);*</strong></em></p>
+<p><em><strong>*返回月份名称7月*</strong></em></p>
+<p><em><strong>*Year (年份)*</strong></em></p>
+<p><em><strong>*参数 : (date)*</strong></em></p>
+<p><em><strong>*Eg : select year(‘2005*</strong></em><em><strong>*-*</strong></em><em><strong>*06*</strong></em><em><strong>*-*</strong></em><em><strong>*16 20:45:30’);*</strong></em></p>
+<p><em><strong>*返回年份2005*</strong></em></p>
+<p><em><strong>*DateDiff(日期差)*</strong></em></p>
+<p><em><strong>*参数 : (date,date)*</strong></em></p>
+<p><em><strong>*Eg : select DateDiff(‘2005-08-24 20:50:59’,’2004-05-20 16:40:50’);*</strong></em></p>
+<p><em><strong>*返回两个日期之间的天数差461*</strong></em></p>
+<p><em><strong>*Timediff(时间差)*</strong></em></p>
+<p><em><strong>*参数 : (time,time)*</strong></em></p>
+<p><em><strong>*Eg : select timediff(‘2005-08-30 23:59:59’ , ‘2005-08-29 23:59:59’);*</strong></em></p>
+<p><em><strong>*返回两个时间的差24:00:00*</strong></em></p>
+<p><em><strong>*Day*</strong></em></p>
+<p><em><strong>*参数 : (expr)*</strong></em></p>
+<p><em><strong>*Eg : select day(‘2008-08-24 22:50:40’);*</strong></em></p>
+<p><em><strong>*返回具体的日子24*</strong></em></p>
+<p><em><strong>*Extract(抽取函数)*</strong></em></p>
+<p><em><strong>*参数 : (unit from date)*</strong></em></p>
+<p><em><strong>*Eg : select extract(year from ‘2009-05-20 22:50:40’);*</strong></em></p>
+<p><em><strong>*抽取年份2009*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps19.jpg" alt="img"> </p>
+<p><em><strong>*Unit预期expr格式*</strong></em></p>
+<p><em><strong>*Eg : select payment_ID as ‘payment ID’ , payment_date as ‘old payment date’ , adddate(payment_date , interval 2 month) as ‘new payment date’ from payment where payment_ID 10;*</strong></em></p>
+<p><em><strong>*将付款ID为10的付款日期延迟2个月*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps20.jpg" alt="img"> </p>
+<p><em><strong>*Date_format函数*</strong></em></p>
+<p><em><strong>*将各种值用于format自变量*</strong></em></p>
+<p><em><strong>*%a : 以缩写形式显示工作日的名称(Sun , Mon , Sat)*</strong></em></p>
+<p><em><strong>*%b : 以缩写格式显示月份的名称(jan , dec , feb)*</strong></em></p>
+<p><em><strong>*%c ：以数值格式显示介于0至12的月份(范围从0开始)*</strong></em></p>
+<p><em><strong>*%H ：以数值格式显示介于00至23的小时*</strong></em></p>
+<p><em><strong>*%i ：以数值格式显示介于00至59的分钟数*</strong></em></p>
+<p><em><strong>*%j ：以数值格式显示介于001至366的一年中的日子(范围从0开始)*</strong></em></p>
+<p><em><strong>*%M ： 显示月份名称(January , December)*</strong></em></p>
+<p><em><strong>*%p ： 以AM或PM显示时间*</strong></em></p>
+<p><em><strong>*%s ： 显示介于00至59的秒数*</strong></em></p>
+<p><em><strong>*Eg : select date_format(rental_date , ‘%H:%i‘) as ‘rental time’from rental；*</strong></em></p>
+<p><em><strong>*客户最多访问商店并租借DVD的时间段*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps21.jpg" alt="img"> </p>
+<p><em><strong>*数学函数 ：*</strong></em> </p>
+<p><em><strong>*Floor(向下取整)*</strong></em></p>
+<p><em><strong>*参数 ： (某个数)*</strong></em></p>
+<p><em><strong>*Eg ：select floor(12.30);*</strong></em></p>
+<p><em><strong>*返回小于等于指定值的最大整数12*</strong></em></p>
+<p><em><strong>*Cot(余切)*</strong></em></p>
+<p><em><strong>*参数 : (某个角的弧度)*</strong></em> </p>
+<p><em><strong>*Eg : select cot(3.5);*</strong></em></p>
+<p><em><strong>*返回弧度中指定角的余切2.669616484968866*</strong></em></p>
+<p><em><strong>*Pi(π)*</strong></em></p>
+<p><em><strong>*无参数*</strong></em></p>
+<p><em><strong>*Eg ： select pi();*</strong></em></p>
+<p><em><strong>*返回常量值3.141593*</strong></em></p>
+<p><em><strong>*Pow(平方函数)*</strong></em></p>
+<p><em><strong>*参数 : (一个数,多少次方)*</strong></em></p>
+<p><em><strong>*Eg : select pow(5,2);*</strong></em></p>
+<p><em><strong>*返回5的2次方25*</strong></em></p>
+<p><em><strong>*Round(四舍五入保留小数)*</strong></em></p>
+<p><em><strong>*参数 : (某个数,小数点后保留的位数)*</strong></em></p>
+<p><em><strong>*Eg : select round(12.789,2);*</strong></em></p>
+<p><em><strong>*返回12.79,四舍五入返回指定数的小数点后两位*</strong></em></p>
+<p><em><strong>*Sqrt(开平方)*</strong></em></p>
+<p><em><strong>*参数 : (某个数)*</strong></em></p>
+<p><em><strong>*Eg : select sqrt(81);*</strong></em></p>
+<p><em><strong>*返回81的平方根9*</strong></em></p>
+<p><em><strong>*信息函数 :*</strong></em> </p>
+<p><em><strong>*Current_user()*</strong></em></p>
+<p><em><strong>*无参数*</strong></em></p>
+<p><em><strong>*Eg : select current_user();*</strong></em></p>
+<p><em><strong>*返回当前登陆的用户的用户名和主机名*</strong></em></p>
+<p><em><strong>*Connection_id()*</strong></em></p>
+<p><em><strong>*无参数*</strong></em></p>
+<p><em><strong>*Eg : select connection_id();*</strong></em></p>
+<p><em><strong>*返回当前连接的id*</strong></em></p>
+<p><em><strong>*Database()*</strong></em></p>
+<p><em><strong>*无参数*</strong></em></p>
+<p><em><strong>*Eg : select database();*</strong></em></p>
+<p><em><strong>*返回当前使用的数据库名称*</strong></em></p>
+<p><em><strong>*Version*</strong></em></p>
+<p><em><strong>*无参数*</strong></em></p>
+<p><em><strong>*Eg : Select version();*</strong></em></p>
+<p><em><strong>*返回mysql服务器当前的版本*</strong></em></p>
+<p><em><strong>*Charset()*</strong></em></p>
+<p><em><strong>*参数 : (某个字符串)*</strong></em></p>
+<p><em><strong>*Eg ： select charset(‘andre’)*</strong></em></p>
+<p><em><strong>*返回字符串参数的字符集utf8(就是刚学mysql定义的那个)*</strong></em></p>
+<p><em><strong>*转换函数(将一种数据类型转换为另一种) :*</strong></em> </p>
+<p><em><strong>*Binary(区分大小写的检索)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em> <em><strong>*Binary(‘要检索的字符串’)*</strong></em></p>
+<p><em><strong>*Eg : select *from film where title &#x3D; binary(‘AFRICAN EGG‘);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps22.jpg" alt="img"> </p>
+<p><em><strong>*Eg  : select*from film where title &#x3D; binary(‘african egg’);*</strong></em></p>
+<p><em><strong>*由于区分大小写,第二个eg无结果*</strong></em></p>
+<p><em><strong>*Cast()*</strong></em></p>
+<p><em><strong>*Cast(定义的表达式 as 某种数据类型)*</strong></em></p>
+<p><em><strong>*Eg : select payment_id , customer_id , cast(payment_date as date) as ‘rental date’ from payment;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps23.jpg" alt="img"> </p>
+<p><em><strong>*Convert()  (效果同上,只不过语法不同)*</strong></em></p>
+<p><em><strong>*Convert(定义表达式 , 数据类型)*</strong></em></p>
+<p><em><strong>*Eg : select payment_ID , customer_ID , convert(payment_date , date) as ‘rental date’ from payment;*</strong></em></p>
+<p><em><strong>*聚合(分组)函数(将汇总一列或一组列的值,并生成一个值) :*</strong></em> </p>
+<p><em><strong>*AVG*</strong></em></p>
+<p><em><strong>*参数 : (列名)*</strong></em></p>
+<p><em><strong>*Eg :　select AVG(rental_rate) from film;*</strong></em></p>
+<p><em><strong>*返回电影平均租费$2.980000*</strong></em></p>
+<p><em><strong>*Sum*</strong></em></p>
+<p><em><strong>*参数 : (列名)*</strong></em></p>
+<p><em><strong>*Eg : select sum(rental_rate) from film;*</strong></em></p>
+<p><em><strong>*返回电影总租金$2980.00*</strong></em></p>
+<p><em><strong>*Min*</strong></em></p>
+<p><em><strong>*参数 : (列名)*</strong></em></p>
+<p><em><strong>*Eg : select min(rental_rate) from film;*</strong></em></p>
+<p><em><strong>*返回电影最少租金$0.99*</strong></em></p>
+<p><em><strong>*Max*</strong></em></p>
+<p><em><strong>*参数 : (列名)*</strong></em></p>
+<p><em><strong>*Eg : select max(rental_rate) from film;*</strong></em></p>
+<p><em><strong>*返回电影最多租金$4.99*</strong></em></p>
+<p><em><strong>*Count*</strong></em></p>
+<p><em><strong>*参数 : (列名)*</strong></em></p>
+<p><em><strong>*Eg : select count(title) from film;*</strong></em></p>
+<p><em><strong>*计算电影片名的总数1000*</strong></em></p>
+<p><em><strong>*Select count(*</strong></em><em><strong>*列名*</strong></em><em><strong>*) as ‘生成的列名*</strong></em><em><strong>*(一个伪列)*</strong></em><em><strong>*’ from 表名;*</strong></em></p>
+<p><em><strong>*Eg : select count(*) as ‘number offilm dvds’ from film;*</strong></em></p>
+<p><em><strong>*显示film表中电影总数*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps24.jpg" alt="img"> </p>
+<p><strong>三、</strong><em><strong>*排序和分组数据 :*</strong></em> </p>
+<p><em><strong>*数据排序(按升序或降序来排序数据) ：*</strong></em></p>
+<p><em><strong>*Order by子句*</strong></em> </p>
+<p><em><strong>*Select [all | distinct]*</strong></em></p>
+<p><em><strong>*定义表达式 [ , 定义表达式…]*</strong></em></p>
+<p><em><strong>*[from 表名]*</strong></em></p>
+<p><em><strong>*[where where指定位置]*</strong></em></p>
+<p><em><strong>*[order by 列名]*</strong></em></p>
+<p><em><strong>*[ASC(升序) | desc(降序)]*</strong></em></p>
+<p><em><strong>*Eg : select rental_ID , amount , payment_date*</strong></em></p>
+<p><em><strong>*From payment*</strong></em></p>
+<p><em><strong>*Order by amount*</strong></em> </p>
+<p><em><strong>*Desc;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps25.jpg" alt="img"> </p>
+<p><em><strong>*分组数据(把数据分组) :*</strong></em></p>
+<p><em><strong>*Group by子句(依据聚合函数)*</strong></em></p>
+<p><em><strong>*Select*</strong></em> </p>
+<p><em><strong>*[all | distinct]*</strong></em></p>
+<p><em><strong>*定义表达式 [ , 定义表达式…]*</strong></em></p>
+<p><em><strong>*[from 表名]*</strong></em></p>
+<p><em><strong>*[where where指定的位置]*</strong></em></p>
+<p><em><strong>*[group by {(依据的)列名 | 表达式}]*</strong></em></p>
+<p><em><strong>*[having 筛选子句生成结果集的条件表达式];*</strong></em></p>
+<p><em><strong>*Eg : select customer_ID as ‘customer_ID’ , sum(amount) as ’total amount’ from payment group by customer_ID;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps26.jpg" alt="img"> </p>
+<p><em><strong>*Having 子句(基于group by子句) :*</strong></em> </p>
+<p><em><strong>*从结果集中出去某些组的某些汇总值*</strong></em></p>
+<p><em><strong>*Eg : select customer_ID as ‘customer ID’ , sum(amount) as ‘total amount’ from payment group by customer_ID having customer_ID &lt; 5;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps27.jpg" alt="img"> </p>
+<p><em><strong>*第四章*</strong></em></p>
+<p><em><strong>*使用联接查询数据 :*</strong></em></p>
+<p><em><strong>*使用内联接 :*</strong></em></p>
+<p><em><strong>*(命令 : insert update delete ; 关键字 : join , inner join)*</strong></em></p>
+<p><em><strong>*Select语句中应用内联接的语法 :*</strong></em> </p>
+<p><em><strong>*Select 列名 , 列名 [ , 列名]*</strong></em></p>
+<p><em><strong>*From 联接表名1 join 联接表名2*</strong></em></p>
+<p><em><strong>*On 联接表名1.ref_列名 join_operator*</strong></em></p>
+<p><em><strong>*联接表名2.ref_表名(联接依据的引用列名)*</strong></em></p>
+<p><em><strong>*等值联接 :*</strong></em></p>
+<p><em><strong>*(与内联接的区别是需要关键字straight_join)*</strong></em></p>
+<p><em><strong>*Select 列名 , 列名 [ , 列名]*</strong></em></p>
+<p><em><strong>*From 表名1 straight_join 表名2*</strong></em></p>
+<p><em><strong>*[where 用于实现直线联接的语句];*</strong></em></p>
+<p><em><strong>*Eg : select c.customer_ID , c.first_name , c.last_name  , a.address_id , a.district , a.city_id , a.postal_code , a.phone from sakila.customer c straight_join sakila.address a on c.address_id &#x3D; a.address_id;*</strong></em></p>
+<p><em><strong>*此例中customer和address表用straight_join通过直线联接联接在一起*</strong></em></p>
+<p><em><strong>*使用外联接 :*</strong></em></p>
+<p><em><strong>*(检索结果集包括表中的所有记录以及基于联接条件另一个表中的匹配记录)*</strong></em></p>
+<p><em><strong>*外联接语法 :*</strong></em></p>
+<p><em><strong>*(分为左外联接与右外联接)*</strong></em></p>
+<p><em><strong>*Select 列名 , 列名 [ , 列名]*</strong></em></p>
+<p><em><strong>*From 表名1 [ left | right ] outer join 表名2*</strong></em></p>
+<p><em><strong>*On 表名1.ref_列名 join_operator*</strong></em></p>
+<p><em><strong>*表名2.ref_列名 | (using ref_列名)*</strong></em></p>
+<p><em><strong>*[where 检索条件];*</strong></em></p>
+<p><em><strong>*左外联接 :*</strong></em> </p>
+<p><em><strong>*(检索left outer join关键字左侧列出的表中的所有行 , 以及left outer join关键字右侧列出的表中的匹配行.右侧列出的表找不到任何匹配记录的列显示null)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps28.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps29.jpg" alt="img"> </p>
+<p><em><strong>*Select film.film_id , film_title , film_actor.actor_id from sakila.film left outer join sakila.film_actor on film.film_id &#x3D; film_actor.film_id where film.film_id between 257 and 260;*</strong></em></p>
+<p><em><strong>*查看ID介于257至260的所有电影中每个演员的ID以及没有任何演员的电影的详细信息*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps30.jpg" alt="img"> </p>
+<p><em><strong>*右外联接 :*</strong></em></p>
+<p><em><strong>*(检索right outer join关键字右侧列出的表中的所有行 , 以及right outer join关键字左侧列出的表中的匹配行.左侧列出的表找不到任何匹配记录的列显示null)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps31.jpg" alt="img"> </p>
+<p><em><strong>*SELECT film.title , language.name from sakila.film right outer join sakila.language on film.language_id &#x3D; language.language_id order by language.language_id desc;*</strong></em></p>
+<p><em><strong>*查看数据库中电影使用的所有语言列表 , 以及这些语言的可用电影列表.再看看没有任何电影使用的那些语言*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps32.jpg" alt="img"> </p>
+<p><em><strong>*使用自然联接 :*</strong></em></p>
+<p><em><strong>*(基于公共列将一个表的一个列与另一个表的列联合起来)*</strong></em></p>
+<p><em><strong>*(可以是左或者右.可以用在未指定表之间主-外键关系的情况中.两个表共享一个列.如果表之间存在主-外键关系,自然联接不会显示所需输出)*</strong></em></p>
+<p><em><strong>*自然联接语法 :*</strong></em></p>
+<p><em><strong>*Select 列名 , 列名 [ , 列名]*</strong></em></p>
+<p><em><strong>*From 表名 natural [{left | right} [outer]] join 表名;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps33.jpg" alt="img"> </p>
+<p><em><strong>*Select *from store natural join city ;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps34.jpg" alt="img"> </p>
+<p><em><strong>*使用交叉联接 :*</strong></em></p>
+<p><em><strong>*(将一个表中的每一行与另一个表中的每一行联接起来)*</strong></em></p>
+<p><em><strong>*Eg : select a.hotel_name , b.room_type_description from  hotels as a cross join room_types as b;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps35.jpg" alt="img"> </p>
+<p><em><strong>*使用自联接 :*</strong></em>　</p>
+<p><em><strong>*(表与自身联接)*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps36.jpg" alt="img"> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps37.jpg" alt="img"> </p>
+<p><em><strong>*Eg : select distinct f1.title , f1.film_id , f1.release_year , f1.rental_rate fro sakila.film as f1 , sakila.film as f2 where*</strong></em></p>
+<p><em><strong>*F1.rental_rate &#x3D; f2.rental_rate and f1.film_id between 320 and 330;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps38.jpg" alt="img"> </p>
+<p><em><strong>*使用子查询查询数据 :*</strong></em> </p>
+<p><em><strong>*(返回用于执行外部查询的值.可以返回一个或多个值)*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : select customer.customer_id , customer.first_name , customer.last_name*</strong></em> </p>
+<p><em><strong>*F*</strong></em><em><strong>*rom sakila.customer where customer.customer_id &#x3D; (select payment.customer_id from sakila.payment where payment.payment_id &#x3D; 1);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps39.jpg" alt="img"> </p>
+<p><em><strong>*使用in和exists关键字 :*</strong></em></p>
+<p><em><strong>*使用in和not in关键字 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*elect 列名 ， 列名 [ , 列名*</strong></em> <em><strong>*…*</strong></em><em><strong>*]*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*rom 表名*</strong></em></p>
+<p><em><strong>*W*</strong></em><em><strong>*here 列名 in | not in*</strong></em></p>
+<p>​		<em><strong>*(select 列名 from 表名 {where 条件表达式});*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : select distinct film_category.category_id from sakila.film_category where film_category.fillm_id in (select film.film_id from sakila.film where film.rental_duration &#x3D; 6);*</strong></em></p>
+<p><em><strong>*检索周期为6天的所有dvd的类别id属性*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps40.jpg" alt="img"> </p>
+<p><em><strong>*使用exists和not exists关键字 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em> </p>
+<p><em><strong>*S*</strong></em><em><strong>*elect 列名 ， 列名 [ , 列名 ]*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*rom 表名*</strong></em></p>
+<p><em><strong>*W*</strong></em><em><strong>*here exists |not exists （select * from 表名 [where 表达式]）;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : select * from sakila.film where exists (*</strong></em> </p>
+<p><em><strong>*S*</strong></em><em><strong>*elect * from sakila.film_actor where film_actor.actor_id &#x3D; (select distinct actor.actor_id from actor where actor.first_name &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*penelope*</strong></em><em><strong>*’*</strong></em> <em><strong>*and actor.last_name &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*guiness*</strong></em><em><strong>*’*</strong></em><em><strong>*) and film_actor.film_id &#x3D; film.film_id);*</strong></em></p>
+<p><em><strong>*检索演员表包括演员penelope guiness的所有电影(检查film_actor表中的记录是否存在)*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps41.jpg" alt="img"> </p>
+<p><em><strong>*使用修改过的比较运算符 :*</strong></em> </p>
+<p><em><strong>*(可以用&#x3D; &lt; &gt;等比较运算符,还可以一起使用all any之类的关键字)*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*ll : 所有比较为真 , 返回true值 , 其余情况返回false*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : select *from sakilla.film where film.replacement_cost &gt; all (select film.replacement_cost from film where length &#x3D; 70 );*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps42.jpg" alt="img"> </p>
+<p><em><strong>*E*</strong></em><em><strong>*g : select count (*) from sakila.payment where amount &gt; any (select amount from payment where customer_id &#x3D; 7 and staff_id &#x3D; 1);*</strong></em></p>
+<p><em><strong>*检索支付金额大于客户id为7的客户向员工if为1的员工所支付金额的客户数*</strong></em> </p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps43.jpg" alt="img"> </p>
+<p><em><strong>*使用嵌套子查询 ：*</strong></em> </p>
+<p><em><strong>*(在一个子查询中使用一个或多个子查询)*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : select * from saklia.actor where actor.actor_id in*</strong></em></p>
+<p><em><strong>*&#x2F;*第三层子查询*&#x2F;*</strong></em></p>
+<p><em><strong>*(select film_actor.actor_id from sakila.film_actor where*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ilm_actor.film_id in*</strong></em></p>
+<p><em><strong>*&#x2F;*第二层子查询*&#x2F;*</strong></em></p>
+<p><em><strong>*(select film.film_id from sakila.film where*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ilm.language_id &#x3D;*</strong></em> </p>
+<p><em><strong>*&#x2F;*第一层子查询*&#x2F;*</strong></em></p>
+<p><em><strong>*(select language.language_id from language where*</strong></em></p>
+<p><em><strong>*L*</strong></em><em><strong>*anguage.name &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*english*</strong></em><em><strong>*’*</strong></em><em><strong>*)));*</strong></em></p>
+<p><em><strong>*查看出演英文电影的每个演员的详细信息*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps44.jpg" alt="img"> </p>
+<p><em><strong>*使用关联子查询 ：*</strong></em></p>
+<p><em><strong>*(使用运行取决于外部查询的内部查询)*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g ：select customer.customer_id , customer.first_name , customer.last_name from sakila.customer where exists (select * from saklia.payment where customer.customer_id &#x3D; payment.customer_id group by*</strong></em> </p>
+<p><em><strong>*C*</strong></em><em><strong>*ustomer.customer_id having coumt (*) &gt; &#x3D;40);*</strong></em></p>
+<p><em><strong>*检索至少支付了40次的所有客户的详细信息*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps45.jpg" alt="img"> </p>
+<p><em><strong>*S*</strong></em><em><strong>*elect * from student where exists (select  stu_id from marks where course &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*chinses*</strong></em><em><strong>*’*</strong></em><em><strong>*);*</strong></em></p>
+<p><em><strong>*–将返回true或者false*</strong></em></p>
+<p><em><strong>*–如果内查询返回任何输出则为true*</strong></em></p>
+<p><em><strong>*–如果返回true则执行外查询否则将会执行NCT（？）*</strong></em></p>
+<p><em><strong>*第五章*</strong></em> </p>
+<p><em><strong>*创建管理和索引 ：*</strong></em></p>
+<p><em><strong>*(为常用的列创建索引 , 全都创建索引会在使用的时候更麻烦)*</strong></em></p>
+<p><em><strong>*(用户只能创建索引 , 使用索引是系统的功能*</strong></em></p>
+<p><em><strong>*了解索引类型 ：*</strong></em></p>
+<p><em><strong>*主键(primary key) ：要求定义了该索引的列必须为表中的所有记录包含唯一值。任何记录的这些列都不得包含null值*</strong></em></p>
+<p><em><strong>*外键(foreign key) ：在 事务表中引用主表列 的 引用列 上定义，用来定义这些表之间的关系，并确保这些表中存储的数据之间的一致性*</strong></em></p>
+<p><em><strong>*唯一(unique) ：在包含表中记录的唯一值的列上定义，可以包含null值*</strong></em></p>
+<p><em><strong>*常规(regular) ：在可以包含表中的重复值和null值的列上定义*</strong></em></p>
+<p><em><strong>*(以二叉树为基础)*</strong></em></p>
+<p><em><strong>*全文(full-text) ：在可以接受字符串值的列上定义。目的是提高搜索列数据中所包含字符串值的速度。数据类型可为 ： char ， varchar ， txet。这些列可以接搜重复值或null值*</strong></em></p>
+<p><em><strong>*T*</strong></em><em><strong>*ip ：在表上定义主键\外键\唯一约束时,会在约束中包括的列上自动创建相应的索引*</strong></em></p>
+<p><em><strong>*T*</strong></em><em><strong>*ip :全文引擎只能在可以使用MyISAM存储引擎访问的表上定义*</strong></em></p>
+<p><em><strong>*创建索引 :*</strong></em></p>
+<p><em><strong>*(创建表时创建索引  在现有表上创建索引)*</strong></em></p>
+<p><em><strong>*1.创建表时创建索引 ：*</strong></em></p>
+<p><strong>（1）</strong> <em><strong>*创建常规索引*</strong></em> </p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*Create*</strong></em> <em><strong>*table 表名*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*…*</strong></em></p>
+<p><em><strong>*{指定任意可用于创建常规索引的关键字} [常规索引名称] (列名 [( , 列名*</strong></em><em><strong>*…*</strong></em><em><strong>*)]*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate table if not exists food_menu*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_item_id int not null ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_item_desc varchar(45) not null ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_item_rate float ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_cat varchar(20) ,*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*uisine varchar(20) ,*</strong></em></p>
+<p><em><strong>*I*</strong></em><em><strong>*ndex rate_index (food_item_rate)*</strong></em></p>
+<p><em><strong>*) engine &#x3D; myisam;*</strong></em></p>
+<p><em><strong>*在food_menu表的food_item_rate列上创建名为rate_index的索引*</strong></em></p>
+<p><strong>（2）</strong> <em><strong>*创建全文索引*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate table 表名*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*…*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ulltext(创建fulltext索引) [可选关键字] 索引名称 (列名 [{ , 列名*</strong></em><em><strong>*…*</strong></em><em><strong>*}*</strong></em><em><strong>*]*</strong></em><em><strong>*)*</strong></em></p>
+<p><em><strong>*);*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate table if not exists food_menu*</strong></em></p>
+<p><em><strong>*(*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_item_id int not null ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_item_desc varchar(45) not null ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_item_rate float ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ood_cat varchar(20) ,*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*uisine varchat(20) ,*</strong></em></p>
+<p><em><strong>*I*</strong></em><em><strong>*ndex rate_index (food_item_rate) ,*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ulltext food_descr_index (food_item_desc)*</strong></em></p>
+<p><em><strong>*)*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*ngine &#x3D; myisam;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps46.jpg" alt="img"> </p>
+<p><em><strong>*2.在现有表上创建索引*</strong></em></p>
+<p><em><strong>*(alter table语句 , create index语句)*</strong></em></p>
+<p><strong>（1）</strong> <em><strong>*ALTER table语句*</strong></em></p>
+<p><em><strong>*(用于在现有表的列上创建索引 , 会修改表的结构)*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*lter table语句创建常规索引语法 ：*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*lter table 表名*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*dd {指定任意可用于创建常规索引的关键字}  [创建索引的名称] (列名 [ , {列名}*</strong></em><em><strong>*…*</strong></em><em><strong>*]);*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : alter table daily_room_rates*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*dd index reqidx_room_rate(daily_room_rate_offered);*</strong></em></p>
+<p><em><strong>*在daily_room_rates表的daily_room_rate_offered上创建常规索引*</strong></em></p>
+<p> <em><strong>*A*</strong></em><em><strong>*lter table语句创建全文索引语法 ：*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*lter table 表名*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*dd fulltext {指定任意可用于创建常规索引的关键字}  [创建全文索引的名称] (列名 [ , {列名}*</strong></em><em><strong>*…*</strong></em><em><strong>*]);*</strong></em></p>
+<p>​			<em><strong>*E*</strong></em><em><strong>*g ：alter table food_menu*</strong></em></p>
+<p>​			<em><strong>*A*</strong></em><em><strong>*dd fulltext index index_cat (food_cat);*</strong></em></p>
+<p><em><strong>*在food_menu表的food_cat列上创建了名为index_cat的全文索引*</strong></em></p>
+<p><strong>（2）</strong> <em><strong>*create index语句*</strong></em></p>
+<p><em><strong>*(允许创建唯一,常规和全文索引,不能用此语句创建主键索引和外键索引)*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate index创建唯一索引语法 :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate 指定要创建的唯一索引列 index 唯一索引名称*</strong></em></p>
+<p><em><strong>*O*</strong></em><em><strong>*n(用在表名之前以指定要在其上创建索引的表) 表名 (列名 , 列名*</strong></em><em><strong>*…*</strong></em><em><strong>*.);*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : create unique index unique_characteristic_desc*</strong></em></p>
+<p><em><strong>*O*</strong></em><em><strong>*n hotel_characteristic (characteristic_code_desc);*</strong></em></p>
+<p><em><strong>*在名为hotel_characteristic的现有表characteristic_code_desc列上创建了名为unique_characteristic_desc的唯一索引*</strong></em></p>
+<p>​			<em><strong>*C*</strong></em><em><strong>*reate index语句创建常规索引的语法 :*</strong></em></p>
+<p>​			<em><strong>*C*</strong></em><em><strong>*reate index 索引名*</strong></em></p>
+<p>​			<em><strong>*O*</strong></em><em><strong>*n 表名 (列名*</strong></em><em><strong>*…*</strong></em><em><strong>*.);*</strong></em></p>
+<p>​			<em><strong>*E*</strong></em><em><strong>*g : create index regidx_rate_offered*</strong></em></p>
+<p>​			<em><strong>*O*</strong></em><em><strong>*n daily_room_rates (daily_room_rate_accepted); 在daily_room_rates表的daily_room_accepted列上创建常规索引*</strong></em></p>
+<p>​			<em><strong>*C*</strong></em><em><strong>*reate index语句创建全文索引的语法 ：*</strong></em></p>
+<p>​			<em><strong>*C*</strong></em><em><strong>*reate fulltext index 索引名*</strong></em></p>
+<p>​			<em><strong>*O*</strong></em><em><strong>*n 表名 (列名*</strong></em> <em><strong>*…*</strong></em><em><strong>*.);*</strong></em></p>
+<p>​			<em><strong>*E*</strong></em><em><strong>*g : create fulltext index fulltxt_food_item*</strong></em></p>
+<p>​				<em><strong>*O*</strong></em><em><strong>*n food_menu (food_item_desc);*</strong></em></p>
+<p><em><strong>*在food_menu表的food_item_desc列上创建了名为fulltxt_food_item的全文索引*</strong></em></p>
+<p><em><strong>*查看索引 :*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*how indexes语句语法 :*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*how indexes*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*rom 表名*</strong></em></p>
+<p><em><strong>*[from 指定表所属的库名];*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : show indexes from guests;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps47.jpg" alt="img"> </p>
+<p><em><strong>*删除索引 :*</strong></em></p>
+<p><em><strong>*(alter table , drop index)*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*lter table语句 :*</strong></em></p>
+<p><em><strong>*(不再需要表时,可以删除在表上创建的索引)*</strong></em></p>
+<p><em><strong>*(用此语句修改表的结构)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*lter table 表名*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*rop index 索引名;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*lter table food_menu*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*rop index index_cat;*</strong></em></p>
+<p><em><strong>*从food_menu表中删除了名为index_cat的索引*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*rop index语句 ：*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*rop index 索引名 on 表名;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*rop index index_cat on food_menu;*</strong></em></p>
+<p><em><strong>*创建和管理视图 :*</strong></em></p>
+<p><em><strong>*创建视图(虚拟表) ：*</strong></em></p>
+<p><em><strong>*(提供对来自一个或多个表或视图的列或记录的子集进行访问)*</strong></em></p>
+<p><em><strong>*创建视图 :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate view语句 ：*</strong></em> </p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate [or replace] (如果已经定义了同名视图,删除现有视图并创建具有指定意义的新视图)*</strong></em></p>
+<p><em><strong>*V*</strong></em><em><strong>*iew 视图名 [{列名 , 列名*</strong></em><em><strong>*…*</strong></em><em><strong>*.}]*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*s 定义视图的select语句;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate view Booking_Cust_View as*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*elect*</strong></em></p>
+<p><em><strong>*a.Agent_ID , Agent_Name , ar.Agent_Reservation_ID , b.Booking_ID , Guest_Name from Agent as a , Agent_Reservation as ar , Guests as g , Bookings as b where a.Agent_ID &#x3D; ar.Agent_ID and ar.Agent_Reservation_ID &#x3D; b.Agent_Reservation_ID and g.Guest_ID &#x3D; b.Guset_ID;*</strong></em></p>
+<p><em><strong>*创建了Agent , Agent_reservation , Guest和Bookings表的所需列的Booking_Cust_View视图*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate view Hotel_Viewl*</strong></em></p>
+<p><em><strong>*A*</strong></em><em><strong>*s*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*elect Guest_Name , coumt(Booking_ID)*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*rom Guests as g join Bookings as b on g.Guest_ID &#x3D; b.Guest_ID group by Guest_Name;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps48.jpg" alt="img"> </p>
+<p><em><strong>*Eg定义 :*</strong></em> </p>
+<p><em><strong>*Create or replace view Hotel _ Viewl (GuestName , Number _ Of _ Bookings)*</strong></em></p>
+<p><em><strong>*As*</strong></em></p>
+<p><em><strong>*Selecct Guest_Name , count(Booking_ID)*</strong></em></p>
+<p><em><strong>*From Guest as g join Bookings as on g.Guest_ID &#x3D; b.Guest_ID group by Guset_Name;*</strong></em></p>
+<p><em><strong>*Tip :*</strong></em> </p>
+<p><em><strong>*1.or replace用于删除Hotel_Viewl视图的现有定义 ,并重现创建具有新定义的Hotel_Viewl视图*</strong></em></p>
+<p><em><strong>*2.GuestName和Number_Of_Bookings是分配给Hotel_Viewl视图的列的显示名称*</strong></em></p>
+<p><em><strong>*查询视图*</strong></em> </p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p> <em><strong>*select * from 视图名;(可以包含where和order by之类的子句)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Select * from Hotel_Viewl;*</strong></em></p>
+<p><em><strong>*查询Hotel_Viewl视图*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps49.jpg" alt="img"> </p>
+<p><em><strong>*查询具有where子句的视图 :*</strong></em> </p>
+<p><em><strong>*(where子句可以包含在视图定义中精化视图要显示的记录 , 对该视图发起的查询还可以包含where子句以精化其输出)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Create view 视图名 as*</strong></em></p>
+<p><em><strong>*Select * from 表名*</strong></em></p>
+<p><em><strong>*Where 约束条件;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Create view Room_Viewl as*</strong></em></p>
+<p><em><strong>*Select * from Rooms*</strong></em></p>
+<p><em><strong>*Where Room_Actual_Rate&lt;600;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps50.jpg" alt="img"> </p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Select * from Room_Viewl;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps51.jpg" alt="img"> </p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Select * from Room_Viewl*</strong></em></p>
+<p><em><strong>*Where Room_Type_Code &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Ex*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*只查看Room_Viewl视图中行政客房的记录*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps52.jpg" alt="img"> </p>
+<p><em><strong>*查询具有Order By子句的视图 :*</strong></em></p>
+<p><em><strong>*(用该子句对视图中要存储的数据进行排序)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Create view 视图名 as*</strong></em></p>
+<p><em><strong>*Select * from 表名*</strong></em></p>
+<p><em><strong>*Order by 列名 降序或升序;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*create view Guest_Viewl as*</strong></em></p>
+<p><em><strong>*Select * from Guests*</strong></em></p>
+<p><em><strong>*Order by Guest_Name dasc;*</strong></em></p>
+<p><em><strong>*创建了Guest_Viewl来按Guest_Name列的降序存储Guests表中的所有记录*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Select * from Guest_Viewl*</strong></em></p>
+<p><em><strong>*Order by Guest_Name;*</strong></em></p>
+<p><em><strong>*查看Guests_Viewl视图中按升序存储的记录*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps53.jpg" alt="img"> </p>
+<p><em><strong>*视图限制 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps54.jpg" alt="img"> </p>
+<p><em><strong>*可更新视图 :*</strong></em></p>
+<p><em><strong>*(在视图上执行插入,更新,或删除操作可以修改底层表时才认为视图可更新)*</strong></em></p>
+<p><em><strong>*视图定义中包含一下操作 , 则视图不可更新 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps55.jpg" alt="img"> </p>
+<p><em><strong>*在视图上插入 :*</strong></em></p>
+<p><em><strong>*(只能对底层表中所有NOT NULL列且在列列表中不包含计算列的视图插入)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> </p>
+<p><em><strong>*Create view Hotel_View3 as*</strong></em></p>
+<p><em><strong>*Select Hotel_ID , Hotel_Name , Star_Rating*</strong></em></p>
+<p><em><strong>*From Hotels;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps56.jpg" alt="img"> </p>
+<p><em><strong>*查询视图存储的数据 : select * from Hotel_View3;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps57.jpg" alt="img"> </p>
+<p><em><strong>*在Hotel表中插入记录 :*</strong></em></p>
+<p><em><strong>*Insert into Hotel_View3*</strong></em></p>
+<p><em><strong>*Values(*</strong></em><em><strong>*‘*</strong></em><em><strong>*H40001*</strong></em><em><strong>*’*</strong></em> <em><strong>*,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Pacific International*</strong></em><em><strong>*’*</strong></em> <em><strong>*, 4);*</strong></em></p>
+<p><em><strong>*Tip : 当要插入不可更新视图时 , MySQL将发出错误*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps58.jpg" alt="img"> </p>
+<p><em><strong>*在视图上更新 :*</strong></em></p>
+<p><em><strong>*(会修改底层表的记录)*</strong></em></p>
+<p><em><strong>*不能在视图上更新的情况 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps59.jpg" alt="img"> </p>
+<p><em><strong>*在视图上更新只能修改一个表 :*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Update Hotel_View3*</strong></em></p>
+<p><em><strong>*Set Star_rating &#x3D; 4 where Hotel_ID &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*H10002*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*将Hotel_ID为H10002的酒店的Star_Rating更新为4*</strong></em></p>
+<p><em><strong>*在视图上删除 :*</strong></em></p>
+<p><em><strong>*(会从底层删除记录)*</strong></em></p>
+<p><em><strong>*(允许一个表中的列进行删除)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Deelete from hotel_view3*</strong></em></p>
+<p><em><strong>*Where Hotel1_ID &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*H40001*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*从Hotels表删除了在Hotel_ID列中值为H40001的酒店记录*</strong></em></p>
+<p><em><strong>*管理视图 :*</strong></em></p>
+<p><em><strong>*(更改 , 删除)*</strong></em></p>
+<p><em><strong>*更改视图 :*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em> </p>
+<p><em><strong>*create view Hotel_View3 as*</strong></em></p>
+<p><em><strong>*Select Hotel_ID , Hotel_Name , Star_Rating*</strong></em></p>
+<p><em><strong>*From Hotels;*</strong></em></p>
+<p><em><strong>*(先创建一个)*</strong></em></p>
+<p><em><strong>*Alter view语法 :*</strong></em></p>
+<p><em><strong>*Alter view 视图名*</strong></em></p>
+<p><em><strong>*As select 视图表中的各个列名*</strong></em></p>
+<p><em><strong>*From 底层表;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Alter view Hotel_view3*</strong></em></p>
+<p><em><strong>*As select Hotel_ID , Hotel_Name , Star_Rating , Hotel_Address*</strong></em></p>
+<p><em><strong>*From Hotels;*</strong></em></p>
+<p><em><strong>*通过包含Hotels表的Hotel_Address列修改了Hotel_View3视图的定义*</strong></em></p>
+<p><em><strong>*删除视图 :*</strong></em></p>
+<p><em><strong>*(对底层表没有影响)*</strong></em></p>
+<p><em><strong>*(查询的视图引用了已删除的表 , 会收到错误信息)*</strong></em></p>
+<p><em><strong>*Drop view语法 :*</strong></em></p>
+<p><em><strong>*Drop view [if exists] 视图名;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Drop view if exists Hotel_View3;*</strong></em></p>
+<p><strong>第六章</strong> <em><strong>*实现复合语句和储存例程*</strong></em></p>
+<p><em><strong>*实现复合语句 :*</strong></em></p>
+<p><em><strong>*创建复合语句 :*</strong></em></p>
+<p><em><strong>*声明复合语句的语法 :*</strong></em></p>
+<p><em><strong>*[begin_label(用于向begin…end块内括起的复合语句提供名称)]*</strong></em></p>
+<p><em><strong>*begin[一个或多个语句列表]*</strong></em> </p>
+<p><em><strong>*end [end_label用于标记复合语句的结束,与begin_label相同];*</strong></em></p>
+<p><em><strong>*Tip : 若使用复合语句,则需要更改默认分隔符(默认为;)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*Select * from sakila.films;*</strong></em></p>
+<p><em><strong>*Create table emp(empno int , ename varcher(50));*</strong></em></p>
+<p><em><strong>*Insert into emp values(4 ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*TOM*</strong></em><em><strong>*’*</strong></em><em><strong>*);*</strong></em></p>
+<p><em><strong>*Insert into emp values(2 ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*ANDREW*</strong></em><em><strong>*’*</strong></em><em><strong>*);*</strong></em></p>
+<p><em><strong>*在sakila数据库中创建了名为emp的新表包含empno和ename字段并把TOM和ANDREW的记录插入到EMP表中*</strong></em></p>
+<p><em><strong>*Declare语句 :*</strong></em></p>
+<p><em><strong>*(用于在begin_end块中声明局部变量,此语句应该在begin…end块内的任何其他语句之前声明)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Decla 声明变量名称 [, 变量名…] 变量类型 [default 默认值];*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Decla a int;*</strong></em></p>
+<p><em><strong>*声明了整型变量a*</strong></em></p>
+<p><em><strong>*Tip : 局部变量的作用域限于在其中声明它的begin…end块内或者在声明块内所嵌套的块内*</strong></em></p>
+<p><em><strong>*Set语句 :*</strong></em></p>
+<p><em><strong>*(给局部变量和全局变量赋值)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Set 变量赋值;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Set p&#x3D;1;*</strong></em></p>
+<p><em><strong>*用户定义变量语法(全局变量) :*</strong></em></p>
+<p><em><strong>*Set @变量名&#x3D;值 , …;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Set @x &#x3D; 1 , @y &#x3D; 2;*</strong></em></p>
+<p><em><strong>*使用流控制语句 :*</strong></em></p>
+<p><strong>1.</strong> <em><strong>*if…then…else语句 :*</strong></em></p>
+<p><em><strong>*(基于条件执行SQL语句)(可在if后嵌套else if)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*If 条件 then*</strong></em></p>
+<p><em><strong>*要执行的语句;*</strong></em></p>
+<p><em><strong>*[else if 条件 then*</strong></em></p>
+<p><em><strong>*要执行的语句;]*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Begin*</strong></em> </p>
+<p><em><strong>*Declare s varchar(20);*</strong></em></p>
+<p><em><strong>*Declare p int;*</strong></em></p>
+<p><em><strong>*Declare q int;*</strong></em></p>
+<p><em><strong>*Set p &#x3D; 10;*</strong></em></p>
+<p><em><strong>*Set q &#x3D; 20;*</strong></em></p>
+<p><em><strong>*If p &gt; q then set s &#x3D; concat(p ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*&gt;*</strong></em><em><strong>*’*</strong></em> <em><strong>*, q);*</strong></em></p>
+<p><em><strong>*Else if p &#x3D; q then set s &#x3D; concat(p ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*&#x3D;*</strong></em><em><strong>*’*</strong></em> <em><strong>*, q);*</strong></em></p>
+<p><em><strong>*Else set s &#x3D; concat(q ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*&gt;*</strong></em><em><strong>*’*</strong></em> <em><strong>*, p);*</strong></em></p>
+<p><em><strong>*Select s;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*End*</strong></em></p>
+<p><em><strong>*比较两个数的值*</strong></em></p>
+<p><strong>2.</strong> <em><strong>*Case语句 :*</strong></em></p>
+<p><em><strong>*(多个条件检查一个共同变量的不同值时)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Case 要评估的表达式*</strong></em></p>
+<p><em><strong>*When 与case比较的值*</strong></em></p>
+<p><em><strong>*执行某语句;*</strong></em></p>
+<p><em><strong>*[When 与case比较的值*</strong></em></p>
+<p><em><strong>*执行某语句;]*</strong></em></p>
+<p><em><strong>*[else*</strong></em></p>
+<p><em><strong>*某表达式;]*</strong></em></p>
+<p><em><strong>*End case;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Select country_id ,*</strong></em> </p>
+<p><em><strong>*Case country_id*</strong></em></p>
+<p>  <em><strong>*When 2 then*</strong></em> <em><strong>*‘*</strong></em><em><strong>*You have selected Algeria*</strong></em><em><strong>*’*</strong></em></p>
+<p>  <em><strong>*When 3 then*</strong></em> <em><strong>*‘*</strong></em><em><strong>*You have selected American Samoa*</strong></em><em><strong>*’*</strong></em></p>
+<p>  <em><strong>*Else*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Other country selected*</strong></em><em><strong>*’*</strong></em></p>
+<p>  <em><strong>*End as DisplayCountry*</strong></em></p>
+<p>  <em><strong>*From country limit 5;l*</strong></em></p>
+<p><em><strong>*从country表中选择前5个记录得国家ID和国家名*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps60.jpg" alt="img"> </p>
+<p><strong>3.</strong> <em><strong>*While语句 :*</strong></em></p>
+<p><em><strong>*(可以在复合语句中使用)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*[循环名称 : ] while 判定条件 do*</strong></em></p>
+<p><em><strong>*某表达式;*</strong></em></p>
+<p><em><strong>*End while [循环名]*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Begin*</strong></em> </p>
+<p><em><strong>*Declare res int;*</strong></em></p>
+<p><em><strong>*Declare no int;*</strong></em></p>
+<p><em><strong>*Set no &#x3D; 2;*</strong></em></p>
+<p><em><strong>*Set counter &#x3D; 1;*</strong></em></p>
+<p><em><strong>*While counter &lt;&#x3D;10 do*</strong></em></p>
+<p><em><strong>*Set res &#x3D; no*counter;*</strong></em></p>
+<p><em><strong>*Set counter &#x3D; counter + 1;*</strong></em></p>
+<p><em><strong>*Select res;*</strong></em></p>
+<p><em><strong>*End while;*</strong></em></p>
+<p><em><strong>*End*</strong></em></p>
+<p><em><strong>*打印乘法口诀*</strong></em></p>
+<p><strong>4.</strong> <em><strong>*Loop语句 :*</strong></em></p>
+<p><em><strong>*(重复执行以分好分割的每个语句的各种语句)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*[loop名 :] loop*</strong></em></p>
+<p><em><strong>*某语句*</strong></em></p>
+<p><em><strong>*End loop [结束标签,与begin_label相同]*</strong></em></p>
+<p><em><strong>*Leave语句 :*</strong></em></p>
+<p><em><strong>*(终止循环)(用于begin…end或循环构造中(如loop , repea , while))*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Leave 循环名;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Begin*</strong></em> </p>
+<p><em><strong>*Decalre a int ;*</strong></em></p>
+<p><em><strong>*Set a &#x3D; 1;*</strong></em></p>
+<p><em><strong>*Labell : loop*</strong></em></p>
+<p><em><strong>*Select * from film where film_id &#x3D; a;*</strong></em></p>
+<p><em><strong>*Set a &#x3D; a+1;*</strong></em></p>
+<p><em><strong>*If a&gt;5*</strong></em></p>
+<p><em><strong>*Then leave labell;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*End loop;*</strong></em></p>
+<p><em><strong>*End*</strong></em></p>
+<p><em><strong>*显示film表中电影的前五个记录*</strong></em></p>
+<p><strong>5.</strong> <em><strong>*Inerate语句 :*</strong></em></p>
+<p><em><strong>*(再次开始循环)(用在loop , repeat , while语句内)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Inerate 循环名;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Begin*</strong></em> </p>
+<p><em><strong>*Declare a int;*</strong></em></p>
+<p><em><strong>*Set a &#x3D; 1;*</strong></em></p>
+<p><em><strong>*Labell : loop*</strong></em></p>
+<p><em><strong>*Select * from film where film_id &#x3D; a;*</strong></em></p>
+<p><em><strong>*Set a &#x3D; a+1;*</strong></em></p>
+<p><em><strong>*If a&lt;5*</strong></em></p>
+<p><em><strong>*Then inerate labell;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*Leave labell;*</strong></em></p>
+<p><em><strong>*End loop labell;*</strong></em></p>
+<p><em><strong>*End*</strong></em></p>
+<p><em><strong>*显示film表中的前四个记录*</strong></em></p>
+<p><strong>6.</strong> <em><strong>*Repe语句 :*</strong></em></p>
+<p><em><strong>*(执行语句直到条件为真为止)(最少循环一次)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*[构造名 :] repeat*</strong></em></p>
+<p><em><strong>*某语句*</strong></em></p>
+<p><em><strong>*Until 满足条件*</strong></em></p>
+<p><em><strong>*End repeat [要终止的构造名]*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Begin declare a int;*</strong></em></p>
+<p><em><strong>*Set a &#x3D; 1;*</strong></em></p>
+<p><em><strong>*Repeat*</strong></em></p>
+<p><em><strong>*Select * from film where film_id &#x3D; a;*</strong></em></p>
+<p><em><strong>*Set a &#x3D; a+1;*</strong></em></p>
+<p><em><strong>*Until a&gt;4*</strong></em></p>
+<p><em><strong>*End repeat;*</strong></em></p>
+<p><em><strong>*End*</strong></em></p>
+<p><em><strong>*显示film表中的前四个记录*</strong></em></p>
+<p><em><strong>*处理异常 :*</strong></em></p>
+<p><em><strong>*Declare handler语句 :*</strong></em></p>
+<p><em><strong>*(声明根据一个或多个条件执行操作的处理程序)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Declare 指定操作类型(continue继续执行 , exit中止执行begin…end块(默认操作),undo) handler*</strong></em></p>
+<p><em><strong>*For 激活处理程序的条件 [,条件..,]*</strong></em></p>
+<p><em><strong>*某语句;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps61.jpg" alt="img"> </p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Create procedure handlerdemo()*</strong></em></p>
+<p><em><strong>*Begin*</strong></em> </p>
+<p><em><strong>*Declare continue jandler for sqlstate*</strong></em> <em><strong>*‘*</strong></em><em><strong>*23000*</strong></em><em><strong>*’*</strong></em></p>
+<p><em><strong>*Set @x &#x3D; 1;*</strong></em></p>
+<p><em><strong>*Insert into category values (17 ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Fiction*</strong></em><em><strong>*’*</strong></em> <em><strong>*, now());*</strong></em></p>
+<p><em><strong>*Set @x &#x3D; 2;*</strong></em></p>
+<p><em><strong>*Insert into category values (17 ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Fiction*</strong></em><em><strong>*’*</strong></em> <em><strong>*, now());*</strong></em></p>
+<p><em><strong>*Set @x &#x3D; 3;*</strong></em></p>
+<p><em><strong>*Select @x;*</strong></em></p>
+<p><em><strong>*End;*</strong></em></p>
+<p><em><strong>*&#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Delimiter;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps62.jpg" alt="img"> </p>
+<p><em><strong>*Signal语句 :*</strong></em></p>
+<p><em><strong>*(用于向调用程序手动返回错误)(多用于调试系统)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*Sigal sqlstate [值] 返回的sqlstate值*</strong></em></p>
+<p><em><strong>*[set message_text &#x3D; 输出啥]*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Create frocedure insertPaymentDetails (pid int , cid int , sid int , rid*</strong></em> </p>
+<p><em><strong>*Int , amount int , pay_date datetme , update_date datetime)*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*If amount &lt;&#x3D;0 then*</strong></em></p>
+<p><em><strong>*Signal sqlstate*</strong></em> <em><strong>*‘*</strong></em><em><strong>*45000*</strong></em><em><strong>*’*</strong></em></p>
+<p><em><strong>*Set message_text &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Enter payment amount greater than 0*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*Else*</strong></em></p>
+<p><em><strong>*Insert into pament values(pid , cid , sid , rid , amount , pay_date , update_date);*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*&#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Delimiter ;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps63.jpg" alt="img"> </p>
+<p><em><strong>*Tip : call insert PaymentDetails (1 , 1 , 1 , 1 , 0 , now() , now());*</strong></em></p>
+<p><em><strong>*(可以用此语句执行insert PaymentDetails过程)*</strong></em></p>
+<p><em><strong>*使用游标 :*</strong></em></p>
+<p><em><strong>*(在查询返回的每一行执行if…then…else语句 , case语句和while语句)*</strong></em></p>
+<p><em><strong>*声明游标 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*eclare 游标名 cursor for 检索游标将遍历的select语句；*</strong></em></p>
+<p><em><strong>*打开游标 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*O*</strong></em><em><strong>*pen 游标名；*</strong></em></p>
+<p><em><strong>*获取游标 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*etch 游标名 into 变量名；*</strong></em></p>
+<p><em><strong>*关闭游标 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*lose 游标名；*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g(总) ：*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate procedure updateRentalRate()*</strong></em></p>
+<p><em><strong>*B*</strong></em><em><strong>*egin*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*eclare duration int;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*eclare counter int default 0;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*eclare update_rent_cursor cursor for select rental_duration from*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*ilm1;*</strong></em></p>
+<p><em><strong>*O*</strong></em><em><strong>*pen update_rent_cursor;*</strong></em></p>
+<p><em><strong>*U*</strong></em><em><strong>*pdate_loop: LOOP*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*et counter &#x3D; counter + 1;*</strong></em></p>
+<p><em><strong>*F*</strong></em><em><strong>*etch update_rent_cursor into duration;*</strong></em></p>
+<p><em><strong>*I*</strong></em><em><strong>*f duration &#x3D; 6 then*</strong></em></p>
+<p><em><strong>*U*</strong></em><em><strong>*pdate film1 set rental_rate &#x3D; rental_rate + (0.3* rental_rate) where rental_duration &#x3D; duration;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*lseif duration &#x3D; 3 then*</strong></em></p>
+<p><em><strong>*U*</strong></em><em><strong>*pdate film1 set rental_rate &#x3D; rental_rante + (0.2* rental_rate)*</strong></em></p>
+<p><em><strong>*W*</strong></em><em><strong>*here rental_duration &#x3D; duration;*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*lose update_rent_cursor;*</strong></em></p>
+<p><em><strong>*L*</strong></em><em><strong>*eave update_loop;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd if;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd LOOP update_loop;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd*</strong></em> </p>
+<p><em><strong>*&#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter;*</strong></em></p>
+<p><em><strong>*游标用于过程中在电影的租借周期分别为3天和6天时将电影的租金增加20%和30%*</strong></em></p>
+<p><em><strong>*实现存储例程 ：*</strong></em></p>
+<p><em><strong>*实现存储过程 ：*</strong></em></p>
+<p><em><strong>*(类似于函数)*</strong></em></p>
+<p><em><strong>*创建存储过程 :*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate procedure 过程名 (参数)*</strong></em></p>
+<p>​	<em><strong>*[特征] 要执行的sql语句;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps64.jpg" alt="img"> </p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate procedure GetFilmDetails()*</strong></em></p>
+<p><em><strong>*B*</strong></em><em><strong>*egin*</strong></em></p>
+<p>​	<em><strong>*S*</strong></em><em><strong>*elect * from film;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter ;*</strong></em></p>
+<p><em><strong>*创建了名为GetfilmDetails的存储过程*</strong></em></p>
+<p><em><strong>*执行存储过程 ：*</strong></em></p>
+<p><em><strong>*语法 ：*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*all 过程名 (要传给过程执行的值);*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*all GetFilmDetails；*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps65.jpg" alt="img"> </p>
+<p><em><strong>*创建参数化的存储过程 ：*</strong></em></p>
+<p><em><strong>*(in , out , inout)*</strong></em></p>
+<p><em><strong>*I*</strong></em><em><strong>*n*</strong></em></p>
+<p><em><strong>*(用于用户向过程传递值)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*看eg*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*eltmiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate procedure Getfilms (in filmtitle vatchar (255))*</strong></em></p>
+<p><em><strong>*B*</strong></em><em><strong>*egin*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*elect film_id , release_year from film*</strong></em></p>
+<p><em><strong>*W*</strong></em><em><strong>*here title &#x3D; filmtitle;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter ;*</strong></em></p>
+<p><em><strong>*指定filmtitle参数是输入参数，调用Getfilms是传递此参数*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g ： call Getfilms(*</strong></em><em><strong>*‘*</strong></em><em><strong>*AFRICAN EGG*</strong></em><em><strong>*’*</strong></em><em><strong>*);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps66.jpg" alt="img"> </p>
+<p><em><strong>*O*</strong></em><em><strong>*ut*</strong></em></p>
+<p><em><strong>*(用于将值从过程中传回调用方)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*看eg*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate procedure getmaxrate (out rate double)*</strong></em></p>
+<p><em><strong>*B*</strong></em><em><strong>*egin*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*elect max(rental_rate) into rate from film;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter ;*</strong></em></p>
+<p><em><strong>*指定rate参数是输出参数，在调用getmaxrate过程时捕获此值*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g ： call getmaxrate*</strong></em> <em><strong>*(*</strong></em><em><strong>*@a);*</strong></em></p>
+<p>​		<em><strong>*S*</strong></em><em><strong>*elect @a;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps67.jpg" alt="img"> </p>
+<p><em><strong>*I*</strong></em><em><strong>*nout*</strong></em></p>
+<p><em><strong>*(将值传递给过程及从过程返回值)*</strong></em></p>
+<p><em><strong>*(可以充当in以及out)*</strong></em></p>
+<p><em><strong>*语法 :*</strong></em></p>
+<p><em><strong>*看eg*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g :*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*C*</strong></em><em><strong>*reate procedure CalculateRentalRate (duration int , ID int , INOUT rate double)*</strong></em></p>
+<p><em><strong>*B*</strong></em><em><strong>*egin*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*eclare rentDur int;*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*elect rental_duration into rentDur from film where film_id &#x3D; ID;*</strong></em></p>
+<p><em><strong>*S*</strong></em><em><strong>*et rate &#x3D; rate * duration\rentDur;*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*nd &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*D*</strong></em><em><strong>*elimiter ;*</strong></em></p>
+<p><em><strong>*租费是inout参数，如果客户借了ID为5的DVD24天,调用CalculateRentalRate来计算总租金*</strong></em></p>
+<p><em><strong>*E*</strong></em><em><strong>*g : set @r &#x3D; 2.99;*</strong></em></p>
+<p>​	<em><strong>*C*</strong></em><em><strong>*all CalculateRentalRate(24 , 5 , @r);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps68.jpg" alt="img"> </p>
+<p><em><strong>*从一个过程调用另一个过程 :*</strong></em></p>
+<p><em><strong>*(使用另一个过程的返回值)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Create procedure DisplayRentalRate (duration int , ID int)*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*Select rental_rate into @r from film where film_id &#x3D; ID;*</strong></em></p>
+<p><em><strong>*Call CalculateRentalRate (duration , ID , @r);*</strong></em></p>
+<p><em><strong>*Select @r;*</strong></em></p>
+<p><em><strong>*End &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Delimiter ;*</strong></em></p>
+<p><em><strong>*Eg : 必须执行call DisplayRentalRate(12 , 7);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps69.jpg" alt="img"> </p>
+<p><em><strong>*实现函数 :*</strong></em></p>
+<p><em><strong>*(创建UDF来永久存储一组SQL语句)*</strong></em></p>
+<p><em><strong>*(比存储过程作用少 , eg不可以从函数中修改数据库表)*</strong></em></p>
+<p><em><strong>*创建UDF :*</strong></em></p>
+<p><em><strong>*Create function语法 :*</strong></em></p>
+<p><em><strong>*Create function 函数名 (函数参数列表)*</strong></em></p>
+<p><em><strong>*Returns 返回数据的数据类型*</strong></em></p>
+<p><em><strong>*定义函数特征 指定要执行的SQL语句 ;*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Create function funcGetFilmDuration (id smallint(5)) returns*</strong></em></p>
+<p><em><strong>*Tinyint(3) reads SQL data*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*Declare filmduration tinyint(3);*</strong></em></p>
+<p><em><strong>*Select rental_duration into filmduration from film where film_id &#x3D; id;*</strong></em></p>
+<p><em><strong>*Return (filmduration);*</strong></em></p>
+<p><em><strong>*End &#x2F;&#x2F;*</strong></em></p>
+<p><em><strong>*Delimiter ;*</strong></em></p>
+<p><em><strong>*创建根据电影ID返回电影租借周期的函数*</strong></em></p>
+<p><em><strong>*调用funcGetFilmDuration()函数 :*</strong></em></p>
+<p><em><strong>*Select funcGetFilmDuration(10) as*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Pental Duration*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps70.jpg" alt="img"> </p>
+<p><strong>第七章</strong> <em><strong>*实现触发器和事务*</strong></em> </p>
+<p><em><strong>*实现触发器 :*</strong></em></p>
+<p><em><strong>*(预编译并存储在数据库中的小程序)*</strong></em></p>
+<p><em><strong>*创建触发器 :*</strong></em></p>
+<p><em><strong>*Create trigger语句语法 :*</strong></em></p>
+<p><em><strong>*Create*</strong></em></p>
+<p><em><strong>*{definer &#x3D; 用户账户}*</strong></em></p>
+<p><em><strong>*Trigger 触发器名 触发时间 触发操作(如何触发触发器)*</strong></em></p>
+<p><em><strong>*On 与触发器关联的表名 for each row 触发语句*</strong></em></p>
+<p><em><strong>*触发时间关联值 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps71.jpg" alt="img"> </p>
+<p><em><strong>*触发操作关联值 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps72.jpg" alt="img"> </p>
+<p><em><strong>*Tip :根据触发时间分为  before触发器  after触发器*</strong></em></p>
+<p><em><strong>*创建before触发器 :*</strong></em></p>
+<p><em><strong>*(insert , update , delete)*</strong></em></p>
+<p><em><strong>*创建before insert触发器 :*</strong></em></p>
+<p><em><strong>*(在向该触发器的关联表添加行之前激活)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter |*</strong></em></p>
+<p><em><strong>*Create trigger product_add before insert on Products*</strong></em></p>
+<p><em><strong>*For each row*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*If new.price&lt; 0 then*</strong></em></p>
+<p><em><strong>*Signal sqlstate*</strong></em> <em><strong>*‘*</strong></em><em><strong>*45000*</strong></em><em><strong>*’*</strong></em></p>
+<p><em><strong>*Set message_text &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*Please insert positive value for price*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*End;*</strong></em></p>
+<p><em><strong>*| delimiter ;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps73.jpg" alt="img"> </p>
+<p><em><strong>*创建before update触发器 :*</strong></em></p>
+<p><em><strong>*(在更新该触发器的关联表行记录之前激活)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter |*</strong></em></p>
+<p><em><strong>*Create trigger check_order_quantity*</strong></em></p>
+<p><em><strong>*Before update on Customer_Order*</strong></em></p>
+<p><em><strong>*For each row*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*Select quantity_in_hand into @a from Products where*</strong></em></p>
+<p><em><strong>*Product_id &#x3D; new.product_id;*</strong></em></p>
+<p><em><strong>*If(new.quantity_order&gt;@a)*</strong></em></p>
+<p><em><strong>*Then signal sqlstate*</strong></em> <em><strong>*‘*</strong></em><em><strong>*45000*</strong></em><em><strong>*’*</strong></em></p>
+<p><em><strong>*Set message_text &#x3D;*</strong></em> <em><strong>*‘*</strong></em><em><strong>*You cannot order more products than in stock*</strong></em><em><strong>*’*</strong></em><em><strong>*;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*End;*</strong></em></p>
+<p><em><strong>*|*</strong></em></p>
+<p><em><strong>*Delimiter ;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps74.jpg" alt="img"> </p>
+<p><em><strong>*创建before delete触发器 :*</strong></em></p>
+<p><em><strong>*(在删除该触发器的关联表行记录之前激活)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Create trigger product_delete before delete on Products*</strong></em></p>
+<p><em><strong>*For each row*</strong></em></p>
+<p><em><strong>*Insert into Product_Audit values(OLD.product_id ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*delete*</strong></em><em><strong>*’*</strong></em><em><strong>*);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps75.jpg" alt="img"> </p>
+<p><em><strong>*创建after触发器 :*</strong></em></p>
+<p><em><strong>*(insert , update , delete)*</strong></em></p>
+<p><em><strong>*创建after insert触发器 :*</strong></em></p>
+<p><em><strong>*(在将某个记录插入到关联表之后触发)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Create trigger on_order*</strong></em></p>
+<p><em><strong>*After insert on Customer_Order*</strong></em></p>
+<p><em><strong>*For each row*</strong></em></p>
+<p><em><strong>*Update Products set quantity_in_hand &#x3D; quantity_in_hand -*</strong></em> </p>
+<p><em><strong>*NEW.quantity_ordered where product_id &#x3D; NEW.product_id;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps76.jpg" alt="img"> </p>
+<p><em><strong>*创建after update触发器 :*</strong></em></p>
+<p><em><strong>*(在将某个记录更新之后触发)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Create trigger product_update after update on Products*</strong></em></p>
+<p><em><strong>*For each row*</strong></em></p>
+<p><em><strong>*Insert into Product_Audit values(OLD.product_id ,*</strong></em> <em><strong>*‘*</strong></em><em><strong>*update*</strong></em><em><strong>*’*</strong></em><em><strong>*);*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps77.jpg" alt="img"> </p>
+<p><em><strong>*创建after delete触发器 :*</strong></em></p>
+<p><em><strong>*(删除一个记录之后执行)*</strong></em></p>
+<p><em><strong>*Eg :*</strong></em></p>
+<p><em><strong>*Delimiter |*</strong></em></p>
+<p><em><strong>*Create trigger order_del after delete on Customer_Order*</strong></em></p>
+<p><em><strong>*For each row*</strong></em></p>
+<p><em><strong>*Begin*</strong></em></p>
+<p><em><strong>*If(OLD.customer_id in(select customer_id from Customers))*</strong></em></p>
+<p><em><strong>*Then*</strong></em></p>
+<p><em><strong>*Delete from Customers where customer_id &#x3D; OLD.customer_id;*</strong></em></p>
+<p><em><strong>*End if;*</strong></em></p>
+<p><em><strong>*End;*</strong></em></p>
+<p><em><strong>*|*</strong></em></p>
+<p><em><strong>*Delimiter ;*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps78.jpg" alt="img"> </p>
+<p><em><strong>*触发器限制 :*</strong></em></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps79.jpg" alt="img"> </p>
+<p><em><strong>*引用旧值和新值 ：*</strong></em></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://yuehua-HNU.github.io">月华.</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yuehua-hnu.github.io/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/">http://yuehua-hnu.github.io/2023/04/08/使用 MySQL 查询数据/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yuehua-HNU.github.io" target="_blank">月华.の奇妙冒险</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a></div><div class="post_share"><div class="social-share" data-image="/./img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/"><img class="prev-cover" src="/./img/%E5%AE%B5%E5%AE%AB-%E6%B8%A9%E6%B0%B4%E6%9A%96%E4%B9%A1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用 Kafka 实现分布式消息传递系统</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/"><img class="next-cover" src="/./img/%E7%94%98%E9%9B%A8-%E4%BA%91%E6%B5%B7%E7%A2%A7%E7%A9%BA.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用 ZooKeeper 建立集群应用</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">月华.</div><div class="author-info__description">我连宇宙的尽头在哪都不知道，怎么知道这个</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/yuehua-HNU"><i class="fa-sharp fa-solid fa-plane"></i><span>快来一起玩</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/yuehua-HNU" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://space.bilibili.com/475208497?spm_id_from=333.1007.0.0" target="_blank" title="Bilibili"><i class="fa-brands fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">图床那篇因为图片隐私问题还在修改, 无限期后应该就改完了, 哎嘿(doge)</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-MySQL-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-text">使用 MySQL 查询数据</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据"><img src="/./img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 MySQL 查询数据"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据">使用 MySQL 查询数据</a><time datetime="2023-04-08T01:59:49.875Z" title="更新于 2023-04-08 09:59:49">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础"><img src="/./img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux 操作系统基础"/></a><div class="content"><a class="title" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础">Linux 操作系统基础</a><time datetime="2023-04-08T01:59:14.316Z" title="更新于 2023-04-08 09:59:14">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统"><img src="/./img/%E5%AE%B5%E5%AE%AB-%E6%B8%A9%E6%B0%B4%E6%9A%96%E4%B9%A1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Kafka 实现分布式消息传递系统"/></a><div class="content"><a class="title" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统">使用 Kafka 实现分布式消息传递系统</a><time datetime="2023-04-08T01:57:38.269Z" title="更新于 2023-04-08 09:57:38">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/" title="Hive 编程"><img src="/./img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hive 编程"/></a><div class="content"><a class="title" href="/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/" title="Hive 编程">Hive 编程</a><time datetime="2023-04-08T01:56:47.347Z" title="更新于 2023-04-08 09:56:47">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/" title="使用 ZooKeeper 建立集群应用"><img src="/./img/%E7%94%98%E9%9B%A8-%E4%BA%91%E6%B5%B7%E7%A2%A7%E7%A9%BA.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 ZooKeeper 建立集群应用"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/" title="使用 ZooKeeper 建立集群应用">使用 ZooKeeper 建立集群应用</a><time datetime="2023-04-08T01:56:24.556Z" title="更新于 2023-04-08 09:56:24">2023-04-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这 就 是 我 的 <a target="_blank" rel="noopener" href="https://github.com/yuehua-HNU/">逃 跑 路 线</a> ！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/边缘行者2.jpg);"> <a class="categoryBar-list-link" href="categories/Docs文档/">Docs文档</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">Docs文档</span></li><li class="categoryBar-list-item" style="background:url(/img/孤独摇滚.jpg);"> <a class="categoryBar-list-link" href="categories/408/">408</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">408</span></li><li class="categoryBar-list-item" style="background:url(/img/波稻.jpg);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">Golang</span></li><li class="categoryBar-list-item" style="background:url(/img/2B4.jpg);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(/img/阿尼亚.jpg);"> <a class="categoryBar-list-link" href="categories/数据科学与大数据/">数据科学与大数据</a><span class="categoryBar-list-count">10</span><span class="categoryBar-list-descr">设计模式</span></li><li class="categoryBar-list-item" style="background:url(/img/进击的巨人3.jpg);"> <a class="categoryBar-list-link" href="categories/设计模式/">设计模式</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">数据科学与大数据</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.3.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.5.1" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" data-title="本站采用多线部署，备用线路托管于4EVERLAND" title=""><img src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/27/数据库系统概论学习笔记/" alt=""><img width="48" height="48" src="./img/艾莉丝格雷拉特3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-27</span><a class="blog-slider__title" href="2023/02/27/数据库系统概论学习笔记/" alt="">数据库系统概论学习笔记</a><div class="blog-slider__text">数据库系统概论期末复习</div><a class="blog-slider__button" href="2023/02/27/数据库系统概论学习笔记/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/17/设计模式 -- 七大基本原则/" alt=""><img width="48" height="48" src="./img/小舟潮.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-17</span><a class="blog-slider__title" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">设计模式 -- 七大基本原则</a><div class="blog-slider__text">设计模式学习笔记整理</div><a class="blog-slider__button" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/26/Java学习（一）-- Java基础/" alt=""><img width="48" height="48" src="./img/来自新世界2.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-26</span><a class="blog-slider__title" href="2023/01/26/Java学习（一）-- Java基础/" alt="">Java学习（一）-- Java基础</a><div class="blog-slider__text">Java 复习笔记</div><a class="blog-slider__button" href="2023/01/26/Java学习（一）-- Java基础/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/15/Go 语言基础 - 基础语法/" alt=""><img width="48" height="48" src="./img/边缘行者4.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-15</span><a class="blog-slider__title" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">Go 语言基础 - 基础语法</a><div class="blog-slider__text">字节跳动第五届青训营后端基础班学习笔记</div><a class="blog-slider__button" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/01/C语言复习/" alt=""><img width="48" height="48" src="./img/奥尔斯蒂德.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-01</span><a class="blog-slider__title" href="2023/01/01/C语言复习/" alt="">C语言复习</a><div class="blog-slider__text">考研向C语言复习, 根据自己的个人情况所记笔记</div><a class="blog-slider__button" href="2023/01/01/C语言复习/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/12/01/搭建自己的博客/" alt=""><img width="48" height="48" src="./img/JOJO3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-12-01</span><a class="blog-slider__title" href="2022/12/01/搭建自己的博客/" alt="">搭建个人博客历程</a><div class="blog-slider__text">搭建博客前前后后的心路历程</div><a class="blog-slider__button" href="2022/12/01/搭建自己的博客/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

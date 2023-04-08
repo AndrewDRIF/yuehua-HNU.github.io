@@ -1,0 +1,656 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Linux 操作系统基础 | 月华.の奇妙冒险</title><meta name="author" content="月华."><meta name="copyright" content="月华."><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="NIIT Linux 学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 操作系统基础">
+<meta property="og:url" content="http://yuehua-hnu.github.io/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="月华.の奇妙冒险">
+<meta property="og:description" content="NIIT Linux 学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuehua-hnu.github.io/img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg">
+<meta property="article:published_time" content="2023-04-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-08T01:59:14.316Z">
+<meta property="article:author" content="月华.">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuehua-hnu.github.io/img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg"><link rel="shortcut icon" href="/img/%E6%98%9F%E6%9C%88%E5%A4%9C.webp"><link rel="canonical" href="http://yuehua-hnu.github.io/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux 操作系统基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-08 09:59:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/echarts@4.9.0/dist/echarts.min.js"></script><script async src="/js/title.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="space-scene"><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">月华.の奇妙冒险</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Linux 操作系统基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-07T16:00:00.000Z" title="发表于 2023-04-08 00:00:00">2023-04-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-08T01:59:14.316Z" title="更新于 2023-04-08 09:59:14">2023-04-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE/">数据科学与大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Linux 操作系统基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Linux-操作系统基础"><a href="#Linux-操作系统基础" class="headerlink" title="Linux 操作系统基础"></a>Linux 操作系统基础</h1><p>Linux中</p>
+<p>.默认为当前目录  </p>
+<p>..默认为父目录</p>
+<p>终端命令格式</p>
+<p>command [-options] [parameter]</p>
+<p>说明：</p>
+<p>command ：命令名，相应功能的英文单词或单词的缩写</p>
+<p>[-options] ：选项，可用来对命令进行控制，也可以省略</p>
+<p>parameter ：传给命令的参数，可以是 零个、一个 或者 多个</p>
+<p>显示 command 命令的帮助信息</p>
+<p>Command –help</p>
+<p>查阅command命令的使用手册</p>
+<p>Man command</p>
+<p>使用手册操作键</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/wps1.jpg" alt="img"> </p>
+<p><em><strong>*小技巧*</strong></em></p>
+<p>ctrl + shift + &#x3D; 放大终端窗口的字体显示</p>
+<p>ctrl + - 缩小终端窗口的字体显示</p>
+<p>自动补全</p>
+<p>在敲出 文件 ／ 目录 ／ 命令 的前几个字母之后，按下 tab 键</p>
+<p>如果输入的没有歧义，系统会自动补全</p>
+<p>如果还存在其他 文件 ／ 目录 ／ 命令 ，再按一下 tab 键，系统会提示可能存在的命令</p>
+<p>按 上 ／ 下 光标键可以在曾经使用过的命令之间来回切换</p>
+<p>如果想要退出选择，并且不想执行当前选中的命令，可以按 ctrl + c</p>
+<p><em><strong>*常用命令*</strong></em></p>
+<p><em><strong>*Ls*</strong></em> <em><strong>*查看当前文件夹下的内容*</strong></em></p>
+<p>ls 常用选项</p>
+<p>参数  含义</p>
+<p>-a  显示指定目录下所有子目录与文件，包括隐藏文件</p>
+<p>-l  以列表方式显示文件的详细信息</p>
+<p>-h  配合-l以人性化的方式显示文件大小(ls -l -h或ls -lh)</p>
+<p>合体: ls -lha(上述功能均能实现)</p>
+<p>ls通配符的使用</p>
+<p>通配符  含义</p>
+<p>*  代表任意个数个字符</p>
+<p>?  代表任意1个字符，至少 1 个</p>
+<p>[]  表示可以匹配字符组中的任一一个</p>
+<p>[abc] 匹配 a、b、c 中的任意一个</p>
+<p>[a-f] 匹配从 a 到 f 范围内的的任意一个字符</p>
+<p>注意：以 . 开头的文件为隐藏文件，需要用 -a 参数才能显示</p>
+<p>查看以1开头的文件: ls 1*</p>
+<p>查看以1结尾的文件: ls *1.txt(拓展名要加上)或ls <em>1</em>(*代表任意多个字符)</p>
+<p>查看中间字符是1的文件: ls ?1?.txt</p>
+<p><em><strong>*pwd 查看当前所在文件夹*</strong></em></p>
+<p><em><strong>*Cd*</strong></em> <em><strong>*[目录名]*</strong></em> <em><strong>*切换文件夹*</strong></em></p>
+<p>命令  含义</p>
+<p>cd  切换到当前用户的主目录(&#x2F;home&#x2F;用户目录)</p>
+<p>cd ~  切换到当前用户的主目录(&#x2F;home&#x2F;用户目录)</p>
+<p>cd .  保持在当前目录不变</p>
+<p>cd …  切换到上级目录</p>
+<p>cd -  可以在最近两次工作目录之间来回切换</p>
+<p>相对路径和绝对路径</p>
+<p>相对路径 在输入路径时，最前面不是 &#x2F; 或者 ~，表示相对 当前目录 所在的目录位置</p>
+<p>绝对路径 在输入路径时，最前面是 &#x2F; 或者 ~，表示从 根目录&#x2F;家目录 开始的具体目录位置</p>
+<p><em><strong>*Touch*</strong></em> <em><strong>*[文件名]如果文件不存在，新建文件*</strong></em></p>
+<p>创建文件或修改文件时间</p>
+<p>如果文件 不存在，可以创建一个空白文件</p>
+<p>如果文件 已经存在，可以修改文件的末次修改日期</p>
+<p>新建隐藏文件:</p>
+<p>Touch .文件名(文件名开头为.的文件为隐藏文件)</p>
+<p><em><strong>*Mkdir*</strong></em> <em><strong>*[目录名] 创建目录*</strong></em></p>
+<p>命令  	含义</p>
+<p>-p  	可以递归创建目录</p>
+<p>新建目录的名称 不能与****当前目录中已有的目录或文件****同名</p>
+<p><em><strong>*Rm*</strong></em> <em><strong>*[文件名]删除指定文件*</strong></em><em><strong>*或目录*</strong></em></p>
+<p>使用 rm 命令要小心，因为文件删除后<em><strong>*不能恢复*</strong></em></p>
+<p>选项  含义</p>
+<p>-f  强制删除,有就删掉,如果没有也不会报错误信息</p>
+<p>-r  递归地删除目录下的内容，删除文件夹时必须加此参数</p>
+<p>Rm -rf * 系统都会被干掉,删库跑路系列</p>
+<p><em><strong>*tree [目录名] 以树状图列出件目录结构*</strong></em></p>
+<p>选项  含义</p>
+<p>-d  只显示目录</p>
+<p><em><strong>*cp*</strong></em> <em><strong>*[*</strong></em><em><strong>*源文件*</strong></em><em><strong>*] [*</strong></em><em><strong>*目标文件*</strong></em><em><strong>*]*</strong></em> <em><strong>*复制文件或者目录*</strong></em><em><strong>*到另一个位置*</strong></em></p>
+<p>选 项  含义</p>
+<p>-i  覆盖文件前提示</p>
+<p>-r  递归复制</p>
+<p>Cp 源文件 . 将源文件复制到当前目录下</p>
+<p><em><strong>*mv 源文件 目标文件 移动文件或者目录／文件或者目录重命名*</strong></em></p>
+<p>选项  含义</p>
+<p>-i  覆盖文件前提示</p>
+<p><em><strong>*c*</strong></em><em><strong>*at 文件名  查看文件内容、创建文件、文件合并、追加文件内容等功能*</strong></em></p>
+<p>cat 会一次显示所有的内容，适合 查看内容较少 的文本文件</p>
+<p>选项  含义</p>
+<p>-b  对****非空输出行****编号</p>
+<p>-n  对****输出的所有行****编号</p>
+<p>Linux 中还有一个 nl 的命令和 cat -b 的效果等价</p>
+<p><em><strong>*more 文件名  分屏显示文件内容*</strong></em></p>
+<p>适合于 查看内容较多的文本文件</p>
+<p>使用 more 的操作键：</p>
+<p>操作键  	功能</p>
+<p>空格键  显示手册页的下一屏</p>
+<p>Enter键		 一次滚动手册页的一行</p>
+<p>b  		回滚一屏</p>
+<p>f  		前滚一屏</p>
+<p>q  		退出</p>
+<p>&#x2F;word  	搜索 word 字符串</p>
+<p><em><strong>*grep 搜索文本 文件名  搜索文本文件内容*</strong></em></p>
+<p>grep 允许对文本文件进行****模式查找****，所谓模式查找，又被称为正则表达式。</p>
+<p>选项  含义</p>
+<p>-n  显示<em><strong>*匹配行及行号*</strong></em></p>
+<p>-v  显示****不包含*<em><strong>匹配文本的所有行（相当于</strong></em>*求反****）</p>
+<p>-i  忽略大小写</p>
+<p>搜索内容中有空格的话就要用””引起来</p>
+<p>常用的两种<em><strong>*模式查找*</strong></em></p>
+<p>参数  含义</p>
+<p>^a  行首，搜寻以a开头的行</p>
+<p>z$  行尾，搜寻以z结束的行</p>
+<p><em><strong>*echo 文字内容*</strong></em></p>
+<p>echo 会在终端中显示参数指定的文字，通常会和 <em><strong>*重定向*</strong></em> 联合使用</p>
+<p>和重定向一起使用时可以直接创建文件并将内容重定向到文件中</p>
+<p>Echo 内容 &gt; 文件名</p>
+<p><em><strong>*重定向 &gt; 和 &gt;&gt;*</strong></em></p>
+<p>Linux 允许将命令执行结果重定向(输入)到一个文件</p>
+<p>将本应显示在终端上的内容 输入／追加 到指定文件中</p>
+<p>&gt; 	表示输出，会覆盖文件原有的内容</p>
+<p>&gt;&gt; 	表示追加，会将内容追加到已有文件的末尾</p>
+<p>单独使用 : 内容 &gt;&#x2F;&gt;&gt; 文件名</p>
+<p>一起使用 : echo 内容 &gt;&#x2F;&gt;&gt; 文件名</p>
+<p>其中内容可以是任意指令,会将其输出的内容重定向到文件中</p>
+<p><em><strong>*管道 |*</strong></em></p>
+<p>Linux 允许将 一个命令的<em><strong>*输出*</strong></em> 可以通过管道做为另一个命令的<em><strong>*输入*</strong></em></p>
+<p>常用的管道命令有：</p>
+<p>more ：分屏显示内容</p>
+<p>grep ：在命令执行结果的基础上查询指定的文本</p>
+<p>Ls -lh | more</p>
+<p>Ls | grep</p>
+<p><em><strong>*Clear*</strong></em> <em><strong>*清屏*</strong></em></p>
+<p><em><strong>*远程管理常用命令*</strong></em></p>
+<p><em><strong>*Shutdown*</strong></em> <em><strong>*关机&#x2F;重启*</strong></em></p>
+<p>常用命令</p>
+<p># ****立刻****重新启动操作系统，其中 now 表示现在</p>
+<p>$ shutdown -r now</p>
+<p># 立刻关机，其中 now 表示现在</p>
+<p>$ shutdown now</p>
+<p># 系统在今天的 20:25 会关机</p>
+<p>$ shutdown 20:25</p>
+<p># 系统再过十分钟后自动关机</p>
+<p>$ shutdown +10</p>
+<p># ****取消****之前指定的关机计划</p>
+<p>$ shutdown -c</p>
+<p>不指定选项和参数，默认表示 1 分钟之后 关闭电脑</p>
+<p>远程维护服务器时，最好不要关闭系统，而应该重新启动系统</p>
+<p>远程维护服务器时,如果权限不够,可以执行sudo shutdown -r now 表示以root权限执行命令</p>
+<p><em><strong>*ifconfig 查看／配置计算机当前的网卡配置信息*</strong></em></p>
+<p># 查看网卡配置信息</p>
+<p>$ ifconfig</p>
+<p># 查看网卡对应的 IP 地址</p>
+<p>$ ifconfig | grep inet</p>
+<p>提示：一台计算机中有可能会有 <em><strong>*一个物理网卡*</strong></em> 和 ****多个虚拟网卡****，在 Linux 中物理网卡的名字通常以 ensXX 表示</p>
+<p>127.0.0.1 被称为 本地回环&#x2F;环回地址，一般用来测试本机网卡是否正常</p>
+<p><em><strong>*ping*</strong></em> <em><strong>*ip地址用于检测目标ip地址的链接是否正常*</strong></em></p>
+<p># 检测到目标主机是否连接正常</p>
+<p>$ ping IP地址</p>
+<p># 检测本地网卡工作正常</p>
+<p>$ ping 127.0.0.1</p>
+<p>远程登录和赋值文件</p>
+<p><em><strong>*ssh 基础（重点）*</strong></em></p>
+<p>在 Linux 中 SSH 是 非常常用的工具，通过 SSH 客户端我们可以连接到运行了 SSH服务器的远程机器上</p>
+<p>ssh的简单使用：</p>
+<p>ssh [-p port] user@remote</p>
+<p>user 是在远程机器上的用户名，如果不指定的话默认为当前用户</p>
+<p>remote 是远程机器的地址，可以是 IP／域名，或者是 后面会提到的别名</p>
+<p>port 是 SSH Server 监听的端口，如果不指定，就为默认值 22</p>
+<p>提示：</p>
+<p>使用 exit 退出当前用户的登录</p>
+<p>在工作中，SSH 服务器的端口号很有可能不是 22，如果遇到这种情况就需要使用 -p 选项，指定正确的端口号，否则无法正常连接到服务器</p>
+<p>Ssh只能在 Linux系统下使用</p>
+<p><em><strong>*Scp*</strong></em> <em><strong>*-P port*</strong></em><em><strong>*文件 文件复制地址*</strong></em>   <em><strong>*在Linu*</strong></em><em><strong>*x*</strong></em><em><strong>*下用来进行远程拷贝文件*</strong></em> </p>
+<p>在指定端口时用的是大写的 -P 而不是小写的</p>
+<p># 把本地当前目录下的 01.py文件 复制到远程家目录下的 Desktop&#x2F;01.py</p>
+<p># 注意：<code>:</code> 后面的路径如果****不是绝对路径*<em><strong>，则以</strong></em>*用户的家目录****作为参照路径</p>
+<p>scp -P port 01.py user@remote:Desktop&#x2F;01.py</p>
+<p># 把远程家目录下的 Desktop&#x2F;01.py 文件复制到本地当前目录下的 01.py</p>
+<p>scp -P port user@remote:Desktop&#x2F;01.py 01.py</p>
+<p># 加上 <em><strong>*-r 选项可以传送文件夹*</strong></em></p>
+<p># 把当前目录下的 demo 文件夹 复制到 远程 家目录下的 Desktop</p>
+<p>scp -r demo user@remote:Desktop</p>
+<p># 把远程 家目录下的 Desktop 复制到 当前目录下的 demo 文件夹</p>
+<p>scp -r user@remote:Desktop demo</p>
+<p>选 项  含义</p>
+<p>-r  若给出的源文件是目录文件，则 scp 将递归复制该目录下的所有子目录和文件，目标文件必须为一个目录名</p>
+<p>-P  若远程 SSH 服务器的端口不是 22，需要使用大写字母 -P 选项指定端口</p>
+<p>注意：</p>
+<p>scp 只能在 Linux系统下使用</p>
+<p>其它命令</p>
+<p>查找文件</p>
+<p>find 命令功能非常强大，通常用来在 特定的目录下 搜索 符合条件的文件</p>
+<p>序号        命令              作用</p>
+<p>01  find [路径] -name “*.py”  查找指定路径下扩展名是 .py 的文件，包括子目录</p>
+<p>如果省略路径，表示在当前文件夹下查找</p>
+<p>之前学习的通配符，在使用 find 命令时同时可用</p>
+<p>演练目标</p>
+<p>1.搜索桌面目录下，文件名包含 1 的文件</p>
+<p>find -name “<em>1</em>“</p>
+<p>2.搜索桌面目录下，所有以 .txt 为扩展名的文件</p>
+<p>find -name “*.txt”</p>
+<p>3.搜索桌面目录下，以数字 1 开头的文件</p>
+<p>find -name “1*”</p>
+<p>软链接</p>
+<p>序 号  命令  作用</p>
+<p>01  ln -s 被链接的源文件 链接文件  建立文件的软链接，用通俗的方式讲类似于 Windows 下的快捷方式</p>
+<p>注意：</p>
+<p>没有 -s 选项建立的是一个 硬链接文件两个文件占用相同大小的硬盘空间，工作中几乎不会建立文件的硬链接</p>
+<p>源文件要使用绝对路径，不能使用相对路径，这样可以方便移动链接文件后，仍然能够正常使用</p>
+<p>演练目标</p>
+<p>将桌面目录下的 01.py 移动到 demo&#x2F;b&#x2F;c 目录下</p>
+<p>在桌面目录下新建 01.py 的 软链接 FirstPython分别使用 相对路径 和 绝对路径 建立 FirstPython 的软链接</p>
+<p>将 FirstPython 移动到 demo 目录下，对比使用 相对路径 和 绝对路径 的区别</p>
+<p>硬链接简介（知道）</p>
+<p>在使用 ln 创建链接时，如果没有 -s 选项，会创建一个 硬链接，而不是软链接</p>
+<p>硬链接演练</p>
+<p>在 ~&#x2F;Desktop&#x2F;demo 目录下建立 ~&#x2F;Desktop&#x2F;demo&#x2F;b&#x2F;c&#x2F;01.py 的硬链接 01_hard</p>
+<p>使用 ls -l 查看文件的硬链接数（硬链接——有多少种方式可以访问文件或者目录）</p>
+<p>删除 ~&#x2F;Desktop&#x2F;demo&#x2F;b&#x2F;c&#x2F;01.py ，并且使用 tree 来确认 demo 目录下的三个链接文件文件软硬链接的示意图</p>
+<p>文件软硬链接示意图</p>
+<p>在 Linux 中，文件名 和 文件的数据 是分开存储的</p>
+<p>提示：</p>
+<p>在 Linux 中，只有文件的 硬链接数 &#x3D;&#x3D; 0 才会被删除</p>
+<p>使用 ls -l 可以查看一个文件的硬链接的数量</p>
+<p>在日常工作中，几乎不会建立文件的硬链接，知道即可</p>
+<p>打包压缩</p>
+<p>打包压缩 是日常工作中备份文件的一种方式</p>
+<p>在不同操作系统中，常用的打包压缩方式是不同的选项 含义</p>
+<p>Windows 常用 rar</p>
+<p>Mac 常用 zip</p>
+<p>Linux 常用 tar.gz</p>
+<p>打包 ／ 解包</p>
+<p>tar 是 Linux 中最常用的 备份工具，此命令可以 把一系列文件 打包到 一个大文件中，也可以把一个 打包的大文件恢复成一系列文件</p>
+<p>tar 的命令格式如下:</p>
+<p># 打包文件</p>
+<p>tar -cvf 打包文件.tar 被打包的文件／路径…</p>
+<p># 解包文件</p>
+<p>tar -xvf 打包文件.tar</p>
+<p>tar选项说明：</p>
+<p>选项  含义</p>
+<p>c  生成档案文件，创建打包文件</p>
+<p>x  解开档案文件</p>
+<p>v  列出归档解档的详细过程，显示进度</p>
+<p>f  指定档案文件名称，f 后面一定是 .tar 文件，所以必须放选项最后</p>
+<p>注意： f 选项必须放在最后，其他选项顺序可以随意</p>
+<p>压缩／解压缩</p>
+<p>1）gzip</p>
+<p>tar 与 gzip 命令结合可以使用实现文件 打包和压缩</p>
+<p>tar 只负责打包文件，但不压缩</p>
+<p>用 gzip 压缩 tar 打包后的文件，其扩展名一般用 xxx.tar.gz</p>
+<p>在 Linux 中，最常见的压缩文件格式就是 xxx.tar.gz</p>
+<p>在 tar 命令中有一个选项 -z 可以调用 gzip ，从而可以方便的实现压缩和解压缩的</p>
+<p>功能命令格式如下：</p>
+<p># 压缩文件</p>
+<p>tar -zcvf 打包文件.tar.gz 被压缩的文件／路径…</p>
+<p># 解压缩文件</p>
+<p>tar -zxvf 打包文件.tar.gz</p>
+<p># 解压缩到指定路径</p>
+<p>tar -zxvf 打包文件.tar.gz -C 目标路径</p>
+<p>选项  含义</p>
+<p>-C  解压缩到指定目录，注意：要解压缩的目录必须存在</p>
+<p>\2) bzip2(two)</p>
+<p>tar 与 bzip2 命令结合可以使用实现文件 打包和压缩（用法和 gzip 一样）</p>
+<p>tar 只负责打包文件，但不压缩</p>
+<p>用 bzip2 压缩 tar 打包后的文件，其扩展名一般用 xxx.tar.bz2</p>
+<p>在 tar 命令中有一个选项 -j 可以调用 bzip2 ，从而可以方便的实现压缩和解压缩的功能</p>
+<p>命令格式如下：</p>
+<p># 压缩文件</p>
+<p>tar -jcvf 打包文件.tar.bz2 被压缩的文件／路径…</p>
+<p># 解压缩文件</p>
+<p>tar -jxvf 打包文件.tar.bz2</p>
+<p>软件安装</p>
+<p>通过 apt 安装／卸载软件</p>
+<p>apt 是 Advanced Packaging Tool ，是 Linux 下的一款安装包管理工具</p>
+<p>可以在终端中方便的 安装／卸载／更新软件包</p>
+<p># 1. 安装软件</p>
+<p>$ sudo apt install 软件包</p>
+<p># 2. 卸载软件</p>
+<p>$ sudo apt remove 软件名</p>
+<p># 3. 更新已安装的包</p>
+<p>$ sudo apt upgrade</p>
+<p>系统信息相关命令</p>
+<p>时间和日期</p>
+<p>序号  命令  作用</p>
+<p>01  date  查看系统时间</p>
+<p>02  cal  calendar 查看日历， -y 选项可以查看一年的日历</p>
+<p>磁盘信息</p>
+<p>序号  命令  作用</p>
+<p>01  df -h  disk free 显示磁盘剩余空间</p>
+<p>02  du -h [目录名]  disk usage 显示目录下的文件大小</p>
+<p>进程信息</p>
+<p>所谓进程，通俗地说就是 当前正在执行的一个程序</p>
+<p>序号  命令  作用</p>
+<p>01  ps aux  process status 查看进程的详细状况</p>
+<p>02  top  动态显示运行中的进程并且排序</p>
+<p>03  kill [-9] 进程代号  终止指定代号的进程， -9 表示强行终止</p>
+<p>ps 默认只会显示当前用户通过终端启动的应用程序</p>
+<p>ps 选项说明</p>
+<p>选项  含义</p>
+<p>a  显示终端上的所有进程，包括其他用户的进程</p>
+<p>u  显示进程的详细状态</p>
+<p>x  显示没有控制终端的进程</p>
+<p>提示：使用 kill 命令时，最好只终止由当前用户开启的进程，而不要终止 root 身份开启的进程，否则可能导致系统崩溃</p>
+<p>要退出 top 可以直接输入 q</p>
+<p>用户权限相关命令</p>
+<p>组管理</p>
+<p>提示：创建组 &#x2F; 删除组 的终端命令都需要通过 sudo 执行</p>
+<p>序号  命令  作用</p>
+<p>01  groupadd 组名  添加组</p>
+<p>02  groupdel 组名  删除组</p>
+<p>03  cat &#x2F;etc&#x2F;group  确认组信息</p>
+<p>04  chgrp -R 组名 文件&#x2F;目录名  递归修改文件&#x2F;目录的所属组</p>
+<p>提示：</p>
+<p>组信息保存在 &#x2F;etc&#x2F;group 文件中</p>
+<p>&#x2F;etc 目录是专门用来保存 系统配置信息 的目录</p>
+<p>用户管理</p>
+<p>提示：创建用户 &#x2F; 删除用户 &#x2F; 修改其他用户密码 的终端命令都需要通过 sudo 执行</p>
+<p>创建用户／设置密码／删除用户</p>
+<p>提示：</p>
+<p>创建用户时，如果忘记添加 -m 选项指定新用户的家目录 —— 最简单的方法就是删除用户，重新创建</p>
+<p>创建用户时，默认会创建一个和用户名同名的组名</p>
+<p>用户信息保存在 &#x2F;etc&#x2F;passwd 文件中</p>
+<p>查看用户信息</p>
+<p>序号  命令  作用</p>
+<p>01  id [用户名]  查看用户 UID 和 GID 信息</p>
+<p>02  who  查看当前所有登录的用户列表</p>
+<p>03  whoami  查看当前登录用户的账户名</p>
+<p>which（重要）</p>
+<p>提示</p>
+<p>&#x2F;etc&#x2F;passwd 是用于保存用户信息的文件</p>
+<p>&#x2F;usr&#x2F;bin&#x2F;passwd 是用于修改用户密码的程序</p>
+<p>which 命令可以查看执行命令所在位置，例如：</p>
+<p>which ls</p>
+<p># 输出</p>
+<p># &#x2F;bin&#x2F;ls</p>
+<p>which useradd</p>
+<p># 输出</p>
+<p># &#x2F;usr&#x2F;sbin&#x2F;useradd</p>
+<p>bin 和 sbin</p>
+<p>在 Linux 中，绝大多数可执行文件都是保存在 &#x2F;bin 、 &#x2F;sbin 、 &#x2F;usr&#x2F;bin 、 &#x2F;usr&#x2F;sbin</p>
+<p>&#x2F;bin （ binary ）是二进制执行文件目录，主要用于具体应用</p>
+<p>&#x2F;sbin （ system binary ）是系统管理员专用的二进制代码存放目录，主要用于系统管理</p>
+<p>&#x2F;usr&#x2F;bin （ user commands for applications ）后期安装的一些软件</p>
+<p>&#x2F;usr&#x2F;sbin （ super user commands for applications ）超级用户的一些管理程序</p>
+<p>提示：</p>
+<p>cd 这个终端命令是内置在系统内核中的，没有独立的文件，因此用 which 无法找到 cd命令的位置</p>
+<p>切换用户</p>
+<p>序 号  命令  作用  说明</p>
+<p>01  su - 用户名  切换用户，并且切换目录  - 可以切换到用户家目录，否则保持位置不变</p>
+<p>02  exit  退出当前登录账户  </p>
+<p>su 不接用户名，可以切换到 root ，但是不推荐使用，因为不安全</p>
+<p>exit 示意图如下：</p>
+<p>修改文件权限</p>
+<p>序号  命令  作用</p>
+<p>01  chown  修改拥有者</p>
+<p>02  chgrp  修改组</p>
+<p>03  chmod  修改权限</p>
+<p>命令格式如下：</p>
+<p># 修改文件|目录的拥有者</p>
+<p>chown 用户名 文件名|目录名</p>
+<p># 递归修改文件|目录的组</p>
+<p>chgrp -R 组名 文件名|目录名</p>
+<p># 递归修改文件权限</p>
+<p>chmod -R 755 文件名|目录名</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>4</p>
+<p>5</p>
+<p>6</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://yuehua-HNU.github.io">月华.</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yuehua-hnu.github.io/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">http://yuehua-hnu.github.io/2023/04/08/Linux 操作系统基础/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yuehua-HNU.github.io" target="_blank">月华.の奇妙冒险</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="/./img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/"><img class="prev-cover" src="/./img/%E7%94%98%E9%9B%A8-%E4%BA%91%E6%B5%B7%E7%A2%A7%E7%A9%BA.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用 ZooKeeper 建立集群应用</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/08/Hadoop%20%E7%BC%96%E7%A8%8B/"><img class="next-cover" src="/./img/%E8%83%A1%E6%A1%83-%E9%9B%AA%E8%BF%B9%E6%A2%85%E9%A6%99.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hadoop 编程</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">月华.</div><div class="author-info__description">我连宇宙的尽头在哪都不知道，怎么知道这个</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/yuehua-HNU"><i class="fa-sharp fa-solid fa-plane"></i><span>快来一起玩</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/yuehua-HNU" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://space.bilibili.com/475208497?spm_id_from=333.1007.0.0" target="_blank" title="Bilibili"><i class="fa-brands fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">图床那篇因为图片隐私问题还在修改, 无限期后应该就改完了, 哎嘿(doge)</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80"><span class="toc-text">Linux 操作系统基础</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据"><img src="/./img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 MySQL 查询数据"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据">使用 MySQL 查询数据</a><time datetime="2023-04-08T01:59:49.875Z" title="更新于 2023-04-08 09:59:49">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础"><img src="/./img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux 操作系统基础"/></a><div class="content"><a class="title" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础">Linux 操作系统基础</a><time datetime="2023-04-08T01:59:14.316Z" title="更新于 2023-04-08 09:59:14">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统"><img src="/./img/%E5%AE%B5%E5%AE%AB-%E6%B8%A9%E6%B0%B4%E6%9A%96%E4%B9%A1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Kafka 实现分布式消息传递系统"/></a><div class="content"><a class="title" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统">使用 Kafka 实现分布式消息传递系统</a><time datetime="2023-04-08T01:57:38.269Z" title="更新于 2023-04-08 09:57:38">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/" title="Hive 编程"><img src="/./img/%E9%9B%B7%E7%94%B5%E5%B0%86%E5%86%9B-%E7%88%B1%E7%90%B4%E6%B5%B7%E7%9A%84%E6%99%9A%E9%A3%8E.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hive 编程"/></a><div class="content"><a class="title" href="/2023/04/08/Hive%20%E7%BC%96%E7%A8%8B/" title="Hive 编程">Hive 编程</a><time datetime="2023-04-08T01:56:47.347Z" title="更新于 2023-04-08 09:56:47">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/" title="使用 ZooKeeper 建立集群应用"><img src="/./img/%E7%94%98%E9%9B%A8-%E4%BA%91%E6%B5%B7%E7%A2%A7%E7%A9%BA.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 ZooKeeper 建立集群应用"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20ZooKeeper%20%E5%BB%BA%E7%AB%8B%E9%9B%86%E7%BE%A4%E5%BA%94%E7%94%A8/" title="使用 ZooKeeper 建立集群应用">使用 ZooKeeper 建立集群应用</a><time datetime="2023-04-08T01:56:24.556Z" title="更新于 2023-04-08 09:56:24">2023-04-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这 就 是 我 的 <a target="_blank" rel="noopener" href="https://github.com/yuehua-HNU/">逃 跑 路 线</a> ！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/边缘行者2.jpg);"> <a class="categoryBar-list-link" href="categories/Docs文档/">Docs文档</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">Docs文档</span></li><li class="categoryBar-list-item" style="background:url(/img/孤独摇滚.jpg);"> <a class="categoryBar-list-link" href="categories/408/">408</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">408</span></li><li class="categoryBar-list-item" style="background:url(/img/波稻.jpg);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">Golang</span></li><li class="categoryBar-list-item" style="background:url(/img/2B4.jpg);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(/img/阿尼亚.jpg);"> <a class="categoryBar-list-link" href="categories/数据科学与大数据/">数据科学与大数据</a><span class="categoryBar-list-count">10</span><span class="categoryBar-list-descr">设计模式</span></li><li class="categoryBar-list-item" style="background:url(/img/进击的巨人3.jpg);"> <a class="categoryBar-list-link" href="categories/设计模式/">设计模式</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">数据科学与大数据</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.3.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.5.1" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" data-title="本站采用多线部署，备用线路托管于4EVERLAND" title=""><img src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/27/数据库系统概论学习笔记/" alt=""><img width="48" height="48" src="./img/艾莉丝格雷拉特3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-27</span><a class="blog-slider__title" href="2023/02/27/数据库系统概论学习笔记/" alt="">数据库系统概论学习笔记</a><div class="blog-slider__text">数据库系统概论期末复习</div><a class="blog-slider__button" href="2023/02/27/数据库系统概论学习笔记/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/17/设计模式 -- 七大基本原则/" alt=""><img width="48" height="48" src="./img/小舟潮.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-17</span><a class="blog-slider__title" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">设计模式 -- 七大基本原则</a><div class="blog-slider__text">设计模式学习笔记整理</div><a class="blog-slider__button" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/26/Java学习（一）-- Java基础/" alt=""><img width="48" height="48" src="./img/来自新世界2.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-26</span><a class="blog-slider__title" href="2023/01/26/Java学习（一）-- Java基础/" alt="">Java学习（一）-- Java基础</a><div class="blog-slider__text">Java 复习笔记</div><a class="blog-slider__button" href="2023/01/26/Java学习（一）-- Java基础/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/15/Go 语言基础 - 基础语法/" alt=""><img width="48" height="48" src="./img/边缘行者4.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-15</span><a class="blog-slider__title" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">Go 语言基础 - 基础语法</a><div class="blog-slider__text">字节跳动第五届青训营后端基础班学习笔记</div><a class="blog-slider__button" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/01/C语言复习/" alt=""><img width="48" height="48" src="./img/奥尔斯蒂德.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-01</span><a class="blog-slider__title" href="2023/01/01/C语言复习/" alt="">C语言复习</a><div class="blog-slider__text">考研向C语言复习, 根据自己的个人情况所记笔记</div><a class="blog-slider__button" href="2023/01/01/C语言复习/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/12/01/搭建自己的博客/" alt=""><img width="48" height="48" src="./img/JOJO3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-12-01</span><a class="blog-slider__title" href="2022/12/01/搭建自己的博客/" alt="">搭建个人博客历程</a><div class="blog-slider__text">搭建博客前前后后的心路历程</div><a class="blog-slider__button" href="2022/12/01/搭建自己的博客/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
