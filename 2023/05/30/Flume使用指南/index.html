@@ -1,0 +1,793 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Flume使用指南 | 月华.の奇妙冒险</title><meta name="author" content="月华."><meta name="copyright" content="月华."><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="NIIT Flume 学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flume使用指南">
+<meta property="og:url" content="http://yuehua-hnu.github.io/2023/05/30/Flume%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="月华.の奇妙冒险">
+<meta property="og:description" content="NIIT Flume 学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuehua-hnu.github.io/img/%E8%83%A1%E6%A1%83-%E6%97%85%E9%80%94%E5%B0%8F%E6%86%A9.jpg">
+<meta property="article:published_time" content="2023-05-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-05-30T12:20:50.632Z">
+<meta property="article:author" content="月华.">
+<meta property="article:tag" content="Flume">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuehua-hnu.github.io/img/%E8%83%A1%E6%A1%83-%E6%97%85%E9%80%94%E5%B0%8F%E6%86%A9.jpg"><link rel="shortcut icon" href="/img/%E6%98%9F%E6%9C%88%E5%A4%9C.webp"><link rel="canonical" href="http://yuehua-hnu.github.io/2023/05/30/Flume%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Flume使用指南',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-30 20:20:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/echarts@4.9.0/dist/echarts.min.js"></script><script async src="/js/title.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-categories-card@1.0.0/lib/categorybar.css"><link rel="stylesheet" href="/css/runtime.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="space-scene"><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div><div class="space-wrap"><div class="space-wall space-wall-right"></div><div class="space-wall space-wall-left"></div><div class="space-wall space-wall-top"></div><div class="space-wall space-wall-bottom"></div><div class="space-wall space-wall-back"></div></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/./img/%E8%83%A1%E6%A1%83-%E6%97%85%E9%80%94%E5%B0%8F%E6%86%A9.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">月华.の奇妙冒险</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Flume使用指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-29T16:00:00.000Z" title="发表于 2023-05-30 00:00:00">2023-05-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-30T12:20:50.632Z" title="更新于 2023-05-30 20:20:50">2023-05-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E4%B8%8E%E5%A4%A7%E6%95%B0%E6%8D%AE/">数据科学与大数据</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>25分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Flume使用指南"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Flume使用指南"><a href="#Flume使用指南" class="headerlink" title="Flume使用指南"></a>Flume使用指南</h1><h1 id="一、安装-Flume"><a href="#一、安装-Flume" class="headerlink" title="一、安装 Flume"></a>一、安装 Flume</h1><p>首先检查机器是否联网</p>
+<blockquote>
+<p><code>8.8.8.8</code> 是Google提供的公共 DNS 服务器的IP地址。ping 命令是用来测试网络通信的，它通过向目标IP地址发送数据包并等待响应，来检查是否能够成功地与该地址进行通信。</p>
+<p>通过向Google提供的公共DNS服务器发送数据包并等待响应，可以检查本地主机是否能够成功地连接到互联网上的其他计算机。因为Google的公共 DNS 服务器在全球多个位置提供服务，并且稳定可靠，所以它成为了Linux用户常用的网络测试地址之一。</p>
+<p>当用户发现自己的电脑无法上网时，可以使用 <code>ping 8.8.8.8</code> 命令来检查是否能够与 Google 的DNS服务器进行通信。如果能够成功连接，那么问题可能出现在其他地方，如果连接失败，则意味着可能存在网络连接问题，需要进一步检查和解决。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ping 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+
+
+<p>检查 <code>nc（netcat）</code> 的版本</p>
+<blockquote>
+<p><code>netcat</code>（也称为 <code>nc</code>）是一种网络工具，它是一个非常强大的用于创建 TCP&#x2F;IP 连接的命令行工具。<code>netcat</code> 的功能十分强大，可以用于端口扫描、文件传输、调试协议等多种场景。</p>
+<p>通过 <code>netcat</code> 可以进行以下操作：</p>
+<ul>
+<li>在主机之间传输数据，可以作为 client（客户端）或 server（服务器）。</li>
+<li>在不打开 FTP、SSH、Telnet 等服务的情况下，创建服务器程序，监听端口并处理连接请求。</li>
+<li>进行端口扫描和服务探测，可测试端口是否打开，并查看被连接服务的协议版本。</li>
+<li>通过网络发送文件或数据，如将文件拷贝到目标主机、进行数据备份等。</li>
+<li>调试网络协议，可以手动输入数据包并观察响应信息来调试各种协议的通信。</li>
+</ul>
+<p><code>netcat</code> 是一个非常灵活的工具，它可以作为一个网络的 Swiss Army Knife，可以被用于多种不同的目的。但同时，由于其强大的功能和灵活的使用方式，也可能被用于网络攻击和安全测试，因此在使用时需要谨慎。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nc -version</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果你的虚拟机没有 <code>nc</code> ，使用以下指令来安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install nc</span><br></pre></td></tr></table></figure>
+
+
+
+<p>GUI 用户打开虚拟机中的浏览器，然后复制链接点击下载 <code>https://archive.apache.org/dist/flume/1.9.0/</code></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230419084651670.png" alt="点击下载"></p>
+<p>命令行用户在安装目录下执行以下指令（需要安装 <code>wget</code> 工具）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://archive.apache.org/dist/flume/1.9.0/apache-flume-1.9.0-bin.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+
+<p>没有 <code>wget</code> 工具的执行以下指令进行安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install wget</span><br></pre></td></tr></table></figure>
+
+
+
+<p>解压安装包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -xvf apache-flume-1.9.0-bin.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+
+<p>将解压之后的文件夹进行重命名为 <code>flume</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mv</span> apache-flume-1.9.0-bin flume</span><br></pre></td></tr></table></figure>
+
+
+
+<p>将重命名之后的文件夹移动到 <code>/training</code> 文件夹下（大数据所有组件都在这里）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mv</span> flume /training/</span><br></pre></td></tr></table></figure>
+
+
+
+<p>修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+
+
+<p>将下面两行加入配置文件</p>
+<p><code>export FLUME_HOME=/training/flume/</code></p>
+<p><code>export PATH=$PATH:$FLUME_HOME/bin</code></p>
+<p>重新导入资源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">source</span> ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+
+
+<p>查看 <code>flume</code> 版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flume-ng version</span><br></pre></td></tr></table></figure>
+
+
+
+<p>查看 <code>JAVA_HOME</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="variable">$JAVA_HOME</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>将 <code>flume-env.sh.template</code> 文件重命名为 <code>flume-env.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mv</span> /training/flume/conf/flume-env.sh.template flume-env.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<p>修改 <code>flume-env.sh</code> 文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi /training/flume/conf/flume-env.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<p>将 <code>flume-env.sh</code> 文件中的 <code>JAVA_HOME</code> 修改位自己的 <code>jdk</code> 路径</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/training/jdk1.8.0_301</span><br></pre></td></tr></table></figure>
+
+
+
+<p>再次查看 <code>flume</code> 版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flume-ng version</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230419091755567.png" alt="安装成功"></p>
+<h1 id="二、什么是-Flume"><a href="#二、什么是-Flume" class="headerlink" title="二、什么是 Flume"></a>二、什么是 Flume</h1><p>Flume是一个高可靠性、高可用性、分布式、可定制化的海量日志采集、聚合和传输的系统工具。</p>
+<p>Flume 是 Apache 的一个开源项目，是一个分布式日志收集系统，以流水线的方式收集、聚合日志。它具有高可扩展性和高可靠性，可以在不停机的情况下进行在线扩容和日志收集。</p>
+<p>Flume 支持多种数据源，例如 Avro、Netcat、JMS、Exec、Thrift 等，也支持多种数据目的地，例如 HDFS、HBase、Solr、Elasticsearch 等。</p>
+<p>Flume 的核心工作单元是 Agent，它由三个主要组件组成：Source、Channel 和 Sink，分别表示数据来源、数据缓存和数据目的地。</p>
+<p>Flume 有许多不同的使用场景，例如日志收集、数据摄取、事件处理等，广泛应用于 Web 应用程序、大数据、云计算等领域。</p>
+<p>没有 Hadoop 我们也可以运行 Flume</p>
+<p>从不同的数据源手机数据，然后传输到中心化储存的系统中</p>
+<p>不依赖于任何操作系统，可以运行在任何设备</p>
+<blockquote>
+<p>Flume Event</p>
+</blockquote>
+<blockquote>
+<p>Flume Event 是 Apache Flume 中的一个概念，代表了一个在 Flume Agent 中传输的<strong>数据单元</strong>。一个 Flume Event 包含了一个数据载体和多个可选的头部信息（header）。其中，数据载体是必须的，而头部信息是可选的。</p>
+<p>Flume Event 的数据载体是一个字节数组，在传输过程中可以被多个 <code>Source</code> 和 <code>Sink</code> <strong>共享</strong>使用。Flume Event 的头部信息是一组<strong>键值对</strong>，通过这些头部信息可以对数据进行标记和描述，例如可以包含数据的来源、时间戳、数据类型、序列号等信息。</p>
+<p>在 Flume Agent 中，<strong>多个</strong> <code>Source</code> 可以向<strong>一个</strong> <code>Channel</code> 发送 <code>Flume Event</code>，<strong>多个</strong> <code>Sink</code> 可以从一个 <code>Channel</code> 中获取 Flume Event。在传输过程中，每个 Flume Event 可以通过<strong>拦截器</strong>（interceptor）进行处理，例如可以对数据进行清洗、格式化、过滤等操作，从而满足不同的业务需求。</p>
+<p>需要注意的是，在 Flume Agent 中，一个 Flume Event 的传输是基于<strong>异步</strong>的，即在发送和接收 Flume Event 的过程中，不需要等待对方的响应。这种设计可以确保高效地传输大量的日志和事件数据。同时，Flume Event 的传输还可以进行<strong>批量处理</strong>，从而进一步提高传输效率。</p>
+</blockquote>
+<p><code>Flume</code> 用来传送数据的最小单位，一个 <code>event</code> 就是一个数据的单位，<code>event</code> 就是数据，许多数据流的集合</p>
+<blockquote>
+<p>Flume Agent</p>
+</blockquote>
+<blockquote>
+<p>Flume Agent 是 Apache Flume 中的一个概念，代表了一个在单个 JVM 进程中运行的 Flume 实例。可以将 Flume Agent 看作是一个数据传输管道，通过各种 <code>Source</code> 和 <code>Sink</code> 连接起来，从而实现数据的采集、传输、处理等功能。</p>
+<p>在 Flume Agent 中，每个 <code>Source</code> 和 <code>Sink</code> 都是一个独立的组件。<code>Source</code> 用于采集数据，可以从各种数据源中获取数据，例如从日志文件、网络流、消息队列、Twitter 等等中获取数据。<code>Sink</code> 用于输出数据，可以将获取到的数据输出到各种存储或处理目的地，例如输出到 HDFS、HBase、MySQL、Kafka、Elasticsearch 等等。</p>
+<p>除了 <code>Source</code> 和 <code>Sink</code> 组件，Flume Agent 中还有一个 <code>Channel</code> 组件。<code>Channel</code> 是连接 <code>Source</code> 和 <code>Sink</code> 的缓冲区，用于暂存从 <code>Source</code> 中获取到的数据，等待 <code>Sink</code> 进行输出。Flume Agent 中可以配置<strong>多个</strong> <code>Source</code> 和多个 <code>Sink</code>，它们通过 <code>Channel</code> 进行连接，从而实现数据的传输和处理。</p>
+<p>Flume Agent 的配置文件通过指定各个组件的名称、类型、属性等来实现对 Agent 的定义。Flume Agent 配置文件的结构与 XML 文件类似，由 <code>&lt;agent&gt;</code> 标签组成，其中包含了<strong>多个</strong> <code>&lt;source&gt;</code>、<code>&lt;channel&gt;</code>、<code>&lt;sink&gt;</code> 标签，每个标签都包含了对应组件的相关配置信息。在配置好 Flume Agent 后，可以通过启动 Flume Agent 进程来启动整个数据传输管道，从而实现数据的采集、传输、处理等功能。</p>
+</blockquote>
+<blockquote>
+<p>Flume Agent（Flume代理）是 Flume 中的核心概念之一，代表一个 Flume 进程实例，其中包含 <code>Source</code>、<code>Channel</code> 和 <code>Sink</code> 三个组件。Flume Agent 用于采集、聚合和传输日志和数据，可运行于单个节点或多个节点的集群中。每个 Flume Agent 进程都可以独立工作，同时也可以和其他 Flume Agent 进程协同工作，以实现更高的可靠性和扩展性。</p>
+<p>Flume Agent 包含以下三个核心组件：</p>
+<ol>
+<li><code>Source</code>（数据源）：负责从数据源（例如文件、日志、数据流、消息队列等）收集数据，并将数据传递到 <code>Channel</code>。</li>
+<li><code>Channel</code>（数据缓存）：负责存储 <code>Source</code> 收集到的数据，以便 <code>Sink</code> 进一步处理。<code>Channel</code> 可以是内存缓存、文件系统缓存、Kafka 等第三方缓存系统。</li>
+<li><code>Sink</code>（数据目的地）：负责将数据从 <code>Channel</code> 读取并将其传输到目标系统，例如 HDFS、HBase、Elasticsearch、Solr 等。</li>
+</ol>
+<p>Flume Agent 可以根据需要自定义配置，如定义<strong>多个</strong> Source<code>、</code>Channel<code>和</code>Sink&#96;，也可以将多个 Agent 配置成一个 Agent 组，以实现更高效的数据采集和传输。</p>
+</blockquote>
+<p><code>web server</code> 网路服务器，不停产生日志文件，是一个数据源</p>
+<p><code>Flume agent</code> 的任务是将日志文件传输到HDFS中</p>
+<p><code>source</code> 将日志数据从网络服务器传输到 <code>channel</code> 中，拉取数据</p>
+<p><code>channel</code> 将存储数据并传输到 <code>sink</code></p>
+<p><code>sink</code> 消费从 <code>channel</code> 传来的数据并将他们传输到 HDFS，推送数据</p>
+<p><code>-put</code> 每次只能传输一个文件（从本地到HDFS），这就是第一个限制</p>
+<p>flume 可以实时与 hadoop 链接，这样就不用来一个数据执行一次 <code>-put</code>命令了</p>
+<p>flume 可以发送大量 实时数据，可以管理数据流</p>
+<p>channel会存储数据，直到sink将所有数据都存储到HDFS 中，channel才会把这些数据删除</p>
+<p>如果hdfs接收的速度小于webserver发送的速度，channel就会把剩下的数据存储起来，直到sink将其存储到hdfs</p>
+<p>channel就像水阀</p>
+<p>临时保存</p>
+<p>一种是临时保存在内存上，另一种是保存在一个文件上</p>
+<p>内存会比硬盘更快，</p>
+<p>complex data flow</p>
+<p>“复杂数据流”是指在数据处理系统中的一种数据流，它包含一系列复杂的计算和处理过程，用于处理和转换复杂的数据结构。这种处理方式通常需要使用一些先进的数据处理技术和算法，如机器学习、图像处理、自然语言处理等。</p>
+<p>复杂数据流通常涉及到多个数据处理阶段，每个阶段都需要处理原始数据并输出处理结果。每个阶段的处理方式和输出结果通常会影响到下一个阶段的处理方式和输出结果。因此，在设计和实现复杂数据流时需要考虑到数据处理阶段之间的依赖关系和数据流的整个工作流程。</p>
+<p>复杂数据流可以应用于各种领域，例如金融、医疗、电商、物流等等，用于解决各种数据处理和决策方面的问题。然而，设计和实现复杂数据流也是具有挑战性的，需要考虑到数据的质量、效率、可靠性和安全性等因素。因此，许多现代数据处理系统提供了各种复杂数据处理和分析的工具和框架，以帮助企业处理和分析大量数据，并从中获得更多价值。</p>
+<p>Flume Avro 是 Flume 中用于实现数据流的一种机制。Avro 是一种数据序列化格式，它具有良好的可扩展性和高效性能，使得 Flume Avro 可以非常高效地传输大量数据。Flume Avro 可以通过 Avro Source 和 Avro Sink 实现数据的传输，使用 Avro 的优点是可以减少数据传输时所需的带宽和网络延迟。</p>
+<p>Avro Source 是 Flume 中的一种 Source 类型，用于接收 Avro 格式的数据。它可以从任何支持 Avro 协议和数据类型的源系统中接收数据，并将其传输到 Flume 的 Channel 组件中，以便后续处理。 Avro Sink 是 Flume 中的一种 Sink 类型，用于将数据传输到支持 Avro 格式的目的地系统。它可以从 Flume 的 Channel 组件中获取数据，并将其传输到目标系统，例如 Avro RPC 服务、HDFS、HBase、Elasticsearch 等。</p>
+<p>使用 Flume Avro 的好处是，它可以支持面向数据的实时流处理，同时也可以有效地降低数据传输时所需的带宽和延迟。在 Flume Avro 中，数据是以二进制格式传输的，数据包括数据类型和数据值，可以快速地进行序列化、反序列化和传输。同时，使用 Avro 的模式定义语言，可以定义和更新数据模式，从而支持数据的演进。这种灵活的模式定义方式使得 Flume Avro 可以支持向后兼容和向前兼容，使得数据流处理更加容易和灵活。</p>
+<p>当我们使用复杂数据流的时候，我们需要使用avro</p>
+<p>。在计算机领域中，replicating 通常指复制数据或实现数据的冗余备份，以增加数据的可靠性和可用性。通过复制数据或备份数据，可以保证数据不会因为单点故障而丢失，同时也可以提高数据的读取速度和吞吐量。Replication 在数据库、分布式系统以及数据中心等领域中被广泛应用。</p>
+<p>netcat是一个数据生成器</p>
+<p>在 Flume 中，Replicating 是一种 Channel 类型，用于在多个 Sink 之间复制消息。当使用 Replicating Channel 时，Flume 会将每个事件广播到多个 Sink，从而提高了消息的可靠性和可用性。Replicating Channel 相对于其他 Channel 类型的优点是，可以同时将消息发送到多个 Sink，从而减少了单点故障的风险，并且可以提供更好的消息传递效率。</p>
+<p>在使用 Replicating Channel 时，每个 Sink 都会接收到相同的消息，并且处理消息的方式也相同。这种方式适用于许多场景，例如在多个数据中心之间复制消息，或者在多个目的地系统之间分发消息。使用 Replicating Channel 可以确保消息的一致性，并提高消息的投递成功率。</p>
+<p>需要注意的是，在使用 Replicating Channel 时，由于每个事件都要广播到多个 Sink，因此会增加网络带宽的使用量。同时，如果 Sink 数量很多，也会增加 Flume Agent 的负载和延迟。因此，在使用 Replicating Channel 时需要根据具体情况权衡利弊，选择合适的 Channel 类型和 Sink 数量。</p>
+<p>multiplexing可以分发数据到不同的hdfs</p>
+<p>Flume 可以传输非结构化数据</p>
+<p><code>FLumeData = filePrefix</code></p>
+<p>是个默认名字后缀</p>
+<p>改名字只是更改前缀</p>
+<h1 id="三、Flume-的操作"><a href="#三、Flume-的操作" class="headerlink" title="三、Flume 的操作"></a>三、Flume 的操作</h1><h2 id="使用另一台机器作为数据源"><a href="#使用另一台机器作为数据源" class="headerlink" title="使用另一台机器作为数据源"></a>使用另一台机器作为数据源</h2><ol>
+<li><p>设置agent name设置source name设置channel name设置sink name</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">agentname.source = sourcename <span class="comment">//我们可以使用任何名字来命名</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>定义source 的属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">agentname.sources.sourcename.type = netcat; <span class="comment">//有专门的几个词，不能随意</span></span><br><span class="line">agentname.sources.sourcename.bind = localhost; <span class="comment">//ip地址</span></span><br><span class="line">agentname.sources.sourcename.port = portnumber(<span class="number">1</span>-<span class="number">65000</span>);</span><br><span class="line"><span class="comment">//我们不能</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>定义 channel的属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">agentname.channel.channelname.type = memory;<span class="comment">//有专门的几个词，不能随意</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>定义sink 的属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">agentnamename.sink.sinkname.type = logger <span class="comment">//是hdfs的话就写和hdfs，logger是终端（terminal）</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>在channel的帮助下链接source和sink</p>
+</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># names of agent,source,channel,sink</span><br><span class="line"></span><br><span class="line">andrew.sources=source1</span><br><span class="line">andrew.channels=channel1</span><br><span class="line">andrew.sinks=sink1</span><br><span class="line"></span><br><span class="line"># source information</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.type=netcat</span><br><span class="line">andrew.sources.source1.bind=localhost</span><br><span class="line">andrew.sources.source1.port=22222</span><br><span class="line"></span><br><span class="line"># channel information</span><br><span class="line"></span><br><span class="line">andrew.channels.channel1.type=memory</span><br><span class="line"></span><br><span class="line"># sink information</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink1.type=logger</span><br><span class="line"></span><br><span class="line"># connection between source and sink with the help of channel</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.channels=channel1</span><br><span class="line">andrew.sinks.sink1.channel=channel1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># names of agent,source,channel,sink</span><br><span class="line"></span><br><span class="line">andrew.sources=source1 # 这里可以用任何名字，Andrew 是 agentname</span><br><span class="line">andrew.channels=channel1</span><br><span class="line">andrew.sinks=sink1</span><br><span class="line"></span><br><span class="line"># source information</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.type=netcat</span><br><span class="line">andrew.sources.source1.bind=localhost # 接收所有来自这个 IP 的信息，不是这个 IP 发出的信息</span><br><span class="line">andrew.sources.source1.port=22222	# 阈值是 1-65000</span><br><span class="line"></span><br><span class="line"># channel information</span><br><span class="line"></span><br><span class="line">andrew.channels.channel1.type=memory</span><br><span class="line"># 可选值为 memory、file</span><br><span class="line"></span><br><span class="line"># sink information</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink1.type=logger</span><br><span class="line"># logger 的意思是会把数据显示在终端上（另一个可选：HDFS）</span><br><span class="line"></span><br><span class="line"># connection between source and sink with the help of channel</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.channels=channel1</span><br><span class="line">andrew.sinks.sink1.channel=channel1 # 只有这里用channel，其他所有都加s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>启动 Flume</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flume-ng agent -n agentname -f filename</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230420181554804.png" alt="指令截图"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ flume-ng agent -n agentname -f filename</span><br><span class="line"></span><br><span class="line"><span class="comment"># -n 后面的是 agentname，一定要跟文件里的一样，不然会报错</span></span><br><span class="line"><span class="comment"># -f 后面的是 数据源文件</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230420181535129.png" alt="agentname输错结果报错"></p>
+<p>运行指令后出现端口号表示执行成功</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230420181200210.png" alt="执行并互通"></p>
+<p>我们启动另一个窗口来当做另一台机器来链接 Flume</p>
+<p>输入指令来链接 Flume</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nc localhost 22222</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ nc localhost 22222</span><br><span class="line"></span><br><span class="line"><span class="comment"># local 是文件中绑定的 IP 地址</span></span><br><span class="line"><span class="comment"># 22222 是文件中设定的端口号</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230420181305851.png" alt="链接Flume"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230420181511494.png" alt="互通成功"></p>
+<h2 id="使用-Windows-作为数据源"><a href="#使用-Windows-作为数据源" class="headerlink" title="使用 Windows 作为数据源"></a>使用 <code>Windows</code> 作为数据源</h2><p>现在我们用Windows来当做source源来运行flume</p>
+<p>在 Linux 中写入配置文件，带不带 <code>.config</code> 都可以</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources=win_source</span><br><span class="line">andrew.channels=win_channel</span><br><span class="line">andrew.sinks=win_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.type=netcat</span><br><span class="line">andrew.sources.win_source.bind=192.168.1.130</span><br><span class="line">andrew.sources.win_source.port=22222</span><br><span class="line"></span><br><span class="line">andrew.channels.win_channel.type=memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.win_sink.type=logger</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.channels=win_channel</span><br><span class="line">andrew.sinks.win_sink.channel=win_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources=win_source</span><br><span class="line">andrew.channels=win_channel</span><br><span class="line">andrew.sinks=win_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.type=netcat</span><br><span class="line">andrew.sources.win_source.bind=192.168.1.130 </span><br><span class="line"></span><br><span class="line"># 因为是要与其他机器相连，所以不能用localhost，要用本机地址</span><br><span class="line"># localhost 是相对于本机而言的，在网络上无法访问 localhost，所以这里必须使用本机 IP</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.port=22222</span><br><span class="line"></span><br><span class="line">andrew.channels.win_channel.type=memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.win_sink.type=logger</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.channels=win_channel</span><br><span class="line">andrew.sinks.win_sink.channel=win_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426081857545.png" alt="配置文件这样写"></p>
+<p>启动 flume</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flume-ng agent -n andrew -f win</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426082005315.png" alt="启动成功"></p>
+<p>在 Windows 中断中输入指令，连接虚拟机</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ncat 192.168.1.130 22222</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426082122152.png" alt="输点什么"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426082138859.png" alt="连接成功"></p>
+<h2 id="Flume-与防火墙"><a href="#Flume-与防火墙" class="headerlink" title="Flume 与防火墙"></a><code>Flume</code> 与防火墙</h2><blockquote>
+<p>这一部分是以后工作中可能需要用到的</p>
+</blockquote>
+<blockquote>
+<p>注意一下指定都需要使用 <code>sudo</code> 执行</p>
+</blockquote>
+<p>查看防火墙状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl status firewalld</span><br></pre></td></tr></table></figure>
+
+
+
+<p>启动防火墙</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl start firewalld</span><br></pre></td></tr></table></figure>
+
+
+
+<p>启动防火墙之后我们饿就不能接收这个 IP 地址的消息了</p>
+<p>防火墙打开，端口就被封闭住了</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426090355740.png" alt="连得上但是不能接收消息"></p>
+<p>查看端口是否开放（允许使用）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426090536810.png" alt="啥都没显示，没有一个端口在白名单"></p>
+<p>开放 <code>22222</code> 端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo firewall-cmd --add-port=22222/tcp --permanent</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426090742090.png" alt="image-20230426090742090"></p>
+<p>重新加载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230426090823304.png" alt="成功开放22222端口"></p>
+<p>再次关闭防火墙，方便日后学习</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl stop firewalld</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用-Linux-指令作为数据源"><a href="#使用-Linux-指令作为数据源" class="headerlink" title="使用 Linux 指令作为数据源"></a>使用 <code>Linux</code> 指令作为数据源</h2><p>exec source：</p>
+<p>我们使用Linux指令来收集数据（Linux指令作为源代码）</p>
+<p>通过命令产生数据，flume 会监听这个产生的数据</p>
+<p><code>cat</code></p>
+<p>我们修改这个文件，cat 不会更新，只能重新使用这个命令来显示</p>
+<p><code>tail</code></p>
+<p>tail -F</p>
+<p>会追踪这个文件，文件更新，这个指令的显示结果就回更新</p>
+<p>适合用于流处理</p>
+<p>我们的数据源是执行 <code>-cat</code> 命令来读取这些命令</p>
+<p>我们的source会收集数据传输到channel然后再传输到sink，再在终端上输出数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources=lin_source</span><br><span class="line">andrew.channels=lin_channel</span><br><span class="line">andrew.sinks=lin_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.type=exec</span><br><span class="line">andrew.sources.lin_source.command=cat /root/bd3/data.txt</span><br><span class="line"></span><br><span class="line">andrew.channels.lin_channel.type=memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.lin_sink.type=logger</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.channels=lin_channel</span><br><span class="line">andrew.sinks.lin_sink.channel=lin_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources=lin_source</span><br><span class="line">andrew.channels=lin_channel</span><br><span class="line">andrew.sinks=lin_sink</span><br><span class="line"></span><br><span class="line"># 注意这两句跟之前的不一样</span><br><span class="line">andrew.sources.lin_source.type=exec	# source 的类型为 exec，表示执行（指令）</span><br><span class="line"># 只适配一个文件，只能读取一个文件，2 个就不行了</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.command=cat /root/bd3/data.txt</span><br><span class="line"># 这里是要写执行的指令，这次是 cat 指令，后面加上要抓取文件的路径</span><br><span class="line"></span><br><span class="line">andrew.channels.lin_channel.type=memory</span><br><span class="line"># memory 表示 channel 将数据暂存在内存够中</span><br><span class="line"></span><br><span class="line">andrew.sinks.lin_sink.type=logger</span><br><span class="line"># sink 的数据类型是日志</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.channels=lin_channel</span><br><span class="line">andrew.sinks.lin_sink.channel=lin_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230427170021431.png" alt="要抓取文件的内容"></p>
+<p>运行指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ flume-ng agent -n andrew -f netcat2.conf</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230427165722372.png" alt="抓取文件内容作为数据源"></p>
+<blockquote>
+<p>使用 <code>tail</code> 指令</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources=lin_source</span><br><span class="line">andrew.channels=lin_channel</span><br><span class="line">andrew.sinks=lin_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.type=exec</span><br><span class="line">andrew.sources.lin_source.command=tail -F /root/bd3/data.txt</span><br><span class="line"></span><br><span class="line">andrew.channels.lin_channel.type=memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.lin_sink.type=logger</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.channels=lin_channel</span><br><span class="line">andrew.sinks.lin_sink.channel=lin_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230427180123625.png" alt="刚启动的时候"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;curry&quot;</span> &gt;&gt; data.txt</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230427180148083.png" alt="插入些东西"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230427180201221.png" alt="追踪显示"></p>
+<blockquote>
+<p>更换追踪目录为 <code>/var/log/message</code></p>
+</blockquote>
+<p>这个文件是记录我们 Linux 的系统日程的</p>
+<p>随着我们对 Linux 系统的操作，这个文件会不断更新日程</p>
+<p>借助 <code>tail -F</code> 我们可以追踪更新实时数据</p>
+<p>无论是什么系统级的操作，它都会记录下来，我们都会实时读取到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources=lin_source</span><br><span class="line">andrew.channels=lin_channel</span><br><span class="line">andrew.sinks=lin_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.type=exec</span><br><span class="line">andrew.sources.lin_source.command=tail -F /var/log/messages</span><br><span class="line"></span><br><span class="line">andrew.channels.lin_channel.type=memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.lin_sink.type=logger</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.channels=lin_channel</span><br><span class="line">andrew.sinks.lin_sink.channel=lin_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230427181146687.png" alt="image-20230427181146687"></p>
+<h2 id="使用一整个文件夹作为数据源"><a href="#使用一整个文件夹作为数据源" class="headerlink" title="使用一整个文件夹作为数据源"></a>使用一整个文件夹作为数据源</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = fireworm_source</span><br><span class="line">andrew.channels = fireworm_channel</span><br><span class="line">andrew.sinks = fireworm_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.type = spooldir</span><br><span class="line">andrew.sources.fireworm_source.spoolDir = /root/bd3</span><br><span class="line"></span><br><span class="line">andrew.channels.fireworm_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.type = logger</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.channels = fireworm_channel</span><br><span class="line">andrew.sinks.fireworm_sink.channel = fireworm_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = fireworm_source</span><br><span class="line">andrew.channels = fireworm_channel</span><br><span class="line">andrew.sinks = fireworm_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.type = spooldir	# 这里的类型就写 spooldir 即可</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.spoolDir = /root/bd3	# 这里要写一个文件夹，不能是一个文件</span><br><span class="line"># 这里的 spoolDir 的 D 要大写，这是大小写敏感的</span><br><span class="line"></span><br><span class="line">andrew.channels.fireworm_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.type = logger</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.channels = fireworm_channel</span><br><span class="line">andrew.sinks.fireworm_sink.channel = fireworm_channel</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><code>Flume</code> 的一个文件被传输之后会被加上 <code>.COMPLETED</code> 标识，<code>Flume</code> 之后就不会传输有这个标识的文件</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504170552281.png" alt="（传输了我所有的 .conf 文件）"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504170656364.png" alt="标识传输过的文件"></p>
+<p>配置文件被重命名之后，文件就会被重命名，下次用它运行 <code>Flume</code> 的时候要用新的、被重命名之后的、后缀为 <code>.COMPLETED</code> 的文件</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504170856549.png" alt="尝试一下使用之前的文件名，报错"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504171141512.png" alt="使用新文件名，成功"></p>
+<p>只要我们不退出程序，flume就回一直监听这个文件夹，只要有新的文件就回继续传输，不需要重启flume</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504171323925.png" alt="新建个文件"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504171313274.png" alt="成功监听"></p>
+<p>如果我们手动删除了这个标识，这个文件会被当成新文件重新传输</p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504172136605.png" alt="手动去掉Flume标识"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504172156486.png" alt="又把这个文件重新传输了一遍"></p>
+<h2 id="修改-sink"><a href="#修改-sink" class="headerlink" title="修改 sink"></a>修改 <code>sink</code></h2><blockquote>
+<p>得先启动 Hadoop</p>
+</blockquote>
+<blockquote>
+<p>这里也是可以监听文件夹的</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = fireworm_source</span><br><span class="line">andrew.channels = fireworm_channel</span><br><span class="line">andrew.sinks = fireworm_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.type = spooldir</span><br><span class="line">andrew.sources.fireworm_source.spoolDir = /root/bd3</span><br><span class="line"></span><br><span class="line">andrew.channels.fireworm_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.type = hdfs</span><br><span class="line">andrew.sinks.fireworm_sink.hdfs.path = /batch3/spool</span><br><span class="line">andrew.sinks.fireworm_sink.hdfs.fileType = DataStream</span><br><span class="line">andrew.sinks.fireworm_sink.hdfs.hdfs.writeFormat = Text</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.channels = fireworm_channel</span><br><span class="line">andrew.sinks.fireworm_sink.channel = fireworm_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = fireworm_source</span><br><span class="line">andrew.channels = fireworm_channel</span><br><span class="line">andrew.sinks = fireworm_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.type = spooldir</span><br><span class="line">andrew.sources.fireworm_source.spoolDir = /root/bd3</span><br><span class="line"></span><br><span class="line">andrew.channels.fireworm_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.type = hdfs	# 修改类型为 hdfs</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.hdfs.path = /batch3/spool	# 指定要上传的 hdfs 路径</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.hdfs.fileType = DataStream	# 指定传输格式为数据流传输</span><br><span class="line"># DataStream 大小写敏感</span><br><span class="line"></span><br><span class="line">andrew.sinks.fireworm_sink.hdfs.hdfs.writeFormat = Text	# 指定上传格式为 .txt 文件</span><br><span class="line"># writeFormat 的 F 与 Text 的 T 都大小写敏感</span><br><span class="line"></span><br><span class="line">andrew.sources.fireworm_source.channels = fireworm_channel</span><br><span class="line">andrew.sinks.fireworm_sink.channel = fireworm_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504181231149.png" alt="这是在等待上传数据"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504181306776.png" alt="这是传输完成"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504181031377.png" alt="这里也在等待上传数据"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230504181043275.png" alt="上传完成"></p>
+<p>如果文件夹里有同名的文件，会报错</p>
+<p>现在我们假设有一个 <code>log1.txt</code> 文件，我们在这个文件夹中使用 <code>Flume</code> 监听后，这个文件的文件名变成了 <code>log1.txt.COMPLETED</code></p>
+<p>现在我们尝试将另一个 <code>log1.txt</code> 文件从根目录中移动到这个目录下，移动过程是不会报错的</p>
+<p>因为一个文件是 <code>log1.txt</code> 另一个文件是 <code>log1.txt.COMPLETED</code></p>
+<p>但是此时 <code>Flume</code> 监听程序会报错，因为它给这个新文件 <code>log1.txt</code> 加上传输标识之后，一个目录下的文件会出现重名，此时不会进行数据传输，也不会将文件改名</p>
+<p>这时将已经有标识的 <code>log1.txt.COMPLETED</code> 文件删除，依然不会将新文件 <code>log1.txt</code> 传输，必须重新运行 <code>Flume</code></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230506075935834.png" alt="报错信息"></p>
+<blockquote>
+<p>使用 <code>exec</code> 作为数据源</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = lin_source</span><br><span class="line">andrew.channels = total_channel</span><br><span class="line">andrew.sinks = total_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.type = exec</span><br><span class="line">andrew.sources.lin_source.command = tail -F /root/batch3/log1.txt</span><br><span class="line"></span><br><span class="line">andrew.channels.total_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.total_sink.type = hdfs</span><br><span class="line">andrew.sinks.total_sink.hdfs.path = /batch3/total</span><br><span class="line">andrew.sinks.total_sink.hdfs.fileType = DataStream</span><br><span class="line">andrew.sinks.total_sink.hdfs.hdfs.writeFormat = Text</span><br><span class="line"></span><br><span class="line">andrew.sources.lin_source.channels = total_channel</span><br><span class="line">andrew.sinks.total_sink.channel = total_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230506091942317.png" alt="追踪成功"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230506091802291.png" alt="追踪成功"></p>
+<blockquote>
+<p>使用 <code>netcat</code> 作为数据源</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = win_source</span><br><span class="line">andrew.channels = total_channel</span><br><span class="line">andrew.sinks = total_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.type = netcat</span><br><span class="line">andrew.sources.win_source.bind = 192.168.1.130</span><br><span class="line">andrew.sources.win_source.port = 12345</span><br><span class="line"></span><br><span class="line">andrew.channels.total_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.total_sink.type = hdfs</span><br><span class="line">andrew.sinks.total_sink.hdfs.path = /batch3/total</span><br><span class="line">andrew.sinks.total_sink.hdfs.fileType = DataStream</span><br><span class="line">andrew.sinks.total_sink.hdfs.hdfs.writeFormat = Text</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.channels = total_channel</span><br><span class="line">andrew.sinks.total_sink.channel = total_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230506091925886.png" alt="传输成功"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230506091903957.png" alt="传输成功"></p>
+<blockquote>
+</blockquote>
+<p>tailDir 使用文件，可以指定一个文件夹下的文件，一直传输一直上传</p>
+<p>taildir 不会重复传输一个文件</p>
+<p>有一个Jason文件会存储我们发送的数据和位置</p>
+<p>要么删除文件要么修改JSON文件，否则不能重复发送文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">ls</span> -a</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> .flume</span><br></pre></td></tr></table></figure>
+
+
+
+<p>JSON文件在这个文件夹下</p>
+<p>taildir和spoodir &#x2F;&#x2F;使用taildir时必须全部大写表示<br>ipoodir有一些限制，比如当文件传输完成后，文件后缀会变成,completed，此时当你再向这个文件中写入新数据时，fume并不会将这些新数据传输poodir: 我们可以多个文件，只要文件在我们要进行传输的路径中，flume就会全部进行传输aildir:我们可以针对特定的文件，而且它不会传输重复的内容，而且当心内容呗增加到我们传输的文件中时，它也会同步更新<br>gentname.sources.sourcename.tvpe&#x3D;TAILDIRagentname.sources.sourcename.filegroups&#x3D;f1&#x2F;&#x2F;你想要传输多少个文件，想要一个就f1，想要两个就f2aqentname.sources.sourcename.filegroups.f1&#x3D; &#x2F;&#x2F;文件路径positionFile&#x3D; &#x2F;&#x2F;因为taildir会把传输的文件位置储存在-个ison 文件中，这就是规定这个json文件的位置<br>如果你要传输多个名字近似的文件，比og1.，og2.，你可以后面写”og或者说你没有这个文件，你在echo的时候添加了新文件，你也可以用这个，但是新文件必须也得是差不多这样子</p>
+<h2 id="HTTP-Source"><a href="#HTTP-Source" class="headerlink" title="HTTP Source"></a>HTTP Source</h2><p>post 和 get 是两个方法，可以用来接收 flume 请求</p>
+<p>.type &#x3D; </p>
+<p>.bind &#x3D; 产生数据的 IP 地址</p>
+<p>.port &#x3D; 1-65535</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = win_source</span><br><span class="line">andrew.channels = total_channel</span><br><span class="line">andrew.sinks = total_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.type = http</span><br><span class="line">andrew.sources.win_source.bind = 192.168.1.130</span><br><span class="line">andrew.sources.win_source.port = 12345</span><br><span class="line"></span><br><span class="line">andrew.channels.total_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.total_sink.type = logger</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.channels = total_channel</span><br><span class="line">andrew.sinks.total_sink.channel = total_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = win_source</span><br><span class="line">andrew.channels = total_channel</span><br><span class="line">andrew.sinks = total_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.type = http	<span class="comment"># 要用 http</span></span><br><span class="line">andrew.sources.win_source.bind = 192.168.1.130 <span class="comment"># 接收消息的 IP 地址</span></span><br><span class="line">andrew.sources.win_source.port = 12345</span><br><span class="line"></span><br><span class="line">andrew.channels.total_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.total_sink.type = logger</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.channels = total_channel</span><br><span class="line">andrew.sinks.total_sink.channel = total_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230517082853194.png" alt="用postman发送数据"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230517082927010.png" alt="接收成功"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = win_source</span><br><span class="line">andrew.channels = total_channel</span><br><span class="line">andrew.sinks = total_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.type = http</span><br><span class="line">andrew.sources.win_source.bind = 192.168.1.130</span><br><span class="line">andrew.sources.win_source.port = 12347</span><br><span class="line"></span><br><span class="line">andrew.channels.total_channel.type = memory</span><br><span class="line"></span><br><span class="line">andrew.sinks.total_sink.type = hdfs</span><br><span class="line">andrew.sinks.total_sink.hdfs.path = /batch3/spool1</span><br><span class="line">andrew.sinks.total_sink.hdfs.filePrefix = httpdata</span><br><span class="line">andrew.sinks.total_sink.hdfs.fileType = DataStream</span><br><span class="line">andrew.sinks.total_sink.hdfs.rollInterval = 60</span><br><span class="line">andrew.sinks.total_sink.hdfs.rollCount = 0</span><br><span class="line">andrew.sinks.total_sink.hdfs.rollSize = 0</span><br><span class="line"></span><br><span class="line">andrew.sources.win_source.channels = total_channel</span><br><span class="line">andrew.sinks.total_sink.channel = total_channel</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230517085211574.png" alt="用postman发送数据"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230517085128412.png" alt="创建文件成功"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230517085229352.png" alt="在hdfs中检查"></p>
+<p>channels</p>
+<p>capacity &#x3D; 100 (默认 100) 存储容量</p>
+<p>transactionCapacity &#x3D; 100 传输容量</p>
+<h2 id="Hbase"><a href="#Hbase" class="headerlink" title="Hbase"></a>Hbase</h2><p>sinks.sink1.type &#x3D; hbase2</p>
+<p>使用HBASE进行数据存储</p>
+<p>sinks.sink1.table &#x3D; </p>
+<p>sinks.sink1.columnFamily</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ start-hbase.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hbase shell</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = hbase_source</span><br><span class="line">andrew.channels = hbase_channel</span><br><span class="line">andrew.sinks = hbase_sink</span><br><span class="line"></span><br><span class="line">andrew.sources.hbase_source.type = TAILDIR</span><br><span class="line">andrew.sources.hbase_source.filegroups = f1 f2</span><br><span class="line">andrew.sources.hbase_source.filegroups.f1 = /root/batch3/.<span class="string">&quot;log1.&quot;</span></span><br><span class="line">andrew.sources.habse_source.filegroups.f2 = /root/batch3/.<span class="string">&quot;log2.&quot;</span></span><br><span class="line"></span><br><span class="line">andrew.channels.hbase_channel.type = memory</span><br><span class="line">andrew.channels.hbase_channel.capacity = 1000</span><br><span class="line">andrew.channels.hbase_channel.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line">andrew.sinks.hbase_sink.type = hbase2</span><br><span class="line">andrew.sinks.hbase_sink.table = batche</span><br><span class="line">andrew.sinks.hbase_sink.columnFamile = data</span><br><span class="line"></span><br><span class="line">andrew.sources.hbase_source.channels = hbase_channel</span><br><span class="line">andrew.sinks.hbase_sink.channel = hbase_channel</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="将-win-中-flume-输出的数据作为-lin-下-flume-的输入"><a href="#将-win-中-flume-输出的数据作为-lin-下-flume-的输入" class="headerlink" title="将 win 中 flume 输出的数据作为 lin 下 flume 的输入"></a>将 win 中 flume 输出的数据作为 lin 下 flume 的输入</h2><blockquote>
+<p>Windows</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = source1</span><br><span class="line">andrew.channels = channel1</span><br><span class="line">andrew.sinks = sink1</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.type = spooldir</span><br><span class="line">andrew.sources.source1.spoolDir = D:\spool</span><br><span class="line"></span><br><span class="line">andrew.channels.channel1.type = memory</span><br><span class="line">andrew.channels.channel1.capacity = 1000</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink1.type = avro</span><br><span class="line">andrew.sinks.sink1.hostname = 192.168.1.130</span><br><span class="line">andrew.sinks.sink1.port = 22222</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.channels = channel1</span><br><span class="line">andrew.sinks.sink1.channel = channel1</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>Linux</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = source1</span><br><span class="line">andrew.channels = channel1</span><br><span class="line">andrew.sinks = sink1</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.type = avro</span><br><span class="line">andrew.sources.source1.bind = 192.168.1.130</span><br><span class="line">andrew.sources.source1.port = 22222</span><br><span class="line"></span><br><span class="line">andrew.channels.channel1.type = memory</span><br><span class="line">andrew.channels.channel1.capacity = 1000</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink1.type = logger</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.channels = channel1</span><br><span class="line">andrew.sinks.sink1.channel = channel1</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230524085952096.png" alt="在Windows上运行flume"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230524085933511.png" alt="sink为logger"></p>
+<blockquote>
+<p>将 <code>sink</code> 修改为 &#96;&#96;hdfs&#96;</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = source1</span><br><span class="line">andrew.channels = channel1</span><br><span class="line">andrew.sinks = sink1</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.type = avro</span><br><span class="line">andrew.sources.source1.bind = 192.168.1.130</span><br><span class="line">andrew.sources.source1.port = 22222</span><br><span class="line"></span><br><span class="line">andrew.channels.channel1.type = memory</span><br><span class="line">andrew.channels.channel1.capacity = 1000</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink1.type = hdfs</span><br><span class="line">andrew.sinks.sink1.hdfs.path = /batch3/spool1</span><br><span class="line">andrew.sinks.sink1.hdfs.fileType = DataStream</span><br><span class="line">andrew.sinks.sink1.hdfs.hdfs.writeFormat = Text</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.channels = channel1</span><br><span class="line">andrew.sinks.sink1.channel = channel1</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230524090513614.png" alt="sink为hdfs"></p>
+<h2 id="多路复用扇出"><a href="#多路复用扇出" class="headerlink" title="多路复用扇出"></a>多路复用扇出</h2><p>传输同一个数据到两个不同的位置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">andrew.sources = source1</span><br><span class="line">andrew.channels = channel1 channel2</span><br><span class="line">andrew.sinks = sink1 sink2</span><br><span class="line"></span><br><span class="line">andrew.sources.source1.type = spooldir</span><br><span class="line">andrew.sources.source1.spoolDir = /root/batch3</span><br><span class="line">andrew.sources.source1.batchSize = 500</span><br><span class="line">andrew.sources.source1.selector.type = replicating</span><br><span class="line"></span><br><span class="line">andrew.channels.channel1.type = memory</span><br><span class="line">andrew.channels.channel1.transactionCapacity = 1000</span><br><span class="line">andrew.channels.channel1.capacity = 1000</span><br><span class="line"></span><br><span class="line">andrew.channels.channel2.type = memory</span><br><span class="line">andrew.channels.channel2.transactionCapacity = 1000</span><br><span class="line">andrew.channels.channel2.capacity = 1000</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink1.type = hdfs</span><br><span class="line">andrew.sinks.sink1.hdfs.path = /batch3/spool</span><br><span class="line">andrew.sinks.sink1.hdfs.fileType = DataStream</span><br><span class="line">andrew.sinks.sink1.hdfs.filePrefix = repdata</span><br><span class="line"></span><br><span class="line">andrew.sinks.sink2.type = logger</span><br><span class="line"><span class="comment"># andrew.sinks.sink2.type = hbase</span></span><br><span class="line"><span class="comment"># andrew.sinks.sink2.table =</span></span><br><span class="line"><span class="comment"># andrew.sinks.sink2.columnFamily =</span></span><br><span class="line"></span><br><span class="line">andrew.sources.source1.channels = channel1 channel2</span><br><span class="line">andrew.sinks.sink1.channel = channel1</span><br><span class="line">andrew.sinks.sink2.channel = channel2</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230525170824448.png" alt="传输完成logger"></p>
+<p><img src="https://yuehua-hnu-1313248262.cos.ap-nanjing.myqcloud.com/typora/image-20230525170841060.png" alt="传输完成hdfs"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://yuehua-HNU.github.io">月华.</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yuehua-hnu.github.io/2023/05/30/Flume%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">http://yuehua-hnu.github.io/2023/05/30/Flume使用指南/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yuehua-HNU.github.io" target="_blank">月华.の奇妙冒险</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Flume/">Flume</a></div><div class="post_share"><div class="social-share" data-image="/./img/%E8%83%A1%E6%A1%83-%E6%97%85%E9%80%94%E5%B0%8F%E6%86%A9.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E5%BE%AE%E4%BF%A1%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" target="_blank"><img class="post-qr-code-img" src="/img/%E6%94%AF%E4%BB%98%E5%AE%9D%E6%94%B6%E6%AC%BE%E7%A0%81.jpg" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/04/08/HBase%20%E4%BC%81%E4%B8%9A%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91/"><img class="prev-cover" src="/./img/%E5%88%BB%E6%99%B4-%E6%99%A8%E5%85%89%E6%98%9F%E6%96%97.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">HBase 企业应用开发</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">月华.</div><div class="author-info__description">我连宇宙的尽头在哪都不知道，怎么知道这个</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">30</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/yuehua-HNU"><i class="fa-sharp fa-solid fa-plane"></i><span>快来一起玩</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/yuehua-HNU" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://space.bilibili.com/475208497?spm_id_from=333.1007.0.0" target="_blank" title="Bilibili"><i class="fa-brands fa-bilibili"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">图床那篇因为图片隐私问题还在修改, 无限期后应该就改完了, 哎嘿(doge)</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flume%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97"><span class="toc-text">Flume使用指南</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85-Flume"><span class="toc-text">一、安装 Flume</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF-Flume"><span class="toc-text">二、什么是 Flume</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Flume-%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">三、Flume 的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8F%A6%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E4%BD%9C%E4%B8%BA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">使用另一台机器作为数据源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Windows-%E4%BD%9C%E4%B8%BA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">使用 Windows 作为数据源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flume-%E4%B8%8E%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-text">Flume 与防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Linux-%E6%8C%87%E4%BB%A4%E4%BD%9C%E4%B8%BA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">使用 Linux 指令作为数据源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%80%E6%95%B4%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9%E4%BD%9C%E4%B8%BA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">使用一整个文件夹作为数据源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-sink"><span class="toc-text">修改 sink</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-Source"><span class="toc-text">HTTP Source</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hbase"><span class="toc-text">Hbase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86-win-%E4%B8%AD-flume-%E8%BE%93%E5%87%BA%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%9C%E4%B8%BA-lin-%E4%B8%8B-flume-%E7%9A%84%E8%BE%93%E5%85%A5"><span class="toc-text">将 win 中 flume 输出的数据作为 lin 下 flume 的输入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E6%89%87%E5%87%BA"><span class="toc-text">多路复用扇出</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/05/30/Flume%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Flume使用指南"><img src="/./img/%E8%83%A1%E6%A1%83-%E6%97%85%E9%80%94%E5%B0%8F%E6%86%A9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume使用指南"/></a><div class="content"><a class="title" href="/2023/05/30/Flume%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Flume使用指南">Flume使用指南</a><time datetime="2023-05-30T12:20:50.632Z" title="更新于 2023-05-30 20:20:50">2023-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/09/%E4%BD%BF%E7%94%A8%20Sqoop%20%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E4%BA%A4%E6%8D%A2/" title="使用 Sqoop 进行数据交换"><img src="/./img/%E5%85%AB%E9%87%8D%E7%A5%9E%E5%AD%90-%E8%89%AF%E7%BC%98%E7%A5%88%E6%84%BF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Sqoop 进行数据交换"/></a><div class="content"><a class="title" href="/2023/03/09/%E4%BD%BF%E7%94%A8%20Sqoop%20%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E4%BA%A4%E6%8D%A2/" title="使用 Sqoop 进行数据交换">使用 Sqoop 进行数据交换</a><time datetime="2023-05-30T12:18:45.648Z" title="更新于 2023-05-30 20:18:45">2023-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据"><img src="/./img/%E5%A6%AE%E9%9C%B2-%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 MySQL 查询数据"/></a><div class="content"><a class="title" href="/2023/04/08/%E4%BD%BF%E7%94%A8%20MySQL%20%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE/" title="使用 MySQL 查询数据">使用 MySQL 查询数据</a><time datetime="2023-04-08T01:59:49.875Z" title="更新于 2023-04-08 09:59:49">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础"><img src="/./img/%E7%BA%B3%E8%A5%BF%E5%A6%B2-%E7%BB%BF%E8%8C%B5%E5%B9%BD%E8%8D%89.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux 操作系统基础"/></a><div class="content"><a class="title" href="/2023/04/08/Linux%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="Linux 操作系统基础">Linux 操作系统基础</a><time datetime="2023-04-08T01:59:14.316Z" title="更新于 2023-04-08 09:59:14">2023-04-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统"><img src="/./img/%E5%AE%B5%E5%AE%AB-%E6%B8%A9%E6%B0%B4%E6%9A%96%E4%B9%A1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Kafka 实现分布式消息传递系统"/></a><div class="content"><a class="title" href="/2023/03/15/%E4%BD%BF%E7%94%A8%20Kafka%20%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%B3%BB%E7%BB%9F/" title="使用 Kafka 实现分布式消息传递系统">使用 Kafka 实现分布式消息传递系统</a><time datetime="2023-04-08T01:57:38.269Z" title="更新于 2023-04-08 09:57:38">2023-04-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这 就 是 我 的 <a target="_blank" rel="noopener" href="https://github.com/yuehua-HNU/">逃 跑 路 线</a> ！</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button><button id="go-down" type="button" title="直达底部" onclick="btf.scrollToDest(document.body.scrollHeight, 500)"><i class="fas fa-arrow-down"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-rho-brown.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      countELement.innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !true) {
+    if (true) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+    function butterfly_categories_card_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 380px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 320px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/边缘行者2.jpg);"> <a class="categoryBar-list-link" href="categories/Docs文档/">Docs文档</a><span class="categoryBar-list-count">6</span><span class="categoryBar-list-descr">Docs文档</span></li><li class="categoryBar-list-item" style="background:url(/img/孤独摇滚.jpg);"> <a class="categoryBar-list-link" href="categories/408/">408</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">408</span></li><li class="categoryBar-list-item" style="background:url(/img/波稻.jpg);"> <a class="categoryBar-list-link" href="categories/Golang/">Golang</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">Golang</span></li><li class="categoryBar-list-item" style="background:url(/img/2B4.jpg);"> <a class="categoryBar-list-link" href="categories/Java/">Java</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">Java</span></li><li class="categoryBar-list-item" style="background:url(/img/阿尼亚.jpg);"> <a class="categoryBar-list-link" href="categories/数据科学与大数据/">数据科学与大数据</a><span class="categoryBar-list-count">11</span><span class="categoryBar-list-descr">设计模式</span></li><li class="categoryBar-list-item" style="background:url(/img/进击的巨人3.jpg);"> <a class="categoryBar-list-link" href="categories/设计模式/">设计模式</a><span class="categoryBar-list-count">4</span><span class="categoryBar-list-descr">数据科学与大数据</span></li></ul></div></div>';
+      console.log('已挂载butterfly_categories_card')
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      }
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+    butterfly_categories_card_injector_config()
+    }
+  </script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.3.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.5.1" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" data-title="本站采用多线部署，备用线路托管于4EVERLAND" title=""><img src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="/js/runtime.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/02/27/数据库系统概论学习笔记/" alt=""><img width="48" height="48" src="./img/艾莉丝格雷拉特3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-02-27</span><a class="blog-slider__title" href="2023/02/27/数据库系统概论学习笔记/" alt="">数据库系统概论学习笔记</a><div class="blog-slider__text">数据库系统概论期末复习</div><a class="blog-slider__button" href="2023/02/27/数据库系统概论学习笔记/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/17/设计模式 -- 七大基本原则/" alt=""><img width="48" height="48" src="./img/小舟潮.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-17</span><a class="blog-slider__title" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">设计模式 -- 七大基本原则</a><div class="blog-slider__text">设计模式学习笔记整理</div><a class="blog-slider__button" href="2023/01/17/设计模式 -- 七大基本原则/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/26/Java学习（一）-- Java基础/" alt=""><img width="48" height="48" src="./img/来自新世界2.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-26</span><a class="blog-slider__title" href="2023/01/26/Java学习（一）-- Java基础/" alt="">Java学习（一）-- Java基础</a><div class="blog-slider__text">Java 复习笔记</div><a class="blog-slider__button" href="2023/01/26/Java学习（一）-- Java基础/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/15/Go 语言基础 - 基础语法/" alt=""><img width="48" height="48" src="./img/边缘行者4.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-15</span><a class="blog-slider__title" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">Go 语言基础 - 基础语法</a><div class="blog-slider__text">字节跳动第五届青训营后端基础班学习笔记</div><a class="blog-slider__button" href="2023/01/15/Go 语言基础 - 基础语法/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/01/01/C语言复习/" alt=""><img width="48" height="48" src="./img/奥尔斯蒂德.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-01-01</span><a class="blog-slider__title" href="2023/01/01/C语言复习/" alt="">C语言复习</a><div class="blog-slider__text">考研向C语言复习, 根据自己的个人情况所记笔记</div><a class="blog-slider__button" href="2023/01/01/C语言复习/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2022/12/01/搭建自己的博客/" alt=""><img width="48" height="48" src="./img/JOJO3.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-12-01</span><a class="blog-slider__title" href="2022/12/01/搭建自己的博客/" alt="">搭建个人博客历程</a><div class="blog-slider__text">搭建博客前前后后的心路历程</div><a class="blog-slider__button" href="2022/12/01/搭建自己的博客/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '0s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
